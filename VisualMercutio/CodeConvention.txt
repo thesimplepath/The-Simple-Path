@@ -1,0 +1,344 @@
+Code convention
+---------------
+
+1.  Indentation
+2.  Declaring variables
+3.  Declaring enumerators
+4.  Whitespace
+5.  Braces
+6.  Parentheses
+7.  Switch statements
+8.  Jump statements (break, continue, return, and goto)
+9.  Line breaks
+10. Comments
+11. General exceptions
+
+1. Indentation
+4 spaces are used for indentation. Tabs aren't allowed. Elements are aligned in columns whenever possible.
+
+// wrong
+int height;
+int width;
+char* pNameOfThis = NULL;
+char* pNameOfThat = NULL;
+std::size index = 0;
+std::size offset = 0;
+
+// correct
+int       height;
+int       width;
+char*     pNameOfThis = NULL;
+char*     pNameOfThat = NULL;
+std::size index       = 0;
+std::size offset      = 0;
+
+2. Declaring variables
+Declare each variable on a separate line. Avoid short or meaningless names (e.g "a", "rbarr", "nughdeget").
+Single character variable names are only admitted for counters and temporaries, where the purpose of the variable is obvious.
+Wait when declaring a variable until it is needed.
+
+// wrong
+int a, b;
+char* c, *d;
+
+// correct
+int   height;
+int   width;
+char* pNameOfThis;
+char* pNameOfThat;
+
+Variables and functions start with a lower-case letter, variables owning a pointer start with the "p" letter.
+Each consecutive word in a variable's name starts with an upper-case letter. Avoid abbreviations.
+
+ // wrong
+ short Cntr;
+ char  ITEM_DELIM = ' ';
+ void* custom;
+
+ // correct
+ short counter;
+ char  itemDelimiter = ' ';
+ void* pCustom;
+
+Classes always start with an upper-case letter, prefixed with "RPM_" (Resource and Process Manager).
+Nested classes start with a "I" followed by an upper case letter (IData). All the functions start with an upper-case letter (GetInfo()).
+Acronyms are camel-cased (e.g. IXmlStreamReader, not IXMLStreamReader).
+
+3. Declaring enumerators
+Public enumerators starts with the "E" letter, whereas nested enumerators start with "IE".
+Add a prefix of one or two letters matching with the enumerator name to avoid confusion between the enumerators which may contain
+the same item (e.g IE_DS_Data for IEDataSource enumerator, and IE_DT_Data for DataType enumerator).
+Avoid short or meaningless names (e.g "IE_A", "IE_FmtDoc", "IE_NmSpcCtrlr"). Each enumeated items start with "E_" if the enumerator is global,
+or with "IE_" if the enumerator is nested. Acronyms are camel-cased (e.g. IE_XmlDataSource, not IE_XMLDataSource).
+
+// wrong
+enum DataSource {FILE, memory, Stream};
+enum dataType
+{
+    FILE,
+    memory,
+    Stream
+};
+
+// correct
+enum EDataSource
+{
+    E_DS_File,
+    E_DS_Memory,
+    E_DS_Stream
+};
+
+enum IEDataType
+{
+    IE_DT_File,
+    IE_DT_Memory,
+    IE_DT_Stream
+};
+
+4. Whitespace
+Use blank lines to group statements together where suited. Always use only one blank line. Always use a single space after a keyword:
+
+// wrong
+if(foo){
+}
+
+// correct
+if (foo)
+{}
+
+For pointers or references, always use a single space between "*" or "&" and the variable name, but no space between the "*" or "&" and the type:
+
+char* pX;
+
+const std::string& myString;
+
+const char* const pName = "hello";
+
+Surround binary operators with spaces, leave a space after each comma. No space after a cast. Avoid C-style casts when possible.
+
+// wrong
+char* pBlockOfMemory = (char*)malloc(data.size());
+
+// correct
+char* pBlockOfMemory = reinterpret_cast<char*>(malloc(data.size()));
+
+Do not put multiple statements on one line. By extension, use a new line for the body of a control flow statement:
+
+// wrong
+if (foo) bar();
+
+// correct
+if (foo)
+    bar();
+
+5. Braces
+The opening and closing braces go on the next line after the statement. Empty braces remains on the same line.
+
+// wrong
+if (codec) {
+    ++index;
+    DoSomething();
+}
+else
+{
+}
+
+// correct
+if (codec)
+{
+    ++index;
+    DoSomething();
+}
+else
+{}
+
+Use curly braces only when the body of a conditional statement contains more than one line.
+
+// wrong
+if (address.isEmpty())
+{
+	return false;
+}
+
+for (int i = 0; i < 10; ++i)
+{
+	Print("%i", i);
+}
+
+// correct
+if (address.isEmpty())
+	return false;
+
+for (int i = 0; i < 10; ++i)
+	Print("%i", i);
+
+Put an indent for the case statement. Put the else if statements on 2 separate lines, and keep the code blocks aligned.
+
+// wrong
+if (firstCondition)
+{
+    ...
+}
+    else if (secondCondition)
+    {
+        ...
+    }
+        else
+        {
+            ...
+        }
+
+switch (condition)
+{
+case 0:
+    ...
+case 1:
+    ...
+}
+
+// correct
+if (firstCondition)
+{
+    ...
+}
+else
+if (secondCondition)
+{
+    ...
+}
+else
+{
+    ...
+}
+
+switch (condition)
+{
+    case 0:
+        ...
+
+    case 1:
+        ...
+}
+
+Don't use curly braces when the body of a conditional statement is empty, or put it on a separate line.
+
+// wrong
+while (a) {}
+
+// correct
+while (a);
+
+while (a)
+{}
+
+6. Parentheses
+
+Use parentheses to group expressions:
+
+// wrong
+if (a && b || c)
+
+// correct
+if ((a && b) || c)
+
+// wrong
+a + b & c
+
+// correct
+(a + b) & c
+
+7. Switch statements
+The case labels are indented one column on the right from the switch. Every case must have a break (or return) statement at the end,
+unless another case follows immediately.
+
+switch (myEnum)
+{
+    case Value1:
+        doSomething();
+        break;
+
+    case Value2:
+    case Value3:
+        doSomethingElse();
+
+    default:
+        defaultHandling();
+        break;
+}
+
+8. Jump statements (break, continue, return, and goto)
+The 'goto' instructions are prohibited, please don't use them, favorize the usage of a sub function instead. Do not put 'else' after jump statements:
+
+// wrong
+if (thisOrThat)
+	return;
+else
+	somethingElse();
+
+// correct
+if (thisOrThat)
+	return;
+
+somethingElse();
+
+Exception If the code is inherently symmetrical, use of 'else' is allowed to visualize that symmetry
+
+9. Line breaks
+Keep lines shorter than 120 characters; wrap if necessary. Comment/apidoc lines should also be kept below 120 columns of actual text.
+Adjust to the surroundings, and try to flow the text in a way that avoids "jagged" paragraphs.
+Commas go at the end of wrapped lines; operators go at the end of the current lines.
+
+// wrong
+if (longExpression
++ otherLongExpression
++ otherOtherLongExpression)
+{}
+
+// correct
+if (longExpression      +
+    otherLongExpression +
+    otherOtherLongExpression)
+{}
+
+Exception switch...case statements containing long instructions which may be kept on one line.
+
+10. Comments
+The comments should always be placed above the line or code block they explain. In some particular case the comment may also be placed
+on the same line after the code, e.g when aligned variables should be explained. Inside a code block, only // is allowed for declare a comment,
+/**/ is only allowed for classes and functions headers. Also the comments should follow the Doxygen specifications.
+
+// wrong
+
+/**
+* this increments a variable
+*/
+++aVariable;
+
+++aVariable;
+// this increments a variable
+
+// correct
+
+// this increments a variable
+++aVariable;
+
+int aVariable; // this is a variable
+
+/**
+* This is a function
+*/
+void MyFunction()
+{}
+
+/**
+* This is a class
+*@author John Doe
+*/
+class MyClass()
+{
+    ....
+}
+
+11. General exceptions
+When strictly following a rule makes your code look bad, feel free to break it. If there is a dispute in any given source code file,
+the maintainer has the final say on the accepted style.
