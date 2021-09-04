@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_Page ------------------------------------------------------------*
+ * ==> RPM_GlobalSettings --------------------------------------------------*
  ****************************************************************************
- * Description:  The main resource and process manager document page        *
+ * Description:  The application global settings                            *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,17 +27,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_Page.h"
+#include "RPM_GlobalSettings.h"
 
-//---------------------------------------------------------------------------
-// RPM_Page
-//---------------------------------------------------------------------------
-RPM_Page::RPM_Page()
-{}
-//---------------------------------------------------------------------------
-RPM_Page::~RPM_Page()
-{
-    for each (auto pItem in m_Items)
-        delete pItem;
-}
+ //---------------------------------------------------------------------------
+ // Static members
+ //---------------------------------------------------------------------------
+// todo FIXME -cFeature -oJean: Change the application name whenever defined
+const std::wstring RPM_GlobalSettings::m_AppName    = L"Visual Mercutio";
+const RPM_Version  RPM_GlobalSettings::m_AppVersion = RPM_Version(0, 0, 0, 1);
 //---------------------------------------------------------------------------

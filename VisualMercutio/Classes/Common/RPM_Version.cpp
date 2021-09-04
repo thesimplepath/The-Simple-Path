@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_IdGenerator -----------------------------------------------------*
+ * ==> RPM_Version ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Identifier generator                                       *
+ * Description:  Provides a version number management class                 *
  * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,62 +27,86 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_IdGenerator.h"
+#include "RPM_Version.h"
 
 // std
-#include <stdexcept>
+#include <sstream>
 
 //---------------------------------------------------------------------------
-// Static members
+// RPM_Version
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::m_pIdGen = nullptr;
-std::mutex       RPM_IdGenerator::m_Mutex;
-//---------------------------------------------------------------------------
-// RPM_IdGenerator
-//---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator()
+RPM_Version::RPM_Version()
 {}
 //---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator(const RPM_IdGenerator& other)
+RPM_Version::RPM_Version(std::uint32_t major, std::uint32_t minor, std::uint32_t release, std::uint32_t build)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
+    // set version
+    SetMajor(major);
+    SetMinor(minor);
+    SetRelease(release);
+    SetBuild(build);
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator::~RPM_IdGenerator()
+RPM_Version::~RPM_Version()
 {}
 //---------------------------------------------------------------------------
-const RPM_IdGenerator& RPM_IdGenerator::operator = (const RPM_IdGenerator& other)
+std::uint32_t RPM_Version::GetMajor() const
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
-
-    // useless and never reached, but otherwise VS generates an error
-    return *this;
+    return m_Major;
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::Instance()
+void RPM_Version::SetMajor(std::uint32_t value)
 {
-    // check instance out of the thread lock (double check lock)
-    if (!m_pIdGen)
-    {
-        // lock up the thread
-        std::unique_lock<std::mutex> lock(m_Mutex);
-
-        // create the instance
-        if (!m_pIdGen)
-            m_pIdGen = new (std::nothrow)RPM_IdGenerator();
-    }
-
-    // still not created?
-    if (!m_pIdGen)
-        throw new std::runtime_error("Could not create the Identifier Generator unique instance");
-
-    return m_pIdGen;
+    m_Major = value;
 }
 //---------------------------------------------------------------------------
-std::size_t RPM_IdGenerator::GetNextID() const
+std::uint32_t RPM_Version::GetMinor() const
 {
-    ++const_cast<std::size_t&>(m_CurId);
+    return m_Minor;
+}
+//---------------------------------------------------------------------------
+void RPM_Version::SetMinor(std::uint32_t value)
+{
+    m_Minor = value;
+}
+//---------------------------------------------------------------------------
+std::uint32_t RPM_Version::GetRelease() const
+{
+    return m_Release;
+}
+//---------------------------------------------------------------------------
+void RPM_Version::SetRelease(std::uint32_t value)
+{
+    m_Release = value;
+}
+//---------------------------------------------------------------------------
+std::uint32_t RPM_Version::GetBuild() const
+{
+    return m_Build;
+}
+//---------------------------------------------------------------------------
+void RPM_Version::SetBuild(std::uint32_t value)
+{
+    m_Build = value;
+}
+//---------------------------------------------------------------------------
+std::string RPM_Version::ToStr() const
+{
+    std::ostringstream sstr;
 
-    return m_CurId - 1;
+    // build version string
+    sstr << m_Major << "." << m_Minor << "." << m_Release << "." << m_Build;
+
+    return sstr.str();
+}
+//---------------------------------------------------------------------------
+std::wstring RPM_Version::ToWStr() const
+{
+    std::wostringstream sstr;
+
+    // build version string
+    sstr << m_Major << L"." << m_Minor << L"." << m_Release << L"." << m_Build;
+
+    return sstr.str();
 }
 //---------------------------------------------------------------------------

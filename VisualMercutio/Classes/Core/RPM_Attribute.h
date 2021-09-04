@@ -29,10 +29,85 @@
 
 #pragma once
 
+// std
+#include <cstdint>
+#include <ctime>
+#include <string>
+
+// core classes
+#include "Core\RPM_Item.h"
+
 /**
 * Basic attribute which may be contained in an element
 *@author Jean-Milost Reymond
 */
-class RPM_Attribute
+class RPM_Attribute : public RPM_Item
 {
+    public:
+        enum class IEFormat
+        {
+            IE_Undefined = 0,
+            IE_Bool,
+            IE_Int8,
+            IE_UInt8,
+            IE_Int16,
+            IE_UInt16,
+            IE_Int32,
+            IE_UInt32,
+            IE_Int64,
+            IE_UInt64,
+            IE_Float,
+            IE_Double,
+            IE_String,
+            IE_UnicodeString,
+            IE_DateTime
+        };
+
+        RPM_Attribute();
+        virtual ~RPM_Attribute();
+
+        /**
+        * Gets the attribute value
+        *@return the attribute value
+        */
+        template <class T>
+        T Get() const;
+
+        /**
+        * Gets the attribute value
+        *@param defVal - default value to return in case the internal type conversion fails
+        *@return the attribute value
+        */
+        virtual bool          Get(bool                defVal)  const;
+        virtual std::int8_t   Get(std::int8_t         defVal)  const;
+        virtual std::uint8_t  Get(std::uint8_t        defVal)  const;
+        virtual std::int16_t  Get(std::int16_t        defVal)  const;
+        virtual std::uint16_t Get(std::uint16_t       defVal)  const;
+        virtual std::int32_t  Get(std::int32_t        defVal)  const;
+        virtual std::uint32_t Get(std::uint32_t       defVal)  const;
+        virtual std::int64_t  Get(std::int64_t        defVal)  const;
+        virtual std::uint64_t Get(std::uint64_t       defVal)  const;
+        virtual float         Get(float               defVal)  const;
+        virtual double        Get(double              defVal)  const;
+        virtual std::string   Get(const std::string&  defVal)  const;
+        virtual std::wstring  Get(const std::wstring& defVal)  const;
+        virtual std::tm       Get(const std::tm&      defVal)  const;
+
+        /**
+        * Clears the attribute
+        */
+        virtual void Clear();
+
+    private:
+        void*         m_pData  = nullptr;
+        IEFormat      m_Format = IEFormat::IE_Undefined;
+        std::uint64_t m_Size   = 0;
 };
+
+//---------------------------------------------------------------------------
+template <class T>
+T RPM_Attribute::Get() const
+{
+    return Get(T(0));
+}
+//---------------------------------------------------------------------------

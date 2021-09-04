@@ -30,6 +30,8 @@
 #include "RPM_Application.h"
 
 //---------------------------------------------------------------------------
+// RPM_Application
+//---------------------------------------------------------------------------
 RPM_Application::RPM_Application(int argc, char* argv[]) :
     m_pApp(new QGuiApplication(argc, argv)),
     m_pEngine(new QQmlApplicationEngine()),

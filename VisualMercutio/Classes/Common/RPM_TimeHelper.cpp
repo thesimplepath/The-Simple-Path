@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_IdGenerator -----------------------------------------------------*
+ * ==> RPM_TimeHelper ------------------------------------------------------*
  ****************************************************************************
- * Description:  Identifier generator                                       *
+ * Description:  Helper class for date and time                             *
  * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,62 +27,79 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_IdGenerator.h"
+#include "RPM_TimeHelper.h"
+
+// common classes
+#include "RPM_StringHelper.h"
 
 // std
-#include <stdexcept>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 //---------------------------------------------------------------------------
-// Static members
+// RPM_TimeHelper
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::m_pIdGen = nullptr;
-std::mutex       RPM_IdGenerator::m_Mutex;
-//---------------------------------------------------------------------------
-// RPM_IdGenerator
-//---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator()
-{}
-//---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator(const RPM_IdGenerator& other)
+std::string RPM_TimeHelper::UTCTimeToIso8601(std::time_t time, const std::string& localeToUse)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
+    return RPM_TimeHelper::UTCTimeToStr(time, "%F %T", localeToUse);
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator::~RPM_IdGenerator()
-{}
-//---------------------------------------------------------------------------
-const RPM_IdGenerator& RPM_IdGenerator::operator = (const RPM_IdGenerator& other)
+std::string RPM_TimeHelper::LocalTimeToIso8601(std::time_t time, const std::string& localeToUse)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
-
-    // useless and never reached, but otherwise VS generates an error
-    return *this;
+    return RPM_TimeHelper::LocalTimeToStr(time, "%F %T", localeToUse);
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::Instance()
+std::time_t RPM_TimeHelper::Iso8601ToTime(const std::string& str, const std::string& localeToUse)
 {
-    // check instance out of the thread lock (double check lock)
-    if (!m_pIdGen)
-    {
-        // lock up the thread
-        std::unique_lock<std::mutex> lock(m_Mutex);
-
-        // create the instance
-        if (!m_pIdGen)
-            m_pIdGen = new (std::nothrow)RPM_IdGenerator();
-    }
-
-    // still not created?
-    if (!m_pIdGen)
-        throw new std::runtime_error("Could not create the Identifier Generator unique instance");
-
-    return m_pIdGen;
+    return StrToTime(str, "%Y-%b-%d %H:%M:%S", localeToUse);
 }
 //---------------------------------------------------------------------------
-std::size_t RPM_IdGenerator::GetNextID() const
+std::string RPM_TimeHelper::UTCTimeToStr(std::time_t time, const std::string& format, const std::string& localeToUse)
 {
-    ++const_cast<std::size_t&>(m_CurId);
+    const std::tm* pUTCTime = std::gmtime(&time);
 
-    return m_CurId - 1;
+    if (pUTCTime)
+        return TmToStr(*pUTCTime, format, "");
+
+    return "";
+}
+//---------------------------------------------------------------------------
+std::string RPM_TimeHelper::LocalTimeToStr(std::time_t time, const std::string& format, const std::string& localeToUse)
+{
+    const std::tm* pLocalTime = std::localtime(&time);
+
+    if (pLocalTime)
+        return TmToStr(*pLocalTime, format, localeToUse);
+
+    return "";
+}
+//---------------------------------------------------------------------------
+std::time_t RPM_TimeHelper::StrToTime(const std::string& str, const std::string& format, const std::string& localeToUse)
+{
+    std::tm dateTime = StrToTm(str, format, localeToUse);
+    return std::mktime(&dateTime);
+}
+//---------------------------------------------------------------------------
+std::string RPM_TimeHelper::TmToStr(const std::tm& dateTime, const std::string& format, const std::string& localeToUse)
+{
+    std::ostringstream sstr;
+    sstr.imbue(std::locale(localeToUse.c_str()));
+    sstr << std::put_time(&dateTime, format.c_str());
+    return sstr.str();
+}
+//---------------------------------------------------------------------------
+std::tm RPM_TimeHelper::StrToTm(const std::string& str, const std::string& format, const std::string& localeToUse)
+{
+    std::tm dateTime = {};
+
+    std::istringstream ss(str.c_str());
+    ss.imbue(std::locale(localeToUse.c_str()));
+    ss >> std::get_time(&dateTime, format.c_str());
+
+    if (ss.fail())
+        return std::tm() = {};
+
+    return dateTime;
 }
 //---------------------------------------------------------------------------

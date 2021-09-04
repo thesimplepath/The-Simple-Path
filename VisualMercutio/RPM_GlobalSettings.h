@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_Page ------------------------------------------------------------*
+ * ==> RPM_GlobalSettings --------------------------------------------------*
  ****************************************************************************
- * Description:  The main resource and process manager document page        *
+ * Description:  The application global settings                            *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,17 +27,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_Page.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// RPM_Page
-//---------------------------------------------------------------------------
-RPM_Page::RPM_Page()
-{}
-//---------------------------------------------------------------------------
-RPM_Page::~RPM_Page()
+// std
+#include <string>
+
+// common classes
+#include "Common/RPM_Version.h"
+
+/**
+* The application global settings
+*@author Jean-Milost Reymond
+*/
+class RPM_GlobalSettings
 {
-    for each (auto pItem in m_Items)
-        delete pItem;
-}
-//---------------------------------------------------------------------------
+    public:
+        static const std::wstring m_AppName;
+        static const RPM_Version  m_AppVersion;
+ };
