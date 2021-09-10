@@ -33,7 +33,7 @@
 #include <vector>
 
 // core classes
-#include "RPM_Item.h"
+#include "RPM_Element.h"
 
 /**
 * The main resource and process manager document page
@@ -46,7 +46,7 @@ class RPM_Page
         virtual ~RPM_Page();
 
     private:
-        typedef std::vector<RPM_Item*> IItems;
+        typedef std::vector<RPM_Element*> IElements;
 
-        IItems m_Items;
+        IElements m_Elements;
 };

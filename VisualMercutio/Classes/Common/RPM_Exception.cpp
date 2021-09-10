@@ -36,6 +36,8 @@
 //---------------------------------------------------------------------------
 // RPM_ExceptionFormatter
 //---------------------------------------------------------------------------
+const std::string RPM_ExceptionFormatter::m_GenericTypeName = "Generic";
+//---------------------------------------------------------------------------
 std::string RPM_ExceptionFormatter::Format(const std::string& type,
                                            const std::string& message,
                                            const std::string& file,

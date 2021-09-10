@@ -32,11 +32,12 @@
 // std
 #include <locale>
 #include <sstream>
-#include <stdexcept>
 
 // common classes
+#include "RPM_Exception.h"
 #include "RPM_StringHelper.h"
 #include "RPM_TimeHelper.h"
+#include "RPM_FileHelper.h"
 
 //---------------------------------------------------------------------------
 // Static members
@@ -51,7 +52,7 @@ RPM_Logger::RPM_Logger()
 //---------------------------------------------------------------------------
 RPM_Logger::RPM_Logger(const RPM_Logger& other)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
+    M_THROW_EXCEPTION("Cannot create a copy of a singleton class");
 }
 //---------------------------------------------------------------------------
 RPM_Logger::~RPM_Logger()
@@ -159,10 +160,30 @@ RPM_Logger& RPM_Logger::operator << (const std::tm& value)
 //---------------------------------------------------------------------------
 const RPM_Logger& RPM_Logger::operator = (const RPM_Logger& other)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
+    M_THROW_EXCEPTION("Cannot create a copy of a singleton class");
 
     // useless and never reached, but otherwise VS generates an error
     return *this;
+}
+//---------------------------------------------------------------------------
+RPM_Logger* RPM_Logger::Instance()
+{
+    // check instance out of the thread lock (double check lock)
+    if (!m_pLogger)
+    {
+        // lock up the thread
+        std::unique_lock<std::mutex> lock(m_Mutex);
+
+        // create the instance
+        if (!m_pLogger)
+            m_pLogger = new (std::nothrow)RPM_Logger();
+    }
+
+    // still not created?
+    if (!m_pLogger)
+        M_THROW_EXCEPTION("Could not create the Logger unique instance");
+
+    return m_pLogger;
 }
 //---------------------------------------------------------------------------
 void RPM_Logger::Clear()
@@ -222,23 +243,8 @@ std::wstring RPM_Logger::GetTimeStamp(bool timeOnly) const
     return pDateTime ? RPM_StringHelper::Utf8ToUtf16(RPM_TimeHelper::TmToStr(*pDateTime, "%F %T", "")) : L"Unknown";
 }
 //---------------------------------------------------------------------------
-RPM_Logger* RPM_Logger::Instance()
+std::wstring RPM_Logger::GetFileName(const std::wstring& appName) const
 {
-    // check instance out of the thread lock (double check lock)
-    if (!m_pLogger)
-    {
-        // lock up the thread
-        std::unique_lock<std::mutex> lock(m_Mutex);
-
-        // create the instance
-        if (!m_pLogger)
-            m_pLogger = new (std::nothrow)RPM_Logger();
-    }
-
-    // still not created?
-    if (!m_pLogger)
-        throw new std::runtime_error("Could not create the Logger unique instance");
-
-    return m_pLogger;
+    return RPM_FileHelper::EscapeForbiddenChars(appName + L"_" + GetTimeStamp(false) + L".txt", L'\'');
 }
 //---------------------------------------------------------------------------

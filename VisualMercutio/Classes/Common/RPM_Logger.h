@@ -38,15 +38,20 @@
 // common classes
 #include "RPM_StringHelper.h"
 #include "RPM_Version.h"
+#include "RPM_Exception.h"
 
-// macros
-#define M_GetTimeStamp   L"[" << RPM_Logger::Instance()->GetTimeStamp(true) << L"] "
-#define M_Log(msg)       *RPM_Logger::Instance()                                   << msg                  << M_WEOL
-#define M_LogT(msg)      *RPM_Logger::Instance() << M_GetTimeStamp                 << msg                  << M_WEOL
-#define M_LogWarn(msg)   *RPM_Logger::Instance()                   << L"<warning>" << msg << L"</warning>" << M_WEOL
-#define M_LogWarnT(msg)  *RPM_Logger::Instance() << M_GetTimeStamp << L"<warning>" << msg << L"</warning>" << M_WEOL
-#define M_LogError(msg)  *RPM_Logger::Instance()                   << L"<error>"   << msg << L"</error>"   << M_WEOL
-#define M_LogErrorT(msg) *RPM_Logger::Instance() << M_GetTimeStamp << L"<error>"   << msg << L"</error>"   << M_WEOL
+//---------------------------------------------------------------------------
+// Global defines
+//---------------------------------------------------------------------------
+#define M_GetTimeStamp            L"[" << RPM_Logger::Instance()->GetTimeStamp(true) << L"] "
+#define M_Log(msg)                *RPM_Logger::Instance()                   << msg << M_WEOL
+#define M_LogT(msg)               *RPM_Logger::Instance() << M_GetTimeStamp << msg << M_WEOL
+#define M_LogWarn(msg)            M_Log (L"<warning>" << msg << L"</warning>")
+#define M_LogWarnT(msg)           M_LogT(L"<warning>" << msg << L"</warning>")
+#define M_LogError(msg)           M_Log (L"<error>"   << msg << L"</error>")
+#define M_LogErrorT(msg)          M_LogT(L"<error>"   << msg << L"</error>")
+#define M_LogException(type, msg) M_Log (M_FORMAT_EXCEPTION(type, msg))
+//---------------------------------------------------------------------------
 
 /**
 * Provides a logger
@@ -68,9 +73,9 @@ class RPM_Logger
         };
 
         /**
-        * Gets the generator instance, creates it if still not exists
-        *@return the generator instance
-        *@throw A runtime error if instance could not be created
+        * Gets the logger instance, creates it if still not exists
+        *@return the logger instance
+        *@throw RPM exception if instance could not be created
         */
         static RPM_Logger* Instance();
 
@@ -125,6 +130,12 @@ class RPM_Logger
         */
         std::wstring GetTimeStamp(bool timeOnly) const;
 
+        /**
+        * Gets a file name for the log
+        *@param appName - application name
+        */
+        std::wstring GetFileName(const std::wstring& appName) const;
+
     private:
         static RPM_Logger*  m_pLogger;
         static std::mutex   m_Mutex;
@@ -134,7 +145,7 @@ class RPM_Logger
 
         /**
         * Copy constructor
-        *@param other - other identifier generator to copy from
+        *@param other - other logger to copy from
         */
         RPM_Logger(const RPM_Logger& other);
 

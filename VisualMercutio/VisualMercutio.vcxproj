@@ -326,16 +326,19 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Classes\Common\RPM_Buffer.cpp" />
     <ClCompile Include="Classes\Common\RPM_Exception.cpp" />
-    <ClCompile Include="Classes\Common\RPM_IdGenerator.cpp" />
+    <ClCompile Include="Classes\Common\RPM_FileBuffer.cpp" />
+    <ClCompile Include="Classes\Common\RPM_FileHelper.cpp" />
     <ClCompile Include="Classes\Common\RPM_Logger.cpp" />
+    <ClCompile Include="Classes\Common\RPM_MemoryBuffer.cpp" />
+    <ClCompile Include="Classes\Common\RPM_StdFileBuffer.cpp" />
     <ClCompile Include="Classes\Common\RPM_StringHelper.cpp" />
     <ClCompile Include="Classes\Common\RPM_TimeHelper.cpp" />
     <ClCompile Include="Classes\Common\RPM_Version.cpp" />
     <ClCompile Include="Classes\Core\RPM_Attribute.cpp" />
     <ClCompile Include="Classes\Core\RPM_Document.cpp" />
     <ClCompile Include="Classes\Core\RPM_Element.cpp" />
-    <ClCompile Include="Classes\Core\RPM_Item.cpp" />
     <ClCompile Include="Classes\Core\RPM_Page.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RPM_Application.cpp" />
@@ -377,16 +380,19 @@
     <None Include="UI\main.qml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classes\Common\RPM_Buffer.h" />
     <ClInclude Include="Classes\Common\RPM_Exception.h" />
-    <ClInclude Include="Classes\Common\RPM_IdGenerator.h" />
+    <ClInclude Include="Classes\Common\RPM_FileBuffer.h" />
+    <ClInclude Include="Classes\Common\RPM_FileHelper.h" />
     <ClInclude Include="Classes\Common\RPM_Logger.h" />
+    <ClInclude Include="Classes\Common\RPM_MemoryBuffer.h" />
+    <ClInclude Include="Classes\Common\RPM_StdFileBuffer.h" />
     <ClInclude Include="Classes\Common\RPM_StringHelper.h" />
     <ClInclude Include="Classes\Common\RPM_TimeHelper.h" />
     <ClInclude Include="Classes\Common\RPM_Version.h" />
     <ClInclude Include="Classes\Core\RPM_Attribute.h" />
     <ClInclude Include="Classes\Core\RPM_Document.h" />
     <ClInclude Include="Classes\Core\RPM_Element.h" />
-    <ClInclude Include="Classes\Core\RPM_Item.h" />
     <ClInclude Include="Classes\Core\RPM_Page.h" />
     <ClInclude Include="RPM_Application.h" />
     <ClInclude Include="RPM_GlobalSettings.h" />

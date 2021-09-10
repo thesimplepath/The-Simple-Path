@@ -61,7 +61,7 @@ std::string RPM_StringHelper::ToLowerCase(const std::string& str)
         for (std::size_t i = 0; i < str.length(); ++i)
             lowerStr += ::tolower(str[i]);
     }
-    catch (std::exception& e)
+    catch (...)
     {
         // restore locale
         SetLocale_ThreadSafe(LC_ALL, loc.c_str());
@@ -86,7 +86,7 @@ std::wstring RPM_StringHelper::ToLowerCase(const std::wstring& str)
         for (std::size_t i = 0; i < str.length(); ++i)
             lowerStr += ::towlower(str[i]);
     }
-    catch (std::exception& e)
+    catch (...)
     {
         // restore locale
         SetLocale_ThreadSafe(LC_ALL, loc.c_str());
@@ -111,7 +111,7 @@ std::string RPM_StringHelper::ToUpperCase(const std::string& str)
         for (std::size_t i = 0; i < str.length(); ++i)
             upperStr += ::toupper(str[i]);
     }
-    catch (std::exception& e)
+    catch (...)
     {
         // restore locale
         SetLocale_ThreadSafe(LC_ALL, loc.c_str());
@@ -136,7 +136,7 @@ std::wstring RPM_StringHelper::ToUpperCase(const std::wstring& str)
         for (std::size_t i = 0; i < str.length(); ++i)
             upperStr += ::towupper(str[i]);
     }
-    catch (std::exception& e)
+    catch (...)
     {
         // restore locale
         SetLocale_ThreadSafe(LC_ALL, loc.c_str());

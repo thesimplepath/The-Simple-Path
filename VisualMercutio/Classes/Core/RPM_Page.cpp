@@ -37,7 +37,7 @@ RPM_Page::RPM_Page()
 //---------------------------------------------------------------------------
 RPM_Page::~RPM_Page()
 {
-    for each (auto pItem in m_Items)
-        delete pItem;
+    for each (auto pElement in m_Elements)
+        delete pElement;
 }
 //---------------------------------------------------------------------------

@@ -19,16 +19,16 @@ Code convention
 // wrong
 int height;
 int width;
-char* pNameOfThis = NULL;
-char* pNameOfThat = NULL;
+char* pNameOfThis = nullptr;
+char* pNameOfThat = nullptr;
 std::size index = 0;
 std::size offset = 0;
 
 // correct
 int       height;
 int       width;
-char*     pNameOfThis = NULL;
-char*     pNameOfThat = NULL;
+char*     pNameOfThis = nullptr;
+char*     pNameOfThat = nullptr;
 std::size index       = 0;
 std::size offset      = 0;
 

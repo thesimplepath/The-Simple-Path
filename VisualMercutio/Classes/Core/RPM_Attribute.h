@@ -33,17 +33,18 @@
 #include <cstdint>
 #include <ctime>
 #include <string>
-
-// core classes
-#include "Core\RPM_Item.h"
+#include <vector>
 
 /**
 * Basic attribute which may be contained in an element
 *@author Jean-Milost Reymond
 */
-class RPM_Attribute : public RPM_Item
+class RPM_Attribute
 {
     public:
+        /**
+        * Attribute value format type
+        */
         enum class IEFormat
         {
             IE_Undefined = 0,
@@ -67,10 +68,48 @@ class RPM_Attribute : public RPM_Item
         virtual ~RPM_Attribute();
 
         /**
+        * Clears the attribute
+        */
+        virtual void Clear();
+
+        /**
+        * Sets the time format to use for conversions
+        *@param timeFormat - new time format to use for conversions
+        */
+        virtual void SetTimeFormat(const std::string& timeFormat);
+
+        /**
+        * Gets the time format used for conversions
+        *@return the time format used for conversions
+        */
+        virtual std::string GetTimeFormat() const;
+
+        /**
+        * Sets the attribute value
+        *@param value - value to set
+        */
+        virtual void Set(bool                value);
+        virtual void Set(std::int8_t         value);
+        virtual void Set(std::uint8_t        value);
+        virtual void Set(std::int16_t        value);
+        virtual void Set(std::uint16_t       value);
+        virtual void Set(std::int32_t        value);
+        virtual void Set(std::uint32_t       value);
+        virtual void Set(std::int64_t        value);
+        virtual void Set(std::uint64_t       value);
+        virtual void Set(float               value);
+        virtual void Set(double              value);
+        virtual void Set(const std::string&  value);
+        virtual void Set(const std::wstring& value);
+        virtual void Set(const char*         pDefVal);
+        virtual void Set(const wchar_t*      pDefVal);
+        virtual void Set(const std::tm&      value);
+
+        /**
         * Gets the attribute value
         *@return the attribute value
         */
-        template <class T>
+        template<class T>
         T Get() const;
 
         /**
@@ -91,18 +130,26 @@ class RPM_Attribute : public RPM_Item
         virtual double        Get(double              defVal)  const;
         virtual std::string   Get(const std::string&  defVal)  const;
         virtual std::wstring  Get(const std::wstring& defVal)  const;
+        virtual std::string   Get(const char*         pDefVal) const;
+        virtual std::wstring  Get(const wchar_t*      pDefVal) const;
         virtual std::tm       Get(const std::tm&      defVal)  const;
 
         /**
-        * Clears the attribute
+        * Gets the attribute value size in bytes
+        *@return the attribute value size in bytes
         */
-        virtual void Clear();
+        virtual std::size_t GetSize() const;
 
     private:
-        void*         m_pData  = nullptr;
-        IEFormat      m_Format = IEFormat::IE_Undefined;
-        std::uint64_t m_Size   = 0;
+        std::string m_TimeFormat = "%F %T";
+        void*       m_pData      = nullptr;
+        IEFormat    m_Format     = IEFormat::IE_Undefined;
 };
+
+/**
+* Attribute list
+*/
+typedef std::vector<RPM_Attribute*> RPM_Attributes;
 
 //---------------------------------------------------------------------------
 template <class T>

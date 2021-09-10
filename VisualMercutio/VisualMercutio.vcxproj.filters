@@ -56,14 +56,8 @@
     <ClCompile Include="Classes\Core\RPM_Attribute.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Core\RPM_Item.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Core\RPM_Element.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Common\RPM_IdGenerator.cpp">
-      <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Core\RPM_Document.cpp">
       <Filter>Source Files\Core</Filter>
@@ -92,6 +86,21 @@
     <ClCompile Include="Classes\Common\RPM_Exception.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Common\RPM_Buffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\RPM_FileBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\RPM_MemoryBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\RPM_StdFileBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\RPM_FileHelper.cpp">
+      <Filter>Header Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -115,14 +124,8 @@
     <ClInclude Include="Classes\Core\RPM_Attribute.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Core\RPM_Item.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Core\RPM_Element.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Common\RPM_IdGenerator.h">
-      <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Core\RPM_Document.h">
       <Filter>Header Files\Core</Filter>
@@ -150,6 +153,21 @@
     </ClInclude>
     <ClInclude Include="Classes\Common\RPM_Exception.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\RPM_Buffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\RPM_FileBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\RPM_MemoryBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\RPM_StdFileBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\RPM_FileHelper.h">
+      <Filter>Source Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

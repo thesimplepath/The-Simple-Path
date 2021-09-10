@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_IdGenerator -----------------------------------------------------*
+ * ==> RPM_FileHelper ------------------------------------------------------*
  ****************************************************************************
- * Description:  Identifier generator                                       *
+ * Description:  Helper class for files and directories                     *
  * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -30,50 +30,23 @@
 #pragma once
 
 // std
-#include <cstddef>
-#include <mutex>
+#include <ctime>
+#include <string>
 
 /**
-* Identifier generator
-*@note The identifiers created by this generator are unique in the context of the application,
-*      including threads
+* Helper class for files and directories
 *@author Jean-Milost Reymond
 */
-class RPM_IdGenerator
+class RPM_FileHelper
 {
     public:
         /**
-        * Gets the generator instance, creates it if still not exists
-        *@return the generator instance
-        *@throw A runtime error if instance could not be created
+        * Escapes the forbidden chars in the file name and replaces by another char
+        *@param fileName - file name in which forbidden chars should be replaced
+        *@param pattern - forbidden chars pattern
+        *@param by - char to replace by
+        *@return escaped file name
         */
-        static RPM_IdGenerator* Instance();
-
-        /**
-        * Gets the next available identifier
-        *@return the next available identifier
-        */
-        std::size_t GetNextID() const;
-
-    private:
-        static RPM_IdGenerator* m_pIdGen;
-        static std::mutex       m_Mutex;
-
-        std::size_t m_CurId = 0;
-
-        RPM_IdGenerator();
-
-        /**
-        * Copy constructor
-        *@param other - other identifier generator to copy from
-        */
-        RPM_IdGenerator(const RPM_IdGenerator& other);
-
-        ~RPM_IdGenerator();
-
-        /**
-        * Copy operator
-        *@param other - other identifier generator to copy from
-        */
-        const RPM_IdGenerator& operator = (const RPM_IdGenerator& other);
+        static std::string  EscapeForbiddenChars(const std::string&  fileName, char    by =  '_');
+        static std::wstring EscapeForbiddenChars(const std::wstring& fileName, wchar_t by = L'_');
 };

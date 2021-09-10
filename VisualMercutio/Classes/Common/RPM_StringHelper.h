@@ -52,6 +52,16 @@ class RPM_StringHelper
         static std::string SetLocale_ThreadSafe(int category, const char* pLocale);
 
         /**
+        * Replaces the chars in the string matching with the pattern by a substitution char
+        *@param fileName - file name in which forbidden chars should be replaced
+        *@param pattern - forbidden chars pattern
+        *@param by - char to replace by
+        *@return file name with replaced chars
+        */
+        template <class T>
+        static std::basic_string<T> ReplaceChars(const std::basic_string<T>& fileName, const std::basic_string<T>& pattern, T by);
+
+        /**
         * Converts string to lower case
         *@param str - string to convert
         *@return converted string
@@ -105,3 +115,24 @@ class RPM_StringHelper
         static bool StrToBool(const std::string&  str);
         static bool StrToBool(const std::wstring& str);
 };
+
+//---------------------------------------------------------------------------
+template <class T>
+std::basic_string<T> RPM_StringHelper::ReplaceChars(const std::basic_string<T>& fileName, const std::basic_string<T>& pattern, T by)
+{
+    std::basic_string<T> result;
+
+    // iterate through chars in file name
+    for each (auto c in fileName)
+    {
+        // check if char match an item in the pattern, write the replacing char if do filter,
+        // otherwise copy char from source file name
+        if (pattern.find(c) != std::basic_string<T>::npos)
+            result += by;
+        else
+            result += c;
+    }
+
+    return result;
+}
+//---------------------------------------------------------------------------

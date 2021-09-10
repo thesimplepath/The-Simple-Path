@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> RPM_Element ---------------------------------------------------------*
+ * ==> RPM_FileBuffer ------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Generic file buffer                                        *
+ * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - todo FIXME -cFeature -oJean: Set the project name here     *
@@ -30,21 +30,53 @@
 #pragma once
 
 // std
-#include <vector>
+#include <string>
 
-// core classes
-#include "RPM_Attribute.h"
+// qr engine
+#include "RPM_Buffer.h"
 
 /**
-* Basic element, which is a base for any symbol
+* Generic file buffer
 *@author Jean-Milost Reymond
 */
-class RPM_Element
+class RPM_FileBuffer : public RPM_Buffer
 {
     public:
-        RPM_Element();
-        virtual ~RPM_Element();
+        /**
+        * Constructor
+        */
+        RPM_FileBuffer();
+
+        /**
+        * Destructor
+        */
+        virtual ~RPM_FileBuffer();
+
+        /**
+        * Buffer read/write mode
+        */
+        enum IEMode
+        {
+            IE_M_Unknown = 0,
+            IE_M_Read,
+            IE_M_Write,
+            IE_M_RW,
+        };
+
+        /**
+        * Opens file in specified mode
+        *@param fileName - file name
+        *@param mode - opening mode
+        *@return true on success, otherwise false
+        */
+        virtual bool Open(const std::string&  fileName, IEMode mode);
+        virtual bool Open(const std::wstring& fileName, IEMode mode);
 
     protected:
-        RPM_Attributes m_Attributes;
+        IEMode m_Mode;
+
+        /**
+        * Closes file
+        */
+        virtual void Close() = 0;
 };

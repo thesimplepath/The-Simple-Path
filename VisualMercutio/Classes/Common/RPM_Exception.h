@@ -37,11 +37,11 @@
 //---------------------------------------------------------------------------
 // Global defines
 //---------------------------------------------------------------------------
-#define M_THROW_EXCEPTION(message)             throw QR_Exception                 (      message, __FILE__, __FUNCTION__, __LINE__)
-#define M_FORMAT_EXCEPTION(type, message)      QR_ExceptionFormatter::Format      (type, message, __FILE__, __FUNCTION__, __LINE__)
-#define M_FORMAT_EXCEPTION_HTML(type, message) QR_ExceptionFormatter::Format_HTML (type, message, __FILE__, __FUNCTION__, __LINE__)
-#define M_FORMAT_MESSAGE(message)              QR_ExceptionFormatter::Message     (      message,           __FUNCTION__, __LINE__)
-#define M_FORMAT_MESSAGE_HTML(message)         QR_ExceptionFormatter::Message_HTML(      message,           __FUNCTION__, __LINE__)
+#define M_THROW_EXCEPTION(message)             throw RPM_Exception                       (message, __FILE__, __FUNCTION__, __LINE__)
+#define M_FORMAT_EXCEPTION(type, message)      RPM_ExceptionFormatter::Format      (type, message, __FILE__, __FUNCTION__, __LINE__)
+#define M_FORMAT_EXCEPTION_HTML(type, message) RPM_ExceptionFormatter::Format_HTML (type, message, __FILE__, __FUNCTION__, __LINE__)
+#define M_FORMAT_MESSAGE(message)              RPM_ExceptionFormatter::Message           (message,           __FUNCTION__, __LINE__)
+#define M_FORMAT_MESSAGE_HTML(message)         RPM_ExceptionFormatter::Message_HTML      (message,           __FUNCTION__, __LINE__)
 #define M_ASSERT(condition)\
 {\
     if (!(condition))\
@@ -56,6 +56,8 @@
 class RPM_ExceptionFormatter
 {
     public:
+        const static std::string m_GenericTypeName;
+
         /**
         * Formats exception message for logs
         *@param type - type of exception (STD, QR_Exception, ...)

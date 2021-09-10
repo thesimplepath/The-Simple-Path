@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> RPM_Item ------------------------------------------------------------*
+ * ==> RPM_FileHelper ------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic resource and process manager item                    *
- * Contained in: Core                                                       *
+ * Description:  Helper class for files and directories                     *
+ * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - todo FIXME -cFeature -oJean: Set the project name here     *
@@ -27,23 +27,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_Item.h"
+#include "RPM_FileHelper.h"
 
 // common classes
-#include "Common\RPM_IdGenerator.h"
+#include "RPM_StringHelper.h"
 
 //---------------------------------------------------------------------------
-// RPM_Item
+// RPM_FileHelper
 //---------------------------------------------------------------------------
-RPM_Item::RPM_Item() :
-    m_ID(RPM_IdGenerator::Instance()->GetNextID())
-{}
-//---------------------------------------------------------------------------
-RPM_Item::~RPM_Item()
-{}
-//---------------------------------------------------------------------------
-std::size_t RPM_Item::GetID() const
+std::wstring RPM_FileHelper::EscapeForbiddenChars(const std::wstring& fileName, wchar_t by)
 {
-    return m_ID;
+    #if defined (_WIN32)
+        const std::wstring pattern = L"<>:\"/\\|?*";
+    #elif defined (__APPLE__)
+        const std::wstring pattern = L":/";
+    #elif defined (__linux__)
+        const std::wstring pattern = L"/";
+    #else
+        M_THROW_EXCEPTION("Unknown operating system");
+    #endif
+
+    return RPM_StringHelper::ReplaceChars(fileName, pattern, by);
 }
 //---------------------------------------------------------------------------

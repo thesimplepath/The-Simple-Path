@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_IdGenerator -----------------------------------------------------*
+ * ==> RPM_Buffer ----------------------------------------------------------*
  ****************************************************************************
- * Description:  Identifier generator                                       *
+ * Description:  Generic buffer                                             *
  * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,62 +27,82 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_IdGenerator.h"
-
-// std
-#include <stdexcept>
+#include "RPM_Buffer.h"
 
 //---------------------------------------------------------------------------
-// Static members
+// RPM_Buffer
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::m_pIdGen = nullptr;
-std::mutex       RPM_IdGenerator::m_Mutex;
-//---------------------------------------------------------------------------
-// RPM_IdGenerator
-//---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator()
+RPM_Buffer::RPM_Buffer()
 {}
 //---------------------------------------------------------------------------
-RPM_IdGenerator::RPM_IdGenerator(const RPM_IdGenerator& other)
+RPM_Buffer::RPM_Buffer(RPM_Buffer& other)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
+    Copy(other);
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator::~RPM_IdGenerator()
+RPM_Buffer::~RPM_Buffer()
 {}
 //---------------------------------------------------------------------------
-const RPM_IdGenerator& RPM_IdGenerator::operator = (const RPM_IdGenerator& other)
+RPM_Buffer& RPM_Buffer::operator = (RPM_Buffer& other)
 {
-    new std::runtime_error("Cannot create a copy of a singleton class");
-
-    // useless and never reached, but otherwise VS generates an error
+    Copy(other);
     return *this;
 }
 //---------------------------------------------------------------------------
-RPM_IdGenerator* RPM_IdGenerator::Instance()
+void RPM_Buffer::Copy(RPM_Buffer& other)
 {
-    // check instance out of the thread lock (double check lock)
-    if (!m_pIdGen)
-    {
-        // lock up the thread
-        std::unique_lock<std::mutex> lock(m_Mutex);
-
-        // create the instance
-        if (!m_pIdGen)
-            m_pIdGen = new (std::nothrow)RPM_IdGenerator();
-    }
-
-    // still not created?
-    if (!m_pIdGen)
-        throw new std::runtime_error("Could not create the Identifier Generator unique instance");
-
-    return m_pIdGen;
+    Copy(&other);
 }
 //---------------------------------------------------------------------------
-std::size_t RPM_IdGenerator::GetNextID() const
+void RPM_Buffer::Copy(RPM_Buffer* pOther)
 {
-    ++const_cast<std::size_t&>(m_CurId);
+    // clear current buffer content
+    Clear();
 
-    return m_CurId - 1;
+    // no buffer to copy from?
+    if (!pOther)
+        return;
+
+    std::uint8_t* pBuffer = nullptr;
+
+    try
+    {
+        // create copy buffer
+        pBuffer = new std::uint8_t[pOther->GetSize()];
+
+        // store current source offset
+        const std::size_t srcOffset = pOther->GetOffset();
+
+        // seek source to start
+        pOther->Seek(0, 0);
+
+        // get size to copy
+        const std::size_t sizeToCopy = pOther->GetSize();
+
+        // read source buffer content
+        pOther->Read(pBuffer, sizeToCopy);
+
+        // seek source to previous offset
+        pOther->Seek(0, srcOffset);
+
+        // write source data to buffer
+        Write(pBuffer, sizeToCopy);
+
+        // seek to start position
+        Seek(0, 0);
+    }
+    catch (...)
+    {
+        // delete copy buffer
+        if (pBuffer)
+            delete[] pBuffer;
+
+        // re-throw exception
+        throw;
+    }
+
+    // delete copy buffer
+    if (pBuffer)
+        delete[] pBuffer;
 }
 //---------------------------------------------------------------------------

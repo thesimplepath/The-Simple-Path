@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> RPM_Item ------------------------------------------------------------*
+ * ==> RPM_FileBuffer ------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic resource and process manager item                    *
- * Contained in: Core                                                       *
+ * Description:  Generic file buffer                                        *
+ * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - todo FIXME -cFeature -oJean: Set the project name here     *
@@ -27,28 +27,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "RPM_FileBuffer.h"
 
-// std
-#include <cstddef>
-
-/**
-* Basic resource and process manager item
-*@author Jean-Milost Reymond
-*/
-class RPM_Item
+//---------------------------------------------------------------------------
+// RPM_FileBuffer
+//---------------------------------------------------------------------------
+RPM_FileBuffer::RPM_FileBuffer() :
+    RPM_Buffer(),
+    m_Mode(IE_M_Unknown)
+{}
+//---------------------------------------------------------------------------
+RPM_FileBuffer::~RPM_FileBuffer()
+{}
+//---------------------------------------------------------------------------
+bool RPM_FileBuffer::Open(const std::string& fileName, IEMode mode)
 {
-    public:
-        RPM_Item();
-        virtual ~RPM_Item();
-
-        /**
-        * Gets the item identifier
-        *@return the item identifier
-        *@note The item identifier should be unique in the application, including threads
-        */
-        virtual std::size_t GetID() const;
-
-    private:
-        std::size_t m_ID;
-};
+    m_Mode = mode;
+    return true;
+}
+//---------------------------------------------------------------------------
+bool RPM_FileBuffer::Open(const std::wstring& fileName, IEMode mode)
+{
+    m_Mode = mode;
+    return true;
+}
+//---------------------------------------------------------------------------
