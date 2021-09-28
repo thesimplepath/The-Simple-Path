@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_Application -----------------------------------------------------*
+ * ==> RPM_ProcedureSymbol -------------------------------------------------*
  ****************************************************************************
- * Description:  The main application class                                 *
+ * Description:  A symbol representing a procedure                          *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,60 +27,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_Application.h"
+#include "RPM_ProcedureSymbol.h"
 
 //---------------------------------------------------------------------------
-// RPM_Application
+// RPM_ProcedureSymbol
 //---------------------------------------------------------------------------
-RPM_Application::RPM_Application(int argc, char* argv[]) :
-    m_pApp(new QGuiApplication(argc, argv)),
-    m_pEngine(new QQmlApplicationEngine()),
-    m_pDocument(new RPM_Document())
+RPM_ProcedureSymbol::RPM_ProcedureSymbol()
 {}
 //---------------------------------------------------------------------------
-RPM_Application::~RPM_Application()
+RPM_ProcedureSymbol::~RPM_ProcedureSymbol()
 {
-    if (m_pDocument)
-        delete m_pDocument;
-
-    if (m_pEngine)
-        delete m_pEngine;
-
-    if (m_pApp)
-        delete m_pApp;
-}
-//---------------------------------------------------------------------------
-QGuiApplication* RPM_Application::GetQtApp() const
-{
-    return m_pApp;
-}
-//---------------------------------------------------------------------------
-QQmlApplicationEngine* RPM_Application::GetQtEngine() const
-{
-    return m_pEngine;
-}
-//---------------------------------------------------------------------------
-RPM_Document* RPM_Application::GetDocument() const
-{
-    return m_pDocument;
-}
-//---------------------------------------------------------------------------
-int RPM_Application::Execute()
-{
-    const QUrl url(QStringLiteral("qrc:/UI/RPM_Main.qml"));
-
-    QObject::connect(m_pEngine,
-                     &QQmlApplicationEngine::objectCreated,
-                     m_pApp,
-                     [url](QObject* pObj, const QUrl& objUrl)
-                     {
-                         if (!pObj && url == objUrl)
-                             QCoreApplication::exit(-1);
-                     },
-                     Qt::QueuedConnection);
-
-    m_pEngine->load(url);
-
-    return m_pApp->exec();
 }
 //---------------------------------------------------------------------------

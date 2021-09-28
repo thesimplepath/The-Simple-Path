@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
         // open a file buffer to write the log
         std::unique_ptr<RPM_StdFileBuffer> pFileBuffer(new RPM_StdFileBuffer());
-        pFileBuffer->Open(fileName, RPM_FileBuffer::IE_M_Write);
+        pFileBuffer->Open(fileName, RPM_FileBuffer::IEMode::IE_M_Write);
 
         // write the log to file
         const std::string log = RPM_StringHelper::Utf16ToUtf8(RPM_Logger::Instance()->Get());

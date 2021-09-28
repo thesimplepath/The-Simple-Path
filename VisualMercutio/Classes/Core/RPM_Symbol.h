@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> RPM_Application -----------------------------------------------------*
+ * ==> RPM_Symbol ----------------------------------------------------------*
  ****************************************************************************
- * Description:  The main application class                                 *
+ * Description:  Basic symbol                                               *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,60 +27,65 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_Application.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// RPM_Application
-//---------------------------------------------------------------------------
-RPM_Application::RPM_Application(int argc, char* argv[]) :
-    m_pApp(new QGuiApplication(argc, argv)),
-    m_pEngine(new QQmlApplicationEngine()),
-    m_pDocument(new RPM_Document())
-{}
-//---------------------------------------------------------------------------
-RPM_Application::~RPM_Application()
+// std
+#include <vector>
+
+// core classes
+#include "RPM_Element.h"
+
+/**
+* Basic symbol
+*@author Jean-Milost Reymond
+*/
+class RPM_Symbol : public RPM_Element
 {
-    if (m_pDocument)
-        delete m_pDocument;
+    public:
+        RPM_Symbol();
+        virtual ~RPM_Symbol();
 
-    if (m_pEngine)
-        delete m_pEngine;
+        /**
+        * Gets the symbol name
+        *@return the symbol name
+        */
+        virtual std::wstring GetSymbolName() const = 0;
 
-    if (m_pApp)
-        delete m_pApp;
-}
-//---------------------------------------------------------------------------
-QGuiApplication* RPM_Application::GetQtApp() const
-{
-    return m_pApp;
-}
-//---------------------------------------------------------------------------
-QQmlApplicationEngine* RPM_Application::GetQtEngine() const
-{
-    return m_pEngine;
-}
-//---------------------------------------------------------------------------
-RPM_Document* RPM_Application::GetDocument() const
-{
-    return m_pDocument;
-}
-//---------------------------------------------------------------------------
-int RPM_Application::Execute()
-{
-    const QUrl url(QStringLiteral("qrc:/UI/RPM_Main.qml"));
+        /**
+        * Sets the symbol name
+        *@param value - the symbol name
+        *@return true on success, otherwise false
+        */
+        virtual bool SetSymbolName(const std::wstring& value) = 0;
 
-    QObject::connect(m_pEngine,
-                     &QQmlApplicationEngine::objectCreated,
-                     m_pApp,
-                     [url](QObject* pObj, const QUrl& objUrl)
-                     {
-                         if (!pObj && url == objUrl)
-                             QCoreApplication::exit(-1);
-                     },
-                     Qt::QueuedConnection);
+        /**
+        * Gets the symbol comments
+        *@return the symbol comments
+        */
+        virtual std::wstring GetSymbolComments() const = 0;
 
-    m_pEngine->load(url);
+        /**
+        * Sets the symbol comments
+        *@param value - the symbol comments
+        *@return true on success, otherwise false
+        */
+        virtual bool SetSymbolComments(const std::wstring& value) = 0;
 
-    return m_pApp->exec();
-}
-//---------------------------------------------------------------------------
+        /**
+        * Gets the symbol reference number
+        *@return the symbol reference number
+        */
+        virtual std::int32_t GetSymbolReferenceNumber() const = 0;
+
+        /**
+        * Sets the symbol reference number
+        *@param value - the symbol reference number
+        *@return true on success, otherwise false
+        */
+        virtual bool SetSymbolReferenceNumber(std::int32_t value) = 0;
+
+    private:
+        std::wstring m_Name;
+        std::wstring m_Comments;
+        std::int32_t m_RefNb = 0;
+};

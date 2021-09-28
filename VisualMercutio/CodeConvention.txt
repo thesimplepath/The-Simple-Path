@@ -17,20 +17,20 @@ Code convention
 4 spaces are used for indentation. Tabs aren't allowed. Elements are aligned in columns whenever possible.
 
 // wrong
-int height;
-int width;
+std::int32_t height;
+std::int32_t width;
 char* pNameOfThis = nullptr;
 char* pNameOfThat = nullptr;
 std::size index = 0;
 std::size offset = 0;
 
 // correct
-int       height;
-int       width;
-char*     pNameOfThis = nullptr;
-char*     pNameOfThat = nullptr;
-std::size index       = 0;
-std::size offset      = 0;
+std::int32_t height;
+std::int32_t width;
+char*        pNameOfThis = nullptr;
+char*        pNameOfThat = nullptr;
+std::size    index       = 0;
+std::size    offset      = 0;
 
 2. Declaring variables
 Declare each variable on a separate line. Avoid short or meaningless names (e.g "a", "rbarr", "nughdeget").
@@ -38,14 +38,14 @@ Single character variable names are only admitted for counters and temporaries, 
 Wait when declaring a variable until it is needed.
 
 // wrong
-int a, b;
-char* c, *d;
+std::int32_t a, b;
+char         *c, *d;
 
 // correct
-int   height;
-int   width;
-char* pNameOfThis;
-char* pNameOfThat;
+std::int32_t height;
+std::int32_t width;
+char*        pNameOfThis;
+char*        pNameOfThat;
 
 Variables and functions start with a lower-case letter, variables owning a pointer start with the "p" letter.
 Each consecutive word in a variable's name starts with an upper-case letter. Avoid abbreviations.
@@ -160,7 +160,7 @@ if (address.isEmpty())
 	return false;
 }
 
-for (int i = 0; i < 10; ++i)
+for (std::int32_t i = 0; i < 10; ++i)
 {
 	Print("%i", i);
 }
@@ -169,7 +169,7 @@ for (int i = 0; i < 10; ++i)
 if (address.isEmpty())
 	return false;
 
-for (int i = 0; i < 10; ++i)
+for (std::int32_t i = 0; i < 10; ++i)
 	Print("%i", i);
 
 Put an indent for the case statement. Put the else if statements on 2 separate lines, and keep the code blocks aligned.
@@ -322,7 +322,7 @@ on the same line after the code, e.g when aligned variables should be explained.
 // this increments a variable
 ++aVariable;
 
-int aVariable; // this is a variable
+std::int32_t aVariable; // this is a variable
 
 /**
 * This is a function

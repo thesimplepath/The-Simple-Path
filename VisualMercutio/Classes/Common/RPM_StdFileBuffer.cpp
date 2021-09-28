@@ -60,15 +60,25 @@ bool RPM_StdFileBuffer::Open(const std::string& fileName, IEMode mode)
         return false;
 
     // open file stream
-    switch (m_Mode)
-    {
-        case IE_M_Read:  m_FileBuffer = std::fopen(fileName.c_str(), "r+b");  break;
-        case IE_M_Write: m_FileBuffer = std::fopen(fileName.c_str(), "w+b");  break;
-        case IE_M_RW:    m_FileBuffer = std::fopen(fileName.c_str(), "rw+b"); break;
-        default:         return false;
-    }
+    #ifdef _MSC_VER
+        switch (m_Mode)
+        {
+            case IEMode::IE_M_Read:  return !fopen_s(&m_FileBuffer, fileName.c_str(), "r+b");
+            case IEMode::IE_M_Write: return !fopen_s(&m_FileBuffer, fileName.c_str(), "w+b");
+            case IEMode::IE_M_RW:    return !fopen_s(&m_FileBuffer, fileName.c_str(), "rw+b");
+            default:                 return false;
+        }
+    #else
+        switch (m_Mode)
+        {
+            case IEMode::IE_M_Read:  m_FileBuffer = std::fopen(fileName.c_str(), "r+b");  break;
+            case IEMode::IE_M_Write: m_FileBuffer = std::fopen(fileName.c_str(), "w+b");  break;
+            case IEMode::IE_M_RW:    m_FileBuffer = std::fopen(fileName.c_str(), "rw+b"); break;
+            default:                 return false;
+        }
 
-    return m_FileBuffer;
+        return m_FileBuffer;
+    #endif
 }
 //---------------------------------------------------------------------------
 void RPM_StdFileBuffer::Clear()
@@ -101,9 +111,17 @@ std::size_t RPM_StdFileBuffer::GetSize() const
     const std::size_t curPos = std::ftell(m_FileBuffer);
 
     // get file size
-    std::fseek(m_FileBuffer, 0, SEEK_END);
+    #ifdef _MSC_VER
+        _fseeki64(m_FileBuffer, 0, SEEK_END);
+    #else
+        std::fseek(m_FileBuffer, 0, SEEK_END);
+    #endif
     const std::size_t fileSize = std::ftell(m_FileBuffer);
-    std::fseek(m_FileBuffer, curPos, SEEK_SET);
+    #ifdef _MSC_VER
+        _fseeki64(m_FileBuffer, curPos, SEEK_SET);
+    #else
+        std::fseek(m_FileBuffer, curPos, SEEK_SET);
+    #endif
 
     return fileSize;
 }
@@ -121,12 +139,20 @@ std::size_t RPM_StdFileBuffer::Seek(std::size_t start, std::size_t delta)
         if (!delta)
         {
             // seek to file beginning
-            std::fseek(m_FileBuffer, 0, SEEK_SET);
+            #ifdef _MSC_VER
+                _fseeki64(m_FileBuffer, 0, SEEK_SET);
+            #else
+                std::fseek(m_FileBuffer, 0, SEEK_SET);
+            #endif
             return 0L;
         }
 
         // seek to final position
-        std::fseek(m_FileBuffer, delta, SEEK_SET);
+        #ifdef _MSC_VER
+            _fseeki64(m_FileBuffer, delta, SEEK_SET);
+        #else
+            std::fseek(m_FileBuffer, delta, SEEK_SET);
+        #endif
         return delta;
     }
 
@@ -141,13 +167,21 @@ std::size_t RPM_StdFileBuffer::Seek(std::size_t start, std::size_t delta)
         // calculate seek to start delta
         startDelta = start - offset;
 
-        std::fseek(m_FileBuffer, startDelta, SEEK_CUR);
+        #ifdef _MSC_VER
+            _fseeki64(m_FileBuffer, startDelta, SEEK_CUR);
+        #else
+            std::fseek(m_FileBuffer, startDelta, SEEK_CUR);
+        #endif
     }
     else
         startDelta = 0;
 
     // seek to final position
-    std::fseek(m_FileBuffer, delta, SEEK_CUR);
+    #ifdef _MSC_VER
+        _fseeki64(m_FileBuffer, delta, SEEK_CUR);
+    #else
+        std::fseek(m_FileBuffer, delta, SEEK_CUR);
+    #endif
 
     return offset + startDelta + delta;
 }
@@ -159,7 +193,7 @@ std::size_t RPM_StdFileBuffer::Read(void* pBuffer, std::size_t length)
         return 0;
 
     // buffer is opened in an incompatible mode?
-    if (m_Mode != IE_M_Read && m_Mode != IE_M_RW)
+    if (m_Mode != IEMode::IE_M_Read && m_Mode != IEMode::IE_M_RW)
         return 0;
 
     // no source buffer?
@@ -221,7 +255,7 @@ std::size_t RPM_StdFileBuffer::Write(const void* pBuffer, std::size_t length)
         return 0;
 
     // buffer is opened in an incompatible mode?
-    if (m_Mode != IE_M_Write && m_Mode != IE_M_RW)
+    if (m_Mode != IEMode::IE_M_Write && m_Mode != IEMode::IE_M_RW)
         return 0;
 
     // write buffer and return successfully written bytes
@@ -235,7 +269,7 @@ std::string RPM_StdFileBuffer::ToStr()
         return "";
 
     // buffer is opened in an incompatible mode?
-    if (m_Mode != IE_M_Read && m_Mode != IE_M_RW)
+    if (m_Mode != IEMode::IE_M_Read && m_Mode != IEMode::IE_M_RW)
         return "";
 
     // get buffer size

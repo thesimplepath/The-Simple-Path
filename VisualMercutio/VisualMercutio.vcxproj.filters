@@ -48,6 +48,12 @@
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{c039c5a5-cd38-4900-9cb2-5fc7c8583be9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{48e110b9-b4dc-4e62-bd52-5e4a9c16b2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{c7f9cdfd-c756-4969-a797-29391122ed27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,8 +104,17 @@
     <ClCompile Include="Classes\Common\RPM_StdFileBuffer.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Core\RPM_Symbol.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\RPM_ProcedureSymbol.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\RPM_ProcedureSymbolModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
     <ClCompile Include="Classes\Common\RPM_FileHelper.cpp">
-      <Filter>Header Files\Common</Filter>
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,11 +129,6 @@
     <QtRcc Include="qml.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="UI\main.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes\Core\RPM_Attribute.h">
@@ -166,13 +176,39 @@
     <ClInclude Include="Classes\Common\RPM_StdFileBuffer.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Core\RPM_Symbol.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\RPM_ProcedureSymbol.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Models\RPM_ProcedureSymbolModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
     <ClInclude Include="Classes\Common\RPM_FileHelper.h">
-      <Filter>Source Files\Common</Filter>
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CodeConvention.txt">
       <Filter>Documents</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UI\RPM_Main.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\RPM_ProcedureSymbol.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\RPM_Handle.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\RPM_Edit.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\RPM_HandlesControl.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
   </ItemGroup>
 </Project>

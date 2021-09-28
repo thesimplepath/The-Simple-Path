@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> RPM_FileBuffer ------------------------------------------------------*
+ * ==> RPM_ProcedureSymbolModel --------------------------------------------*
  ****************************************************************************
- * Description:  Generic file buffer                                        *
- * Contained in: Common                                                     *
+ * Description:  A model for the procedure symbol                           *
+ * Contained in: Models                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - todo FIXME -cFeature -oJean: Set the project name here     *
@@ -27,28 +27,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "RPM_FileBuffer.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// RPM_FileBuffer
-//---------------------------------------------------------------------------
-RPM_FileBuffer::RPM_FileBuffer() :
-    RPM_Buffer(),
-    m_Mode(IEMode::IE_M_Unknown)
-{}
-//---------------------------------------------------------------------------
-RPM_FileBuffer::~RPM_FileBuffer()
-{}
-//---------------------------------------------------------------------------
-bool RPM_FileBuffer::Open(const std::string& fileName, IEMode mode)
+// std
+#include <vector>
+
+// core classes
+#include "Core\RPM_ProcedureSymbol.h"
+
+/**
+* A model for the procedure symbol
+*@author Jean-Milost Reymond
+*/
+class RPM_ProcedureSymbolModel
 {
-    m_Mode = mode;
-    return true;
-}
-//---------------------------------------------------------------------------
-bool RPM_FileBuffer::Open(const std::wstring& fileName, IEMode mode)
-{
-    m_Mode = mode;
-    return true;
-}
-//---------------------------------------------------------------------------
+    public:
+        RPM_ProcedureSymbolModel();
+        virtual ~RPM_ProcedureSymbolModel();
+
+    private:
+};

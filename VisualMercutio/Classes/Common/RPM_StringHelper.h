@@ -49,7 +49,7 @@ class RPM_StringHelper
         *@param pLocale - new locale to select, system locale if nullptr
         *@return previously selected locale
         */
-        static std::string SetLocale_ThreadSafe(int category, const char* pLocale);
+        static std::string SetLocale_ThreadSafe(std::int32_t category, const char* pLocale);
 
         /**
         * Replaces the chars in the string matching with the pattern by a substitution char

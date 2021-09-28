@@ -32,7 +32,7 @@
 // std
 #include <string>
 
-// qr engine
+// common classes
 #include "RPM_Buffer.h"
 
 /**
@@ -55,7 +55,7 @@ class RPM_FileBuffer : public RPM_Buffer
         /**
         * Buffer read/write mode
         */
-        enum IEMode
+        enum class IEMode
         {
             IE_M_Unknown = 0,
             IE_M_Read,

@@ -35,6 +35,10 @@
 #include <string>
 #include <vector>
 
+// common classes
+#include "Common\RPM_Exception.h"
+#include "Common\RPM_Logger.h"
+
 /**
 * Basic attribute which may be contained in an element
 *@author Jean-Milost Reymond
@@ -64,8 +68,47 @@ class RPM_Attribute
             IE_DateTime
         };
 
+        /**
+        * Constructor
+        */
         RPM_Attribute();
+
+        /**
+        * Constructor
+        *@param value - value for meta-data
+        *@note Meta-data created with this constructor are strict
+        */
+        template<class T>
+        inline RPM_Attribute(const T& value);
+
         virtual ~RPM_Attribute();
+
+        /**
+        * Copy operator
+        *@param other - other attribute to copy from
+        *@return this attribute
+        */
+        virtual inline RPM_Attribute& operator = (const RPM_Attribute& other);
+        virtual inline RPM_Attribute& operator = (const char*          pOther);
+        virtual inline RPM_Attribute& operator = (const wchar_t*       pOther);
+
+        /**
+        * Equality operator
+        *@param other - other attribute to compare with
+        *@return true if attributes are identical, otherwise false
+        */
+        virtual inline bool operator == (const RPM_Attribute& value)  const;
+        virtual inline bool operator == (const char*          pOther) const;
+        virtual inline bool operator == (const wchar_t*       pOther) const;
+
+        /**
+        * Not equality operator
+        *@param other - other attribute to compare with
+        *@return true if attributes are not identical, otherwise false
+        */
+        virtual inline bool operator != (const RPM_Attribute& value)  const;
+        virtual inline bool operator != (const char*          pOther) const;
+        virtual inline bool operator != (const wchar_t*       pOther) const;
 
         /**
         * Clears the attribute
@@ -144,6 +187,22 @@ class RPM_Attribute
         std::string m_TimeFormat = "%F %T";
         void*       m_pData      = nullptr;
         IEFormat    m_Format     = IEFormat::IE_Undefined;
+
+        /**
+        * Checks if an attribute equals another one
+        *@param other - other attribute to compare with
+        *@return true if the attribute equals the other, otherwise false
+        */
+        template<class T>
+        bool Equals(const RPM_Attribute& other) const;
+
+        /**
+        * Checks if an attribute differs from another one
+        *@param other - other attribute to compare with
+        *@return true if the attribute differs from the other, otherwise false
+        */
+        template<class T>
+        bool Differs(const RPM_Attribute& other) const;
 };
 
 /**
@@ -152,9 +211,142 @@ class RPM_Attribute
 typedef std::vector<RPM_Attribute*> RPM_Attributes;
 
 //---------------------------------------------------------------------------
+// RPM_Attribute
+//---------------------------------------------------------------------------
+template<class T>
+RPM_Attribute::RPM_Attribute(const T& value)
+{
+    Set(value);
+}
+//---------------------------------------------------------------------------
+RPM_Attribute& RPM_Attribute::operator = (const RPM_Attribute& other)
+{
+    switch (other.m_Format)
+    {
+        case IEFormat::IE_Bool:          Set(other.Get<bool>());          break;
+        case IEFormat::IE_Int8:          Set(other.Get<std::int8_t>());   break;
+        case IEFormat::IE_UInt8:         Set(other.Get<std::uint8_t>());  break;
+        case IEFormat::IE_Int16:         Set(other.Get<std::int16_t>());  break;
+        case IEFormat::IE_UInt16:        Set(other.Get<std::uint16_t>()); break;
+        case IEFormat::IE_Int32:         Set(other.Get<std::int32_t>());  break;
+        case IEFormat::IE_UInt32:        Set(other.Get<std::uint32_t>()); break;
+        case IEFormat::IE_Int64:         Set(other.Get<std::int64_t>());  break;
+        case IEFormat::IE_UInt64:        Set(other.Get<std::uint64_t>()); break;
+        case IEFormat::IE_Float:         Set(other.Get<float>());         break;
+        case IEFormat::IE_Double:        Set(other.Get<double>());        break;
+        case IEFormat::IE_String:        Set(other.Get<std::string>());   break;
+        case IEFormat::IE_UnicodeString: Set(other.Get<std::wstring>());  break;
+        default:                         M_THROW_EXCEPTION("Unknown or undefined format - " + std::to_string((int)other.m_Format));
+    }
+
+    return *this;
+}
+//---------------------------------------------------------------------------
+RPM_Attribute& RPM_Attribute::operator = (const char* pOther)
+{
+    Set(std::string(pOther));
+    return *this;
+}
+//---------------------------------------------------------------------------
+RPM_Attribute& RPM_Attribute::operator = (const wchar_t* pOther)
+{
+    Set(std::wstring(pOther));
+    return *this;
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator == (const RPM_Attribute& other) const
+{
+    switch (m_Format)
+    {
+        case IEFormat::IE_Bool:          return Equals<bool>(other);
+        case IEFormat::IE_Int8:          return Equals<std::int8_t>(other);
+        case IEFormat::IE_UInt8:         return Equals<std::uint8_t>(other);
+        case IEFormat::IE_Int16:         return Equals<std::int16_t>(other);
+        case IEFormat::IE_UInt16:        return Equals<std::uint16_t>(other);
+        case IEFormat::IE_Int32:         return Equals<std::int32_t>(other);
+        case IEFormat::IE_UInt32:        return Equals<std::uint32_t>(other);
+        case IEFormat::IE_Int64:         return Equals<std::int64_t>(other);
+        case IEFormat::IE_UInt64:        return Equals<std::uint64_t>(other);
+        case IEFormat::IE_Float:         return Equals<float>(other);
+        case IEFormat::IE_Double:        return Equals<double>(other);
+        case IEFormat::IE_String:        return Equals<std::string>(other);
+        case IEFormat::IE_UnicodeString: return Equals<std::wstring>(other);
+    }
+
+    return false;
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator == (const char* pOther) const
+{
+    return Equals<std::string>(std::string(pOther));
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator == (const wchar_t* pOther) const
+{
+    return Equals<std::wstring>(std::wstring(pOther));
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator != (const RPM_Attribute& other) const
+{
+    switch (m_Format)
+    {
+        case IEFormat::IE_Bool:          return Differs<bool>(other);
+        case IEFormat::IE_Int8:          return Differs<std::int8_t>(other);
+        case IEFormat::IE_UInt8:         return Differs<std::uint8_t>(other);
+        case IEFormat::IE_Int16:         return Differs<std::int16_t>(other);
+        case IEFormat::IE_UInt16:        return Differs<std::uint16_t>(other);
+        case IEFormat::IE_Int32:         return Differs<std::int32_t>(other);
+        case IEFormat::IE_UInt32:        return Differs<std::uint32_t>(other);
+        case IEFormat::IE_Int64:         return Differs<std::int64_t>(other);
+        case IEFormat::IE_UInt64:        return Differs<std::uint64_t>(other);
+        case IEFormat::IE_Float:         return Differs<float>(other);
+        case IEFormat::IE_Double:        return Differs<double>(other);
+        case IEFormat::IE_String:        return Differs<std::string>(other);
+        case IEFormat::IE_UnicodeString: return Differs<std::wstring>(other);
+    }
+
+    return false;
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator != (const char* pOther) const
+{
+    return Differs<std::string>(std::string(pOther));
+}
+//---------------------------------------------------------------------------
+bool RPM_Attribute::operator != (const wchar_t* pOther) const
+{
+    return Differs<std::wstring>(std::wstring(pOther));
+}
+//---------------------------------------------------------------------------
 template <class T>
 T RPM_Attribute::Get() const
 {
-    return Get(T(0));
+    T value = T();
+
+    return Get(value);
+}
+//---------------------------------------------------------------------------
+template<class T>
+bool RPM_Attribute::Equals(const RPM_Attribute& other) const
+{
+    T value1 = T();
+    T value2 = T();
+
+    Get(value1);
+    other.Get(value2);
+
+    return (value1 == value2);
+}
+//---------------------------------------------------------------------------
+template<class T>
+bool RPM_Attribute::Differs(const RPM_Attribute& other) const
+{
+    T value1 = T();
+    T value2 = T();
+
+    Get(value1);
+    other.Get(value2);
+
+    return (value1 != value2);
 }
 //---------------------------------------------------------------------------

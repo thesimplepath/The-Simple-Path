@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>UI/main.qml</file>
+        <file>UI/RPM_Main.qml</file>
+        <file>UI/RPM_ProcedureSymbol.qml</file>
+        <file>UI/RPM_Edit.qml</file>
+        <file>UI/RPM_Handle.qml</file>
+        <file>UI/RPM_HandlesControl.qml</file>
     </qresource>
 </RCC>

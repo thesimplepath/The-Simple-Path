@@ -340,6 +340,9 @@
     <ClCompile Include="Classes\Core\RPM_Document.cpp" />
     <ClCompile Include="Classes\Core\RPM_Element.cpp" />
     <ClCompile Include="Classes\Core\RPM_Page.cpp" />
+    <ClCompile Include="Classes\Core\RPM_ProcedureSymbol.cpp" />
+    <ClCompile Include="Classes\Core\RPM_Symbol.cpp" />
+    <ClCompile Include="Classes\Models\RPM_ProcedureSymbolModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RPM_Application.cpp" />
     <ClCompile Include="RPM_GlobalSettings.cpp" />
@@ -377,9 +380,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <None Include="UI\main.qml" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Classes\Common\RPM_Buffer.h" />
     <ClInclude Include="Classes\Common\RPM_Exception.h" />
     <ClInclude Include="Classes\Common\RPM_FileBuffer.h" />
@@ -394,11 +394,21 @@
     <ClInclude Include="Classes\Core\RPM_Document.h" />
     <ClInclude Include="Classes\Core\RPM_Element.h" />
     <ClInclude Include="Classes\Core\RPM_Page.h" />
+    <ClInclude Include="Classes\Core\RPM_ProcedureSymbol.h" />
+    <ClInclude Include="Classes\Core\RPM_Symbol.h" />
+    <ClInclude Include="Classes\Models\RPM_ProcedureSymbolModel.h" />
     <ClInclude Include="RPM_Application.h" />
     <ClInclude Include="RPM_GlobalSettings.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CodeConvention.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UI\RPM_Edit.qml" />
+    <None Include="UI\RPM_Handle.qml" />
+    <None Include="UI\RPM_HandlesControl.qml" />
+    <None Include="UI\RPM_Main.qml" />
+    <None Include="UI\RPM_ProcedureSymbol.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -1,16 +1,17 @@
 /****************************************************************************
- * ==> QR_MemoryBuffer -----------------------------------------------------*
+ * ==> RPM_MemoryBuffer ----------------------------------------------------*
  ****************************************************************************
- * Description : Buffer keeping data in memory                              *
- * Developer   : Jean-Milost Reymond                                        *
+ * Description:  Buffer keeping data in memory                              *
+ * Contained in: Common                                                     *
+ * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
- * MIT License - QR Engine                                                  *
+ * MIT License - todo FIXME -cFeature -oJean: Set the project name here     *
  *                                                                          *
  * Permission is hereby granted, free of charge, to any person obtaining a  *
  * copy of this software and associated documentation files (the            *
  * "Software"), to deal in the Software without restriction, including      *
  * without limitation the rights to use, copy, modify, merge, publish,      *
- * distribute, sublicense, and/or sell copies of the Software, and to       *
+ * distribute, sub-license, and/or sell copies of the Software, and to      *
  * permit persons to whom the Software is furnished to do so, subject to    *
  * the following conditions:                                                *
  *                                                                          *

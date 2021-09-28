@@ -36,7 +36,6 @@
 // common classes
 #include "Common\RPM_StringHelper.h"
 #include "Common\RPM_TimeHelper.h"
-#include "Common\RPM_Logger.h"
 
 //---------------------------------------------------------------------------
 // Global macros

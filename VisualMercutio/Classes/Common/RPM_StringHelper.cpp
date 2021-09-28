@@ -36,7 +36,7 @@
  //---------------------------------------------------------------------------
  // RPM_StringHelper
  //---------------------------------------------------------------------------
-std::string RPM_StringHelper::SetLocale_ThreadSafe(int category, const char* pLocale)
+std::string RPM_StringHelper::SetLocale_ThreadSafe(std::int32_t category, const char* pLocale)
 {
     static std::mutex lockMutex;
 
