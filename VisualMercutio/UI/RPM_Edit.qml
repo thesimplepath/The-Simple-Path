@@ -23,6 +23,8 @@ T.Control
     */
     TextEdit
     {
+        property string m_InitialText: ""
+
         // common properties
         id: edEdit
         anchors.fill: parent
@@ -36,9 +38,7 @@ T.Control
         activeFocusOnPress: true
         clip: true
 
-        /**
-        * Called when the text changed
-        */
+        /// Called when the text changed
         onTextChanged:
         {
             // update the matching text
@@ -48,22 +48,59 @@ T.Control
             ctEdit.textChanged(edEdit.text);
         }
 
-        /**
-        * Called when the focus changed
-        */
+        /// Called when the focus changed
         onActiveFocusChanged:
         {
+            if (edEdit.activeFocus)
+            {
+                m_InitialText = edEdit.text;
+                edEdit.selectAll();
+            }
+
             // call the parent callback
             ctEdit.activeFocusChanged(edEdit.activeFocus);
         }
 
-        /**
-        * Called when the edition finished
-        */
+        /// Called when the edition finished
         onEditingFinished:
         {
             // call the parent callback
             ctEdit.editingFinished();
+        }
+
+        /// Called when a key is pressed
+        Keys.onPressed: function(keyEvent)
+        {
+            switch (keyEvent.key)
+            {
+                case Qt.Key_Escape:
+                    m_Text      = m_InitialText;
+                    edEdit.text = m_InitialText;
+                    edEdit.selectAll();
+
+                    keyEvent.accepted = true;
+                    break;
+
+                case Qt.Key_Backtab:
+                    doSelectPrevEdit();
+                    keyEvent.accepted = true;
+                    break;
+
+                case Qt.Key_Tab:
+                    doSelectNextEdit();
+                    keyEvent.accepted = true;
+                    break;
+
+                case Qt.Key_Return:
+                case Qt.Key_Enter:
+                    if (keyEvent.modifiers & Qt.ControlModifier)
+                    {
+                        doSelectNextEdit();
+                        keyEvent.accepted = true;
+                    }
+
+                    break;
+            }
         }
 
         /**
@@ -89,22 +126,34 @@ T.Control
     }
 
     /**
-    * onTextChanged callback function to override
+    * textChanged callback function to override
     *@param text - new text
     */
     function textChanged(text)
     {}
 
     /**
-    * onActiveFocusChanged callback function to override
+    * activeFocusChanged callback function to override
     *@param hasFocus - if true, the edit has the focus
     */
     function activeFocusChanged(hasFocus)
     {}
 
     /**
-    * onEditingFinished callback function to override
+    * editingFinished callback function to override
     */
     function editingFinished()
+    {}
+
+    /**
+    * doSelectPrevEdit callback function to override
+    */
+    function doSelectPrevEdit()
+    {}
+
+    /**
+    * doSelectNextEdit callback function to override
+    */
+    function doSelectNextEdit()
     {}
 }

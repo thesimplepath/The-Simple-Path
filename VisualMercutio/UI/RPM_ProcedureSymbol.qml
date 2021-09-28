@@ -99,6 +99,7 @@ T.Control
                     // common properties
                     id: edFirstLine
                     anchors.fill: parent
+                    edit.objectName: "edFirstLine"
 
                     /**
                     * Called when the active focus changed
@@ -119,6 +120,22 @@ T.Control
                         // editors are no longer focused?
                         if (!edit.activeFocus && !edSecondLine.edit.activeFocus && !edThirdLine.edit.activeFocus)
                             setMode(RPM_ProcedureSymbol.IEMode.IE_M_Default);
+                    }
+
+                    /**
+                    * Called when previous edit should be selected
+                    */
+                    function doSelectPrevEdit()
+                    {
+                        edThirdLine.edit.forceActiveFocus();
+                    }
+
+                    /**
+                    * Called when next edit should be selected
+                    */
+                    function doSelectNextEdit()
+                    {
+                        edSecondLine.edit.forceActiveFocus();
                     }
                 }
             }
@@ -143,6 +160,7 @@ T.Control
                     // common properties
                     id: edSecondLine
                     anchors.fill: parent
+                    edit.objectName: "edSecondLine"
 
                     /**
                     * Called when the active focus changed
@@ -163,6 +181,22 @@ T.Control
                         // editors are no longer focused?
                         if (!edFirstLine.edit.activeFocus && !activeFocus && !edThirdLine.edit.activeFocus)
                             setMode(RPM_ProcedureSymbol.IEMode.IE_M_Default);
+                    }
+
+                    /**
+                    * Called when previous edit should be selected
+                    */
+                    function doSelectPrevEdit()
+                    {
+                        edFirstLine.edit.forceActiveFocus();
+                    }
+
+                    /**
+                    * Called when next edit should be selected
+                    */
+                    function doSelectNextEdit()
+                    {
+                        edThirdLine.edit.forceActiveFocus();
                     }
                 }
             }
@@ -186,6 +220,7 @@ T.Control
                     // common properties
                     id: edThirdLine
                     anchors.fill: parent
+                    edit.objectName: "edThirdLine"
 
                     /**
                     * Called when the active focus changed
@@ -206,6 +241,22 @@ T.Control
                         // editors are no longer focused?
                         if (!edFirstLine.edit.activeFocus && !edSecondLine.edit.activeFocus && !activeFocus)
                             setMode(RPM_ProcedureSymbol.IEMode.IE_M_Default);
+                    }
+
+                    /**
+                    * Called when previous edit should be selected
+                    */
+                    function doSelectPrevEdit()
+                    {
+                        edSecondLine.edit.forceActiveFocus();
+                    }
+
+                    /**
+                    * Called when next edit should be selected
+                    */
+                    function doSelectNextEdit()
+                    {
+                        edFirstLine.edit.forceActiveFocus();
                     }
                 }
             }
