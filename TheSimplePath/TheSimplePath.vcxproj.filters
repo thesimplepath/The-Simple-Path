@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ac2fd5f4-63aa-423b-a3c2-fba63e6c6843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\UI">
+      <UniqueIdentifier>{9e9def8e-b9b5-4def-88e0-7142af0ed2a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{5750d3d0-6b3f-40be-892a-574683e3ec2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{07965d9c-2e71-4d9b-9571-a44befd41742}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Documents">
+      <UniqueIdentifier>{210bba4e-662d-40c5-9cd2-2f6b478bb085}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{b4de1678-91a0-4bd9-ac0c-d29a11a920aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{c039c5a5-cd38-4900-9cb2-5fc7c8583be9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{48e110b9-b4dc-4e62-bd52-5e4a9c16b2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{c7f9cdfd-c756-4969-a797-29391122ed27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party">
+      <UniqueIdentifier>{62258bc8-275a-4d4b-a828-ba9a86e6fb7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\RapidJSON">
+      <UniqueIdentifier>{eaa0faf1-9388-4be5-9164-a304e9d7d008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\RapidJSON\error">
+      <UniqueIdentifier>{f58607e4-5d47-4532-9147-d3b484034bf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\RapidJSON\internal">
+      <UniqueIdentifier>{464f537e-f940-4f2f-9e0d-2292a4e151f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\RapidJSON\msinttypes">
+      <UniqueIdentifier>{ada65912-bfb9-4b2c-abdb-1ff916b75b87}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSP_Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSP_GlobalSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_Buffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_Exception.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_FileBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_FileHelper.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_Logger.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_MemoryBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_StdFileBuffer.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_StringHelper.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_TimeHelper.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_Version.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Attribute.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Document.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Element.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Model.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Page.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_ProcedureSymbol.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Symbol.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\TSP_DocumentModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\TSP_ModelModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\TSP_ProcedureSymbolModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="qml.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\cursorstreamwrapper.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\document.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\encodedstream.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\encodings.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\filereadstream.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\filewritestream.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\fwd.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\istreamwrapper.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\memorybuffer.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\memorystream.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\ostreamwrapper.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\pointer.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\prettywriter.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\rapidjson.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\reader.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\schema.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\stream.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\stringbuffer.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\uri.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\writer.h">
+      <Filter>Third-Party\RapidJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\error\en.h">
+      <Filter>Third-Party\RapidJSON\error</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\error\error.h">
+      <Filter>Third-Party\RapidJSON\error</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\biginteger.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\clzll.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\diyfp.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\dtoa.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\ieee754.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\itoa.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\meta.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\pow10.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\regex.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\stack.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\strfunc.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\strtod.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\internal\swap.h">
+      <Filter>Third-Party\RapidJSON\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\msinttypes\inttypes.h">
+      <Filter>Third-Party\RapidJSON\msinttypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\msinttypes\stdint.h">
+      <Filter>Third-Party\RapidJSON\msinttypes</Filter>
+    </ClInclude>
+    <ClInclude Include="TSP_Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSP_GlobalSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_Buffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_Exception.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_FileBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_FileHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_Logger.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_MemoryBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_StdFileBuffer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_StringHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_TimeHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_Version.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Attribute.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Document.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Element.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Model.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Page.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_ProcedureSymbol.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Symbol.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CodeConvention.txt">
+      <Filter>Documents</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UI\TSP_DocumentView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Edit.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Handle.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_HandlesControl.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Main.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_ModelItem.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_ProcedureSymbol.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Classes\Models\TSP_DocumentModel.h">
+      <Filter>Header Files\Models</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Models\TSP_ModelModel.h">
+      <Filter>Header Files\Models</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Models\TSP_ProcedureSymbolModel.h">
+      <Filter>Header Files\Models</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
