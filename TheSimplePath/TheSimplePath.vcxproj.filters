@@ -140,6 +140,9 @@
     <ClCompile Include="Classes\Models\TSP_ProcedureSymbolModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_JsonHelper.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Symbol.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_JsonHelper.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
         // create and run the application
-        std::unique_ptr<TSP_Application> pApplication(new TSP_Application(argc, argv, L"UI/TSP_Main.qml"));
-        result = pApplication->Execute();
+        auto pApplication = std::make_unique<TSP_Application>(argc, argv, L"UI/TSP_Main.qml");
+             result       = pApplication->Execute();
     }
     catch (...)
     {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         const std::wstring fileName = logDir.toStdWString() + L"\\" + TSP_Logger::Instance()->GetFileName(TSP_GlobalSettings::m_AppName);
 
         // open a file buffer to write the log
-        std::unique_ptr<TSP_StdFileBuffer> pFileBuffer(new TSP_StdFileBuffer());
+        auto pFileBuffer = std::make_unique<TSP_StdFileBuffer>();
         pFileBuffer->Open(fileName, TSP_FileBuffer::IEMode::IE_M_Write);
 
         // write the log to file

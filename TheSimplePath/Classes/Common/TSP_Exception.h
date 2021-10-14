@@ -60,7 +60,7 @@ class TSP_ExceptionFormatter
 
         /**
         * Formats exception message for logs
-        *@param type - type of exception (STD, QR_Exception, ...)
+        *@param type - type of exception (STD, TSP_Exception, ...)
         *@param message - message to format
         *@param file - the name of the file where the exception was raised
         *@param function - the name of the function where the exception was raised
@@ -75,7 +75,7 @@ class TSP_ExceptionFormatter
 
         /**
         * Formats exception message for HTML logs
-        *@param type - type of exception (STD, QR_Exception, ...)
+        *@param type - type of exception (STD, TSP_Exception, ...)
         *@param message - message to format
         *@param file - the name of the file where the exception was raised
         *@param function - the name of the function where the exception was raised

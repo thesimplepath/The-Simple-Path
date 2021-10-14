@@ -58,8 +58,8 @@ std::string TSP_StringHelper::ToLowerCase(const std::string& str)
 
     try
     {
-        for (std::size_t i = 0; i < str.length(); ++i)
-            lowerStr += ::tolower(str[i]);
+        for each (auto c in str)
+            lowerStr += ::tolower(c);
     }
     catch (...)
     {
@@ -83,8 +83,8 @@ std::wstring TSP_StringHelper::ToLowerCase(const std::wstring& str)
 
     try
     {
-        for (std::size_t i = 0; i < str.length(); ++i)
-            lowerStr += ::towlower(str[i]);
+        for each (auto c in str)
+            lowerStr += ::towlower(c);
     }
     catch (...)
     {
@@ -108,8 +108,8 @@ std::string TSP_StringHelper::ToUpperCase(const std::string& str)
 
     try
     {
-        for (std::size_t i = 0; i < str.length(); ++i)
-            upperStr += ::toupper(str[i]);
+        for each (auto c in str)
+            upperStr += ::toupper(c);
     }
     catch (...)
     {
@@ -133,8 +133,8 @@ std::wstring TSP_StringHelper::ToUpperCase(const std::wstring& str)
 
     try
     {
-        for (std::size_t i = 0; i < str.length(); ++i)
-            upperStr += ::towupper(str[i]);
+        for each (auto c in str)
+            upperStr += ::towupper(c);
     }
     catch (...)
     {
@@ -181,11 +181,11 @@ std::wstring TSP_StringHelper::BoolToWStr(bool value, bool numeric)
 //---------------------------------------------------------------------------
 bool TSP_StringHelper::StrToBool(const std::string& str)
 {
-    return (str == "1" || ToLowerCase(str) == "true") ? true : false;
+    return (str == "1" || ToLowerCase(str) == "true");
 }
 //---------------------------------------------------------------------------
 bool TSP_StringHelper::StrToBool(const std::wstring& str)
 {
-    return (str == L"1" || ToLowerCase(str) == L"true") ? true : false;
+    return (str == L"1" || ToLowerCase(str) == L"true");
 }
 //---------------------------------------------------------------------------

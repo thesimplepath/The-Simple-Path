@@ -162,7 +162,7 @@ const char* TSP_Exception::Format() const
 {
     std::ostringstream sstr;
 
-    sstr << "[QR_Exception raised]" << std::endl << "[Message]  ";
+    sstr << "[TSP_Exception raised]" << std::endl << "[Message]  ";
 
     if (m_Message.empty())
         sstr << "Unknown exception" << std::endl;
@@ -180,7 +180,7 @@ std::string TSP_Exception::Format_HTML() const
 {
     std::ostringstream sstr;
 
-    sstr << "[QR_Exception raised]" << "<br>" << "[Message]  ";
+    sstr << "[TSP_Exception raised]" << "<br>" << "[Message]  ";
 
     if (m_Message.empty())
         sstr << "Unknown exception" << "<br>";
