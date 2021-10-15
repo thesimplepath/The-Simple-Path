@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>UI/TSP_DocumentView.qml</file>
-        <file>UI/TSP_Edit.qml</file>
         <file>UI/TSP_Handle.qml</file>
-        <file>UI/TSP_HandlesControl.qml</file>
         <file>UI/TSP_Main.qml</file>
         <file>UI/TSP_ModelItem.qml</file>
         <file>UI/TSP_ProcedureSymbol.qml</file>
+        <file>UI/TSP_Connector.qml</file>
+        <file>UI/TSP_HandleControl.qml</file>
     </qresource>
 </RCC>

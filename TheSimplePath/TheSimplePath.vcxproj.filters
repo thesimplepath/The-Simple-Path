@@ -342,13 +342,7 @@
     <None Include="UI\TSP_DocumentView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_Edit.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="UI\TSP_Handle.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_HandlesControl.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
     <None Include="UI\TSP_Main.qml">
@@ -358,6 +352,12 @@
       <Filter>Resource Files\UI</Filter>
     </None>
     <None Include="UI\TSP_ProcedureSymbol.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_HandleControl.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Connector.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
   </ItemGroup>

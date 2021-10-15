@@ -8,13 +8,79 @@ import QtQuick.Templates 2.15 as T
 */
 T.Control
 {
+    // aliases
+    property alias rectConnectors:  rcConnectors
+    property alias leftConnector:   coLeft
+    property alias topConnector:    coTop
+    property alias rightConnector:  coRight
+    property alias bottomConnector: coBottom
+
     // common properties
     id: hcProcedureSymbol
 
     /**
+    * Connectors
+    */
+    Rectangle
+    {
+        // common properties
+        id: rcConnectors
+        anchors.fill: parent
+        color: "transparent"
+
+        /**
+        * Left connector
+        */
+        TSP_Connector
+        {
+            // common properties
+            id: coLeft
+            x:   parent.x - (width + 2)
+            y: ((parent.y + parent.height) / 2) - (height / 2)
+            visible: true
+        }
+
+        /**
+        * Top connector
+        */
+        TSP_Connector
+        {
+            // common properties
+            id: coTop
+            x: ((parent.x + parent.width) / 2) - (width / 2)
+            y:   parent.y - (height + 2)
+            visible: true
+        }
+
+        /**
+        * Right connector
+        */
+        TSP_Connector
+        {
+            // common properties
+            id: coRight
+            x:   parent.x + parent.width + 2
+            y: ((parent.y + parent.height) / 2) - (height / 2)
+            visible: true
+        }
+
+        /**
+        * Bottom connector
+        */
+        TSP_Connector
+        {
+            // common properties
+            id: coBottom
+            x: ((parent.x + parent.width) / 2) - (width / 2)
+            y:   parent.y + parent.height + 2
+            visible: true
+        }
+    }
+
+    /**
     * Symbol background, also handles gesture
     */
-    TSP_HandlesControl
+    TSP_HandleControl
     {
         // common properties
         id: hcBackground

@@ -450,10 +450,10 @@
     <Text Include="CodeConvention.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="UI\TSP_Connector.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
-    <None Include="UI\TSP_Edit.qml" />
     <None Include="UI\TSP_Handle.qml" />
-    <None Include="UI\TSP_HandlesControl.qml" />
+    <None Include="UI\TSP_HandleControl.qml" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_ModelItem.qml" />
     <None Include="UI\TSP_ProcedureSymbol.qml" />

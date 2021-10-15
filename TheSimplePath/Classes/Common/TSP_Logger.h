@@ -80,6 +80,11 @@ class TSP_Logger
         static TSP_Logger* Instance();
 
         /**
+        * Releases the logger instance
+        */
+        static void Release();
+
+        /**
         * Input stream operator
         *@param value - value to add to the log
         *@returns reference to itself

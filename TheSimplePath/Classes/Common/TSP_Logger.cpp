@@ -186,6 +186,19 @@ TSP_Logger* TSP_Logger::Instance()
     return m_pLogger;
 }
 //---------------------------------------------------------------------------
+void TSP_Logger::Release()
+{
+    // lock up the thread
+    std::unique_lock<std::mutex> lock(m_Mutex);
+
+    if (!m_pLogger)
+        return;
+
+    // delete the instance
+    delete m_pLogger;
+    m_pLogger = nullptr;
+}
+//---------------------------------------------------------------------------
 void TSP_Logger::Clear()
 {
     m_Log.clear();
