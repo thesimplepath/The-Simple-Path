@@ -360,6 +360,9 @@
     <None Include="UI\TSP_Connector.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
+    <None Include="UI\TSP_Message.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h">

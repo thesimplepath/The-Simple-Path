@@ -84,6 +84,19 @@ Window
                 height: 80
             }
 
+            TSP_Message
+            {
+                m_From: symbol1
+                m_To: symbol2
+            }
+
+            TSP_Message
+            {
+                m_From: symbol3
+                m_To: symbol2
+            }
+
+            /*
             Item
             {
                 property int  startX:    symbol1.x + (symbol1.rectConnectors.width / 2)
@@ -177,6 +190,7 @@ Window
                     }
                 }
             }
+            */
         }
     }
     /**/

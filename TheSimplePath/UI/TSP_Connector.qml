@@ -8,12 +8,25 @@ import QtQuick.Templates 2.15 as T
 */
 T.Control
 {
+    /**
+    * Connector position
+    */
+    enum IEPosition
+    {
+        IE_P_None,
+        IE_P_Left,
+        IE_P_Top,
+        IE_P_Right,
+        IE_P_Bottom
+    }
+
     // aliases
     property alias connectorRect: rcConnector
 
     // advanced properties
-    property var m_Source: null
-    property var m_Target: null
+    property var m_Source:   null
+    property var m_Target:   null
+    property int m_Position: IEPosition.IE_P_None
 
     // common properties
     id: ctConnector

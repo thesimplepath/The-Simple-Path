@@ -29,7 +29,7 @@ T.Control
 
     // advanced properties
     property var m_Target:    null
-    property int m_Direction: IEDirection.IE_D_None;
+    property int m_Direction: IEDirection.IE_D_None
 
     // common properties
     id: ctHandle

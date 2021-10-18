@@ -455,6 +455,7 @@
     <None Include="UI\TSP_Handle.qml" />
     <None Include="UI\TSP_HandleControl.qml" />
     <None Include="UI\TSP_Main.qml" />
+    <None Include="UI\TSP_Message.qml" />
     <None Include="UI\TSP_ModelItem.qml" />
     <None Include="UI\TSP_ProcedureSymbol.qml" />
   </ItemGroup>

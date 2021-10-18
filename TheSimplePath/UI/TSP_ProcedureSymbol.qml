@@ -38,6 +38,9 @@ T.Control
             x:   parent.x - (width + 2)
             y: ((parent.y + parent.height) / 2) - (height / 2)
             visible: true
+
+            // advanced properties
+            m_Position: IEPosition.IE_P_Left
         }
 
         /**
@@ -50,6 +53,9 @@ T.Control
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:   parent.y - (height + 2)
             visible: true
+
+            // advanced properties
+            m_Position: IEPosition.IE_P_Top
         }
 
         /**
@@ -62,6 +68,9 @@ T.Control
             x:   parent.x + parent.width + 2
             y: ((parent.y + parent.height) / 2) - (height / 2)
             visible: true
+
+            // advanced properties
+            m_Position: IEPosition.IE_P_Right
         }
 
         /**
@@ -74,6 +83,9 @@ T.Control
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:   parent.y + parent.height + 2
             visible: true
+
+            // advanced properties
+            m_Position: IEPosition.IE_P_Bottom
         }
     }
 
@@ -169,7 +181,6 @@ T.Control
             /// called when the view is clicked
             onClicked:
             {
-                //REM setMode(TSP_ProcedureSymbol.IEMode.IE_M_MoveSize);
                 hcProcedureSymbol.forceActiveFocus();
             }
         }
