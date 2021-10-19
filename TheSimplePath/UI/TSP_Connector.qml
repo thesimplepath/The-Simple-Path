@@ -24,8 +24,7 @@ T.Control
     property alias connectorRect: rcConnector
 
     // advanced properties
-    property var m_Source:   null
-    property var m_Target:   null
+    property var m_Messages: []
     property int m_Position: IEPosition.IE_P_None
 
     // common properties

@@ -40,7 +40,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Position: IEPosition.IE_P_Left
+            m_Position: TSP_Connector.IEPosition.IE_P_Left
         }
 
         /**
@@ -55,7 +55,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Position: IEPosition.IE_P_Top
+            m_Position: TSP_Connector.IEPosition.IE_P_Top
         }
 
         /**
@@ -70,7 +70,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Position: IEPosition.IE_P_Right
+            m_Position: TSP_Connector.IEPosition.IE_P_Right
         }
 
         /**
@@ -85,7 +85,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Position: IEPosition.IE_P_Bottom
+            m_Position: TSP_Connector.IEPosition.IE_P_Bottom
         }
     }
 

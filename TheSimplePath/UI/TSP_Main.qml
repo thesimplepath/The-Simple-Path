@@ -86,111 +86,21 @@ Window
 
             TSP_Message
             {
+                id: message1
                 m_From: symbol1
                 m_To: symbol2
+                m_FromConn: TSP_Connector.IEPosition.IE_P_Bottom
+                m_ToConn: TSP_Connector.IEPosition.IE_P_Top
             }
 
             TSP_Message
             {
-                m_From: symbol3
-                m_To: symbol2
+                id: message2
+                m_From: symbol1
+                m_To: symbol3
+                m_FromConn: TSP_Connector.IEPosition.IE_P_Bottom
+                m_ToConn: TSP_Connector.IEPosition.IE_P_Top
             }
-
-            /*
-            Item
-            {
-                property int  startX:    symbol1.x + (symbol1.rectConnectors.width / 2)
-                property int  startY:    symbol1.y +  symbol1.rectConnectors.height + (symbol1.bottomConnector.height / 2) + 2
-                property int  endX:      symbol2.x + (symbol2.rectConnectors.width / 2)
-                property int  endY:      symbol2.y - (symbol2.topConnector.height  / 2) - 2
-                property int  boxWidth:  invertX ? startX - endX : endX - startX
-                property int  boxHeight: invertY ? startY - endY : endY - startY
-                property bool invertX:   startX > endX
-                property bool invertY:   startY > endY
-
-                id:     itLink
-                x:      invertX ? endX : startX
-                y:      invertY ? endY : startY
-                width:  boxWidth  > spLink.strokeWidth ? boxWidth  : spLink.strokeWidth
-                height: boxHeight > spLink.strokeWidth ? boxHeight : spLink.strokeWidth
-
-                Shape
-                {
-                    id: shLink
-                    anchors.fill: parent
-                    layer.enabled: true
-                    layer.samples: 8
-                    smooth: true
-
-                    ShapePath
-                    {
-                        id: spLink
-                        strokeColor: "black"
-                        fillColor: "transparent"
-                        strokeWidth: 1
-                        startX: itLink.invertX ? itLink.width  : 0
-                        startY: itLink.invertY ? itLink.height : 0
-
-                        PathCubic
-                        {
-                            x:         itLink.invertX ? 0             : itLink.width
-                            y:         itLink.invertY ? 0             : itLink.height
-                            control1X: itLink.invertX ? itLink.width  : 0
-                            control1Y: itLink.invertY ? 0             : itLink.height
-                            control2X: itLink.invertX ? 0             : itLink.width
-                            control2Y: itLink.invertY ? itLink.height : 0
-                        }
-                    }
-                }
-            }
-
-            Item
-            {
-                property int  startX:    symbol1.x + (symbol1.rectConnectors.width / 2)
-                property int  startY:    symbol1.y +  symbol1.rectConnectors.height + (symbol1.bottomConnector.height / 2) + 2
-                property int  endX:      symbol3.x + (symbol3.rectConnectors.width / 2)
-                property int  endY:      symbol3.y - (symbol3.topConnector.height / 2) - 2
-                property int  boxWidth:  invertX ? startX - endX : endX - startX
-                property int  boxHeight: invertY ? startY - endY : endY - startY
-                property bool invertX:   startX > endX
-                property bool invertY:   startY > endY
-
-                id:     itLink2
-                x:      invertX ? endX : startX
-                y:      invertY ? endY : startY
-                width:  boxWidth  > spLink2.strokeWidth ? boxWidth  : spLink2.strokeWidth
-                height: boxHeight > spLink2.strokeWidth ? boxHeight : spLink2.strokeWidth
-
-                Shape
-                {
-                    id: shLink2
-                    anchors.fill: parent
-                    layer.enabled: true
-                    layer.samples: 8
-                    smooth: true
-
-                    ShapePath
-                    {
-                        id: spLink2
-                        strokeColor: "black"
-                        fillColor: "transparent"
-                        strokeWidth: 1
-                        startX: itLink2.invertX ? itLink2.width  : 0
-                        startY: itLink2.invertY ? itLink2.height : 0
-
-                        PathCubic
-                        {
-                            x:         itLink2.invertX ? 0             : itLink2.width
-                            y:         itLink2.invertY ? 0             : itLink2.height
-                            control1X: itLink2.invertX ? itLink2.width  : 0
-                            control1Y: itLink2.invertY ? 0             : itLink2.height
-                            control2X: itLink2.invertX ? 0             : itLink2.width
-                            control2Y: itLink2.invertY ? itLink2.height : 0
-                        }
-                    }
-                }
-            }
-            */
         }
     }
     /**/
