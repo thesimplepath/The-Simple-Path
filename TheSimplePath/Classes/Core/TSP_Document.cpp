@@ -29,8 +29,12 @@
 
 #include "TSP_Document.h"
 
-// rapid json
-#include "rapidjson/document.h"
+ // common classes
+#include "Common/TSP_StringHelper.h"
+#include "Common/TSP_FileHelper.h"
+#include "Common/TSP_JsonHelper.h"
+#include "Common/TSP_StdFileBuffer.h"
+#include "Common/TSP_Logger.h"
 
 //---------------------------------------------------------------------------
 // TSP_Document
@@ -46,14 +50,14 @@ TSP_Document::~TSP_Document()
 //---------------------------------------------------------------------------
 TSP_Model* TSP_Document::AddModel()
 {
-    std::unique_ptr<TSP_Model> pModel(new TSP_Model());
+    auto pModel = std::make_unique<TSP_Model>();
     m_Models.push_back(pModel.get());
     return pModel.release();
 }
 //---------------------------------------------------------------------------
 TSP_Model* TSP_Document::AddModel(const std::wstring& name)
 {
-    std::unique_ptr<TSP_Model> pModel(new TSP_Model(name));
+    auto pModel = std::make_unique<TSP_Model>(name);
     m_Models.push_back(pModel.get());
     return pModel.release();
 }
@@ -97,7 +101,8 @@ std::size_t TSP_Document::GetModelCount() const
 //---------------------------------------------------------------------------
 bool TSP_Document::Load(const std::wstring fileName)
 {
-    //m_NbrGen;
+    M_LogT("Load document - " << fileName);
+
     //m_Title
 
     /*
@@ -110,14 +115,55 @@ bool TSP_Document::Load(const std::wstring fileName)
 //---------------------------------------------------------------------------
 bool TSP_Document::Save(const std::wstring fileName) const
 {
-    std::unique_ptr<rapidjson::Document> pJsonDoc(new rapidjson::Document());
+    M_LogT("Save document - " << fileName);
 
-    //m_NbrGen;
-    //m_Title
+    if (TSP_FileHelper::FileExists(fileName))
+    {
+        // todo FIXME -cFeature -oJean: ask Qt to show a popup to overwrite the file and fail if user rejects the overwrite
+    }
+
+    // create a json document
+    auto pJsonDoc = std::make_unique<TSP_JsonHelper::IDocumentW>();
+    pJsonDoc->SetObject();
+
+    // create document title value
+    TSP_JsonHelper::IValueW title;
+    title.SetString(TSP_JsonHelper::IStringRefW(m_Title.c_str()));
+
+    // set document title
+    pJsonDoc->AddMember(L"title", title, pJsonDoc->GetAllocator());
+
+    /*REM
+    TSP_JsonHelper::IValueW documentValue(rapidjson::kObjectType);
+    documentValue.AddMember(L"title2", TSP_JsonHelper::IStringRefW(L"m_Title2"), pJsonDoc->GetAllocator());
+
+    pJsonDoc->AddMember(L"document", documentValue, pJsonDoc->GetAllocator());
+    */
 
     /*
     for each (auto pModel in m_Models)
         pModel->Save();
+    */
+
+    TSP_JsonHelper::IStringBufferW       stringBuffer;
+    TSP_JsonHelper::IStringBufferWriterW stringBufferWriter(stringBuffer);
+    pJsonDoc->Accept(stringBufferWriter);
+
+    const wchar_t* pOutput = stringBuffer.GetString();
+
+    /*REM
+    std::ofstream ofs("output.json");
+    rapidjson::OStreamWrapper osw(ofs);
+
+    rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+    pJsonDoc->Accept(writer);
+    */
+
+    /*
+    // write the json content to the file
+    auto pFileBuffer = std::make_unique<TSP_StdFileBuffer>;
+    pFileBuffer->Open(fileName, TSP_FileBuffer::IEMode::IE_M_Write);
+    pFileBuffer->Write(buffer.GetString(), buffer.GetSize());
     */
 
     return true;

@@ -70,7 +70,7 @@ Window
             {
                 id: symbol2
                 x: 200
-                y: 200
+                y: 400
                 width: 100
                 height: 80
             }
@@ -99,7 +99,7 @@ Window
                 m_From: symbol1
                 m_To: symbol3
                 m_FromConn: TSP_Connector.IEPosition.IE_P_Bottom
-                m_ToConn: TSP_Connector.IEPosition.IE_P_Top
+                m_ToConn: TSP_Connector.IEPosition.IE_P_Left
             }
         }
     }
