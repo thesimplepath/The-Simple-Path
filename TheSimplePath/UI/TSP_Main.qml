@@ -79,7 +79,7 @@ Window
             {
                 id: symbol3
                 x: 400
-                y: 200
+                y: 150
                 width: 100
                 height: 80
             }

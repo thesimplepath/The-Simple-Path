@@ -39,11 +39,11 @@ T.Control
     Shape
     {
         // common properties
-        id: shMessage
-        anchors.fill: parent
-        layer.enabled: true
+        id:            shMessage
+        anchors.fill:  parent
         layer.samples: 8
-        smooth: true
+        layer.enabled: true
+        smooth:        true
 
         /**
         * Message path
@@ -51,12 +51,12 @@ T.Control
         ShapePath
         {
             // common properties
-            id: spMessage
-            strokeColor: "black"
-            fillColor: "transparent"
+            id:          spMessage
+            strokeColor: "#202020"
+            fillColor:   "transparent"
             strokeWidth: 1
-            startX: itMessage.m_InvertX ? itMessage.width  : 0
-            startY: itMessage.m_InvertY ? itMessage.height : 0
+            startX:      itMessage.m_InvertX ? itMessage.width  : 0
+            startY:      itMessage.m_InvertY ? itMessage.height : 0
 
             /**
             * Message curve
@@ -95,25 +95,61 @@ T.Control
         ShapePath
         {
             // common properties
-            id: spMessageArrow
+            id:          spMessageArrow
             strokeColor: "transparent"
-            fillColor: "black"
+            fillColor:   "#202020"
             strokeWidth: 0
-            startX: itMessage.m_InvertX ? shMessageArrow.width  : 0
-            startY: itMessage.m_InvertY ? shMessageArrow.height : 0
+            startX:      itMessage.m_InvertX ? shMessageArrow.width  : 0
+            startY:      itMessage.m_InvertY ? shMessageArrow.height : 0
 
             /**
             * Arrow path SVG
             */
             PathSvg
             {
-                property int  m_FirstX:  itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? shMessageArrow.width : 0)  : (itMessage.m_InvertX ? 0 : shMessageArrow.width)
-                property int  m_FirstY:  itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? 0 : shMessageArrow.height) : (itMessage.m_InvertY ? shMessageArrow.height : 0)
-                property int  m_SecondX: itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? 0 : shMessageArrow.width)  : shMessageArrow.width / 2
-                property int  m_SecondY: itMessage.m_ToIsHorz ? shMessageArrow.height / 2                         : (itMessage.m_InvertY ? 0 : shMessageArrow.height)
+                // advanced properties
+                property int m_FirstX:  itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? shMessageArrow.width : 0)  : (itMessage.m_InvertX ? 0 : shMessageArrow.width)
+                property int m_FirstY:  itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? 0 : shMessageArrow.height) : (itMessage.m_InvertY ? shMessageArrow.height : 0)
+                property int m_SecondX: itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? 0 : shMessageArrow.width)  : shMessageArrow.width / 2
+                property int m_SecondY: itMessage.m_ToIsHorz ? shMessageArrow.height / 2                         : (itMessage.m_InvertY ? 0 : shMessageArrow.height)
 
                 path: "L " + m_FirstX + " " + m_FirstY + " L " + m_SecondX + " " + m_SecondY + " z"
             }
+        }
+    }
+
+    /**
+    * Background
+    */
+    Rectangle
+    {
+        // common properties
+        x:            (itMessage.width  / 2) - (width  / 2)
+        y:            itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? -(height / 2) : itMessage.height - (height / 2)) : (itMessage.height / 2) - (height / 2)
+        width:        100
+        height:       50
+        color:        "white"
+        border.color: "#202020"
+        border.width: 1
+        radius:       3
+
+        /**
+        * Message label
+        */
+        Text
+        {
+            // common properties
+            id:                  itLabel
+            text:                "Message"
+            anchors.fill:        parent
+            anchors.margins:     2
+            font.family:         "Arial"
+            font.pointSize:      10
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment:   Text.AlignVCenter
+            wrapMode:            Text.WordWrap
+            color:               "#202020"
+            clip:                true
         }
     }
 

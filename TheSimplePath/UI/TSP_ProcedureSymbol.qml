@@ -121,14 +121,17 @@ T.Control
         id: rcContent
         anchors.fill: parent
         color: "transparent"
-        border.color: "#202020"
-        border.width: 1
         radius: 3
+        anchors.margins: 2
         z: hcProcedureSymbol.activeFocus ? -1 : 0
         clip: true
 
+        /**
+        * Top label
+        */
         Text
         {
+            // common properties
             id: txName
             text: "<b>Hello World!</b>"
             anchors.left: parent.left
@@ -141,8 +144,12 @@ T.Control
             clip: true
         }
 
+        /**
+        * Middle label
+        */
         Text
         {
+            // common properties
             id: txObjNb
             text: "ID: 1234"
             anchors.left: parent.left
@@ -155,8 +162,12 @@ T.Control
             clip: true
         }
 
+        /**
+        * Bottom label
+        */
         Text
         {
+            // common properties
             id: txTeamName
             text: "Team: Alpha"
             anchors.left: parent.left
