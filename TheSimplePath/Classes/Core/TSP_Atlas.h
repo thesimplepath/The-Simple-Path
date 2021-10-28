@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Model -----------------------------------------------------------*
+ * ==> TSP_Atlas -----------------------------------------------------------*
  ****************************************************************************
- * Description:  Resource and process manager business model                *
+ * Description:  Document atlas, it's a kind of folder containing pages     *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,45 +27,97 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Model.h"
+#pragma once
+
+ // std
+#include <vector>
+
+// core classes
+#include "TSP_Page.h"
+
+/**
+* Document atlas, it's a kind of folder containing pages
+*@author Jean-Milost Reymond
+*/
+class TSP_Atlas
+{
+    public:
+        TSP_Atlas();
+
+        /**
+        * Constructor
+        *@param name - model name
+        */
+        TSP_Atlas(const std::wstring& name);
+
+        virtual ~TSP_Atlas();
+
+        /**
+        * Gets the model name
+        *@return the model name
+        */
+        virtual inline std::wstring GetName() const;
+
+        /**
+        * Sets the model name
+        *@param name - the model name
+        */
+        virtual inline void SetName(const std::wstring& name);
+
+        /**
+        * Gets the next available identifier
+        *@return next available identifier
+        *@note The identifier is unique in the model
+        *@note BE CAREFUL calling this function, the internal identifier generator will be incremented by 1
+        */
+        virtual inline std::size_t GetNextID();
+
+        /**
+        * Gets the last (i.e the higher) identifier in the model
+        *@return the last (i.e the higher) identifier in the model
+        */
+        virtual inline std::size_t GetLastID() const;
+
+        /**
+        * Loads a model from a file
+        *@return true on success, otherwise false
+        */
+        virtual bool Load();
+
+        /**
+        * Saves a model to a file
+        *@return true on success, otherwise false
+        */
+        virtual bool Save() const;
+
+    private:
+        typedef std::vector<TSP_Page*> IPages;
+
+        IPages       m_Pages;
+        std::wstring m_Name;
+        std::size_t  m_NbrGen = 0;
+};
 
 //---------------------------------------------------------------------------
-// TSP_Model
+// TSP_Atlas
 //---------------------------------------------------------------------------
-TSP_Model::TSP_Model()
-{}
-//---------------------------------------------------------------------------
-TSP_Model::TSP_Model(const std::wstring& name) :
-    m_Name(name)
-{}
-//---------------------------------------------------------------------------
-TSP_Model::~TSP_Model()
+std::wstring TSP_Atlas::GetName() const
 {
-    for each (auto pPage in m_Pages)
-        delete pPage;
+    return m_Name;
 }
 //---------------------------------------------------------------------------
-bool TSP_Model::Load()
+void TSP_Atlas::SetName(const std::wstring& name)
 {
-    //m_Name
-
-    /*
-    for each (auto pModel in m_Models)
-        pModel->Load();
-    */
-
-    return true;
+    m_Name = name;
 }
 //---------------------------------------------------------------------------
-bool TSP_Model::Save() const
+std::size_t TSP_Atlas::GetNextID()
 {
-    //m_Name
-
-    /*
-    for each (auto pModel in m_Models)
-        pModel->Save();
-    */
-
-    return true;
+    return ++m_NbrGen;
+}
+//---------------------------------------------------------------------------
+std::size_t TSP_Atlas::GetLastID() const
+{
+    return m_NbrGen;
 }
 //---------------------------------------------------------------------------

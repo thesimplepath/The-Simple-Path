@@ -337,16 +337,15 @@
     <ClCompile Include="Classes\Common\TSP_StringHelper.cpp" />
     <ClCompile Include="Classes\Common\TSP_TimeHelper.cpp" />
     <ClCompile Include="Classes\Common\TSP_Version.cpp" />
+    <ClCompile Include="Classes\Core\TSP_Atlas.cpp" />
     <ClCompile Include="Classes\Core\TSP_Attribute.cpp" />
     <ClCompile Include="Classes\Core\TSP_Document.cpp" />
     <ClCompile Include="Classes\Core\TSP_Element.cpp" />
-    <ClCompile Include="Classes\Core\TSP_Model.cpp" />
     <ClCompile Include="Classes\Core\TSP_Page.cpp" />
     <ClCompile Include="Classes\Core\TSP_ProcedureSymbol.cpp" />
     <ClCompile Include="Classes\Core\TSP_Symbol.cpp" />
+    <ClCompile Include="Classes\Models\TSP_AtlasModel.cpp" />
     <ClCompile Include="Classes\Models\TSP_DocumentModel.cpp" />
-    <ClCompile Include="Classes\Models\TSP_ModelModel.cpp" />
-    <ClCompile Include="Classes\Models\TSP_ProcedureSymbolModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TSP_Application.cpp" />
     <ClCompile Include="TSP_GlobalSettings.cpp" />
@@ -395,16 +394,15 @@
     <ClInclude Include="Classes\Common\TSP_StringHelper.h" />
     <ClInclude Include="Classes\Common\TSP_TimeHelper.h" />
     <ClInclude Include="Classes\Common\TSP_Version.h" />
+    <ClInclude Include="Classes\Core\TSP_Atlas.h" />
     <ClInclude Include="Classes\Core\TSP_Attribute.h" />
     <ClInclude Include="Classes\Core\TSP_Document.h" />
     <ClInclude Include="Classes\Core\TSP_Element.h" />
-    <ClInclude Include="Classes\Core\TSP_Model.h" />
     <ClInclude Include="Classes\Core\TSP_Page.h" />
     <ClInclude Include="Classes\Core\TSP_ProcedureSymbol.h" />
     <ClInclude Include="Classes\Core\TSP_Symbol.h" />
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h" />
-    <QtMoc Include="Classes\Models\TSP_ModelModel.h" />
-    <QtMoc Include="Classes\Models\TSP_ProcedureSymbolModel.h" />
+    <QtMoc Include="Classes\Models\TSP_AtlasModel.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\cursorstreamwrapper.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\document.h" />
@@ -450,14 +448,14 @@
     <Text Include="CodeConvention.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="UI\TSP_AtlasItem.qml" />
+    <None Include="UI\TSP_Box.qml" />
     <None Include="UI\TSP_Connector.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
     <None Include="UI\TSP_Handle.qml" />
     <None Include="UI\TSP_HandleControl.qml" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_Message.qml" />
-    <None Include="UI\TSP_ModelItem.qml" />
-    <None Include="UI\TSP_ProcedureSymbol.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

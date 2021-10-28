@@ -36,7 +36,7 @@
 #include "Core\TSP_Document.h"
 
 // model classes
-#include "Models\TSP_ModelModel.h"
+#include "Models\TSP_AtlasModel.h"
 
 // qt
 #include <QObject>
@@ -76,10 +76,10 @@ class TSP_DocumentModel : public QAbstractListModel
         virtual TSP_Document* GetDocument() const;
 
         /**
-        * Gets the model's model
-        *@return the model's model, nullptr if not found or on error
+        * Gets the atlas model
+        *@return the atlas model, nullptr if not found or on error
         */
-        virtual TSP_ModelModel* GetModelModel() const;
+        virtual TSP_AtlasModel* GetAtlasModel() const;
 
         /**
         * Adds a business model
@@ -116,5 +116,5 @@ class TSP_DocumentModel : public QAbstractListModel
 
     private:
         TSP_Document*   m_pDocument   = nullptr;
-        TSP_ModelModel* m_pModelModel = nullptr;
+        TSP_AtlasModel* m_pAtlasModel = nullptr;
 };

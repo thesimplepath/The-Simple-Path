@@ -33,7 +33,7 @@
 #include <vector>
 
 // core classes
-#include "TSP_Model.h"
+#include "TSP_Atlas.h"
 #include "TSP_Page.h"
 #include "TSP_Element.h"
 
@@ -60,42 +60,42 @@ class TSP_Document
         virtual inline void SetTitle(const std::wstring& title);
 
         /**
-        * Adds a new model in document
-        *@return newly added model
+        * Adds a new atlas in document
+        *@return newly added atlas
         */
-        virtual TSP_Model* AddModel();
+        virtual TSP_Atlas* AddAtlas();
 
         /**
-        * Adds a new model in document
-        *@param name - model name
-        *@return newly added model
+        * Adds a new atlas in document
+        *@param name - atlas name
+        *@return newly added atlas
         */
-        virtual TSP_Model* AddModel(const std::wstring& name);
+        virtual TSP_Atlas* AddAtlas(const std::wstring& name);
 
         /**
-        * Removes a business model
-        *@param index - business model index to remove
+        * Removes an atlas
+        *@param index - atlas index to remove
         */
-        virtual void RemoveModel(std::size_t index);
+        virtual void RemoveAtlas(std::size_t index);
 
         /**
-        * Removes a business model
-        *@param index - business model index to remove
+        * Removes an atlas
+        *@param pAtlas - atlas to remove
         */
-        virtual void RemoveModel(TSP_Model* pModel);
+        virtual void RemoveAtlas(TSP_Atlas* pAtlas);
 
         /**
-        * Gets model at index
-        *@param index - model index to get
-        *@return model, nullptr if not found or on error
+        * Gets atlas at index
+        *@param index - atlas index to get
+        *@return atlas, nullptr if not found or on error
         */
-        virtual TSP_Model* GetModel(std::size_t index) const;
+        virtual TSP_Atlas* GetAtlas(std::size_t index) const;
 
         /**
-        * Gets model count
-        *@return model count
+        * Gets atlas count
+        *@return atlas count
         */
-        virtual std::size_t GetModelCount() const;
+        virtual std::size_t GetAtlasCount() const;
 
         /**
         * Loads a document from a file
@@ -114,9 +114,9 @@ class TSP_Document
         virtual bool Save(const std::wstring fileName) const;
 
     private:
-        typedef std::vector<TSP_Model*> IModels;
+        typedef std::vector<TSP_Atlas*> IAtlases;
 
-        IModels      m_Models;
+        IAtlases     m_Atlases;
         std::wstring m_Title;
 };
 

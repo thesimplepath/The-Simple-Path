@@ -37,6 +37,8 @@ Window
         anchors.top: rcToolbox.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        m_Parent: maTest
     }
 
     /*REM*/
@@ -48,6 +50,7 @@ Window
         {
             property var m_Target: parent
 
+            id: maTest
             anchors.fill: parent
             hoverEnabled: true
 
@@ -57,50 +60,61 @@ Window
                     m_Target.forceActiveFocus(true);
             }
 
-            TSP_ProcedureSymbol
+            TSP_Box
             {
                 id: symbol1
+                objectName: "symbol1"
                 x: 50
                 y: 50
                 width: 100
                 height: 80
+
+                m_Document: dvDocumentView
+
+                //nameLabel.text: "1"
             }
 
-            TSP_ProcedureSymbol
+            TSP_Box
             {
                 id: symbol2
+                objectName: "symbol2"
                 x: 200
                 y: 400
                 width: 100
                 height: 80
+
+                //nameLabel.text: "2"
             }
 
-            TSP_ProcedureSymbol
+            TSP_Box
             {
                 id: symbol3
+                objectName: "symbol3"
                 x: 400
                 y: 150
                 width: 100
                 height: 80
+
+                //nameLabel.text: "3"
             }
 
+            /*REM*/
             TSP_Message
             {
                 id: message1
-                m_From: symbol1
-                m_To: symbol2
-                m_FromConn: TSP_Connector.IEPosition.IE_P_Bottom
-                m_ToConn: TSP_Connector.IEPosition.IE_P_Top
+                objectName: "message1"
+                m_From: symbol1.bottomConnector
+                m_To: symbol2.topConnector
             }
 
             TSP_Message
             {
                 id: message2
-                m_From: symbol1
-                m_To: symbol3
-                m_FromConn: TSP_Connector.IEPosition.IE_P_Bottom
-                m_ToConn: TSP_Connector.IEPosition.IE_P_Left
+                objectName: "message2"
+                m_From: symbol1.bottomConnector
+                m_To: symbol3.leftConnector
             }
+            /**/
         }
     }
     /**/

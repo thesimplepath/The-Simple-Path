@@ -35,13 +35,13 @@
 TSP_DocumentModel::TSP_DocumentModel(QObject* pParent) :
     QAbstractListModel(pParent),
     m_pDocument(new TSP_Document()),
-    m_pModelModel(new TSP_ModelModel(pParent))
+    m_pAtlasModel(new TSP_AtlasModel(pParent))
 {}
 //---------------------------------------------------------------------------
 TSP_DocumentModel::~TSP_DocumentModel()
 {
-    if (m_pModelModel)
-        delete m_pModelModel;
+    if (m_pAtlasModel)
+        delete m_pAtlasModel;
 
     if (m_pDocument)
         delete m_pDocument;
@@ -52,9 +52,9 @@ TSP_Document* TSP_DocumentModel::GetDocument() const
     return m_pDocument;
 }
 //---------------------------------------------------------------------------
-TSP_ModelModel* TSP_DocumentModel::GetModelModel() const
+TSP_AtlasModel* TSP_DocumentModel::GetAtlasModel() const
 {
-    return m_pModelModel;
+    return m_pAtlasModel;
 }
 //---------------------------------------------------------------------------
 void TSP_DocumentModel::addModel(const QString& name)
@@ -65,7 +65,7 @@ void TSP_DocumentModel::addModel(const QString& name)
     const int count = rowCount();
 
     beginInsertRows(QModelIndex(), count, count);
-    m_pDocument->AddModel(name.toStdWString());
+    m_pDocument->AddAtlas(name.toStdWString());
     endInsertRows();
 }
 //---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void TSP_DocumentModel::removeModel(std::size_t index)
         return;
 
     beginRemoveRows(QModelIndex(), count - 1, count - 1);
-    m_pDocument->RemoveModel(index);
+    m_pDocument->RemoveAtlas(index);
     endRemoveRows();
 }
 //---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ int TSP_DocumentModel::rowCount(const QModelIndex& pParent) const
     if (!m_pDocument)
         return 0;
 
-    return m_pDocument->GetModelCount();
+    return m_pDocument->GetAtlasCount();
 }
 //---------------------------------------------------------------------------
 QVariant TSP_DocumentModel::data(const QModelIndex& index, int role) const
@@ -109,7 +109,7 @@ QVariant TSP_DocumentModel::data(const QModelIndex& index, int role) const
     const int currentIndex = index.row();
 
     // is index out of bounds?
-    if (currentIndex < 0 || (std::size_t)currentIndex > m_pDocument->GetModelCount())
+    if (currentIndex < 0 || (std::size_t)currentIndex > m_pDocument->GetAtlasCount())
         return QVariant();
 
     // search for model data role to get
@@ -117,15 +117,15 @@ QVariant TSP_DocumentModel::data(const QModelIndex& index, int role) const
     {
         case TSP_DocumentModel::IEDataRole::IE_DR_ModelName:
         {
-            // get the model matching with row index
-            TSP_Model* pModel = m_pDocument->GetModel(currentIndex);
+            // get the atlas matching with row index
+            TSP_Atlas* pAtlas = m_pDocument->GetAtlas(currentIndex);
 
             // found it?
-            if (!pModel)
+            if (!pAtlas)
                 return QVariant();
 
-            // get the model name
-            return QString::fromStdWString(pModel->GetName());
+            // get the atlas name
+            return QString::fromStdWString(pAtlas->GetName());
         }
     }
 

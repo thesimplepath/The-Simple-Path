@@ -3,17 +3,21 @@ import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
 /**
-* Procedure symbol
+* Box, it's a basic component which can be moved and resized, and contain connectors
 *@author Jean-Milost Reymond
 */
 T.Control
 {
     // aliases
+    property alias nameLabel:       txName
     property alias rectConnectors:  rcConnectors
     property alias leftConnector:   coLeft
     property alias topConnector:    coTop
     property alias rightConnector:  coRight
     property alias bottomConnector: coBottom
+
+    // advanced properties
+    property var m_Document: null
 
     // common properties
     id: hcProcedureSymbol
@@ -40,6 +44,8 @@ T.Control
             visible: true
 
             // advanced properties
+            m_Document: hcProcedureSymbol.m_Document
+            m_Symbol:   hcProcedureSymbol
             m_Position: TSP_Connector.IEPosition.IE_P_Left
         }
 
@@ -55,6 +61,8 @@ T.Control
             visible: true
 
             // advanced properties
+            m_Document: hcProcedureSymbol.m_Document
+            m_Symbol:   hcProcedureSymbol
             m_Position: TSP_Connector.IEPosition.IE_P_Top
         }
 
@@ -70,6 +78,8 @@ T.Control
             visible: true
 
             // advanced properties
+            m_Document: hcProcedureSymbol.m_Document
+            m_Symbol:   hcProcedureSymbol
             m_Position: TSP_Connector.IEPosition.IE_P_Right
         }
 
@@ -85,6 +95,8 @@ T.Control
             visible: true
 
             // advanced properties
+            m_Document: hcProcedureSymbol.m_Document
+            m_Symbol:   hcProcedureSymbol
             m_Position: TSP_Connector.IEPosition.IE_P_Bottom
         }
     }

@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_ProcedureSymbolModel --------------------------------------------*
+ * ==> TSP_AtlasModel ------------------------------------------------------*
  ****************************************************************************
- * Description:  A model for the procedure symbol                           *
+ * Description:  A model for the atlas                                      *
  * Contained in: Models                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -33,34 +33,51 @@
 #include <vector>
 
 // core classes
-#include "Core\TSP_ProcedureSymbol.h"
+#include "Core\TSP_Atlas.h"
 
 // qt
 #include <QObject>
+#include <QAbstractListModel>
 
 /**
-* A model for the procedure symbol
+* A model for the atlas
 *@author Jean-Milost Reymond
 */
-class TSP_ProcedureSymbolModel : public QObject
+class TSP_AtlasModel : public QAbstractListModel
 {
     Q_OBJECT
     //Q_PROPERTY(float x READ userName WRITE setUserName NOTIFY userNameChanged)
 
     public:
-        TSP_ProcedureSymbolModel(QObject* pParent = nullptr);
+        /**
+        * Constructor
+        *@param pParent - object which will be the parent of this object
+        */
+        explicit TSP_AtlasModel(QObject* pParent = nullptr);
 
-        virtual ~TSP_ProcedureSymbolModel();
+        virtual ~TSP_AtlasModel();
+
+        /**
+        * Get row count
+        *@param parent - the parent row index from which the count should be performed
+        *@return the row count
+        */
+        virtual Q_INVOKABLE int rowCount(const QModelIndex& pParent = QModelIndex()) const;
+
+        /**
+        * Get data at row index
+        *@param index - row index
+        *@param role - data role
+        *@return the data, empty value if not found or on error
+        */
+        virtual Q_INVOKABLE QVariant data(const QModelIndex& index, int role) const;
+
+        /**
+        * Get role names
+        *@return the role names
+        */
+        virtual QHash<int, QByteArray> roleNames() const;
 
     private:
-        float m_X      = 0.0f;
-        float m_Y      = 0.0f;
-        float m_Width  = 100.0f;
-        float m_Height = 80.0f;
-
-        // act on qml property directly
-        //object->setProperty("width", 500);
-        //QQmlProperty(object, "width").write(500);
-        //https://doc.qt.io/qt-5/qtqml-cppintegration-interactqmlfromcpp.html
-        //https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
+        TSP_Atlas* m_pAtlas = nullptr;
 };

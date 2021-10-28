@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_ModelModel ------------------------------------------------------*
+ * ==> TSP_AtlasModel ------------------------------------------------------*
  ****************************************************************************
- * Description:  A model for the business models                            *
+ * Description:  Document atlas (it's a kind of folder containing pages)    *
  * Contained in: Models                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,19 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_ModelModel.h"
+#include "TSP_AtlasModel.h"
 
 //---------------------------------------------------------------------------
-// TSP_ModelModel
+// TSP_AtlasModel
 //---------------------------------------------------------------------------
-TSP_ModelModel::TSP_ModelModel(QObject* pParent) :
+TSP_AtlasModel::TSP_AtlasModel(QObject* pParent) :
     QAbstractListModel(pParent)
 {}
 //---------------------------------------------------------------------------
-TSP_ModelModel::~TSP_ModelModel()
+TSP_AtlasModel::~TSP_AtlasModel()
 {}
 //---------------------------------------------------------------------------
-int TSP_ModelModel::rowCount(const QModelIndex& pParent) const
+int TSP_AtlasModel::rowCount(const QModelIndex& pParent) const
 {
     /*REM FIXME
     if (!m_pDocument)
@@ -50,7 +50,7 @@ int TSP_ModelModel::rowCount(const QModelIndex& pParent) const
     return 0;
 }
 //---------------------------------------------------------------------------
-QVariant TSP_ModelModel::data(const QModelIndex& index, int role) const
+QVariant TSP_AtlasModel::data(const QModelIndex& index, int role) const
 {
     /*REM FIXME
     if (!m_pDocument)
@@ -86,7 +86,7 @@ QVariant TSP_ModelModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 //---------------------------------------------------------------------------
-QHash<int, QByteArray> TSP_ModelModel::roleNames() const
+QHash<int, QByteArray> TSP_AtlasModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     //REM FIXME roles[(int)TSP_DocumentModel::IEDataRole::IE_DR_Name] = "name";

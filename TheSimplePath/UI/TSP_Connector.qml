@@ -21,9 +21,12 @@ T.Control
     }
 
     // aliases
-    property alias connectorRect: rcConnector
+    property alias connectorRect:      rcConnector
+    property alias connectorMouseArea: maConnector
 
     // advanced properties
+    property var m_Document: null
+    property var m_Symbol:   null
     property var m_Messages: []
     property int m_Position: IEPosition.IE_P_None
 
@@ -51,11 +54,36 @@ T.Control
     */
     MouseArea
     {
+        property bool m_IsDragging: false
+
         // common properties
         id: maConnector
         anchors.fill: parent
         cursorShape: Qt.CrossCursor
         acceptedButtons: Qt.LeftButton
         hoverEnabled: true
+
+        onPressed: function(mouseEvent)
+        {
+            //REM console.log("DRAG START - " + mouseEvent.x + " - " + mouseEvent.y);
+            m_IsDragging = true;
+
+            if (m_Document)
+                m_Document.addMessage(ctConnector, null);
+        }
+
+        onReleased: function(mouseEvent)
+        {
+            //REM console.log("DRAG END - " + mouseEvent.x + " - " + mouseEvent.y);
+            m_IsDragging = false;
+        }
+
+        onPositionChanged: function(mouseEvent)
+        {
+            if (!m_IsDragging)
+                return;
+
+            //REM console.log("DRAG MOVE - " + mouseEvent.x + " - " + mouseEvent.y);
+        }
     }
 }

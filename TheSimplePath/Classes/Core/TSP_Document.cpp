@@ -44,59 +44,59 @@ TSP_Document::TSP_Document()
 //---------------------------------------------------------------------------
 TSP_Document::~TSP_Document()
 {
-    for each (auto pModel in m_Models)
-        delete pModel;
+    for each (auto pAtlas in m_Atlases)
+        delete pAtlas;
 }
 //---------------------------------------------------------------------------
-TSP_Model* TSP_Document::AddModel()
+TSP_Atlas* TSP_Document::AddAtlas()
 {
-    auto pModel = std::make_unique<TSP_Model>();
-    m_Models.push_back(pModel.get());
-    return pModel.release();
+    auto pAtlas = std::make_unique<TSP_Atlas>();
+    m_Atlases.push_back(pAtlas.get());
+    return pAtlas.release();
 }
 //---------------------------------------------------------------------------
-TSP_Model* TSP_Document::AddModel(const std::wstring& name)
+TSP_Atlas* TSP_Document::AddAtlas(const std::wstring& name)
 {
-    auto pModel = std::make_unique<TSP_Model>(name);
-    m_Models.push_back(pModel.get());
-    return pModel.release();
+    auto pAtlas = std::make_unique<TSP_Atlas>(name);
+    m_Atlases.push_back(pAtlas.get());
+    return pAtlas.release();
 }
 //---------------------------------------------------------------------------
-void TSP_Document::RemoveModel(std::size_t index)
+void TSP_Document::RemoveAtlas(std::size_t index)
 {
     // is index out of bounds?
-    if (index >= m_Models.size())
+    if (index >= m_Atlases.size())
         return;
 
-    // delete the model
-    delete m_Models[index];
-    m_Models.erase(m_Models.begin() + index);
+    // delete the atlas
+    delete m_Atlases[index];
+    m_Atlases.erase(m_Atlases.begin() + index);
 }
 //---------------------------------------------------------------------------
-void TSP_Document::RemoveModel(TSP_Model* pModel)
+void TSP_Document::RemoveAtlas(TSP_Atlas* pAtlas)
 {
-    // search for model to remove
-    for (std::size_t i = 0; i < m_Models.size(); ++i)
+    // search for atlas to remove
+    for (std::size_t i = 0; i < m_Atlases.size(); ++i)
         // found it?
-        if (m_Models[i] == pModel)
+        if (m_Atlases[i] == pAtlas)
         {
-            // remove the model and exit
-            RemoveModel(i);
+            // remove the atlas and exit
+            RemoveAtlas(i);
             return;
         }
 }
 //---------------------------------------------------------------------------
-TSP_Model* TSP_Document::GetModel(std::size_t index) const
+TSP_Atlas* TSP_Document::GetAtlas(std::size_t index) const
 {
-    if (index >= m_Models.size())
+    if (index >= m_Atlases.size())
         return nullptr;
 
-    return m_Models[index];
+    return m_Atlases[index];
 }
 //---------------------------------------------------------------------------
-std::size_t TSP_Document::GetModelCount() const
+std::size_t TSP_Document::GetAtlasCount() const
 {
-    return m_Models.size();
+    return m_Atlases.size();
 }
 //---------------------------------------------------------------------------
 bool TSP_Document::Load(const std::wstring fileName)
@@ -106,8 +106,8 @@ bool TSP_Document::Load(const std::wstring fileName)
     //m_Title
 
     /*
-    for each (auto pModel in m_Models)
-        pModel->Load();
+    for each (auto pAtlas in m_Atlases)
+        pAtlas->Load();
     */
 
     return true;
@@ -141,8 +141,8 @@ bool TSP_Document::Save(const std::wstring fileName) const
     */
 
     /*
-    for each (auto pModel in m_Models)
-        pModel->Save();
+    for each (auto pAtlas in m_Atlases)
+        pAtlas->Save();
     */
 
     TSP_JsonHelper::IStringBufferW       stringBuffer;

@@ -12,19 +12,17 @@ T.Control
     // advanced properties
     property var  m_From:       null
     property var  m_To:         null
-    property int  m_FromConn:   TSP_Connector.IEPosition.IE_P_None
-    property int  m_ToConn:     TSP_Connector.IEPosition.IE_P_None
+    property int  m_Margin:     2
     property int  m_StartX:     getStartX()
     property int  m_StartY:     getStartY()
     property int  m_EndX:       getEndX()
     property int  m_EndY:       getEndY()
     property int  m_BoxWidth:   m_InvertX ? m_StartX - m_EndX : m_EndX - m_StartX
     property int  m_BoxHeight:  m_InvertY ? m_StartY - m_EndY : m_EndY - m_StartY
-    property int  m_Margin:     2
     property bool m_InvertX:    m_StartX  > m_EndX
     property bool m_InvertY:    m_StartY  > m_EndY
-    property bool m_FromIsHorz: m_FromConn === TSP_Connector.IEPosition.IE_P_Left || m_FromConn === TSP_Connector.IEPosition.IE_P_Right
-    property bool m_ToIsHorz:   m_ToConn   === TSP_Connector.IEPosition.IE_P_Left || m_ToConn   === TSP_Connector.IEPosition.IE_P_Right
+    property bool m_FromIsHorz: m_From ? (m_From.m_Position === TSP_Connector.IEPosition.IE_P_Left || m_From.m_Position === TSP_Connector.IEPosition.IE_P_Right) : false
+    property bool m_ToIsHorz:   m_To   ? (m_To.m_Position   === TSP_Connector.IEPosition.IE_P_Left || m_To.m_Position   === TSP_Connector.IEPosition.IE_P_Right) : false
 
     // common properties
     id:     itMessage
@@ -124,7 +122,7 @@ T.Control
     Rectangle
     {
         // common properties
-        x:            (itMessage.width  / 2) - (width  / 2)
+        x:            (itMessage.width / 2) - (width / 2)
         y:            itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? -(height / 2) : itMessage.height - (height / 2)) : (itMessage.height / 2) - (height / 2)
         width:        100
         height:       50
@@ -172,24 +170,6 @@ T.Control
     }
 
     /**
-    * Called when the from connector changed
-    */
-    onM_FromConnChanged:
-    {
-        //console.log("onM_FromConnChanged");
-        bindMsgToSrcSymbol();
-    }
-
-    /**
-    * Called when the to connector changed
-    */
-    onM_ToConnChanged:
-    {
-        //console.log("onM_ToConnChanged");
-        bindMsgToDstSymbol();
-    }
-
-    /**
     * Gets the message rect start position on x axis
     *@return the message rect start position on x axis
     */
@@ -199,18 +179,7 @@ T.Control
         if (!m_From)
             return 0;
 
-        // search for the connector from which the message rect should start
-        switch (m_FromConn)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:   return m_From.x - (m_From.leftConnector.width  / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Right:  return m_From.x +  m_From.rectConnectors.width + (m_From.rightConnector.width / 2) + m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Top:
-            case TSP_Connector.IEPosition.IE_P_Bottom: return m_From.x + (m_From.rectConnectors.width / 2);
-
-            default:
-                console.log("getStartX - unknown \"from\" connector - " + m_FromConn);
-                return 0;
-        }
+        return getXPos(m_From);
     }
 
     /**
@@ -223,18 +192,7 @@ T.Control
         if (!m_From)
             return 0;
 
-        // search for the connector from which the message rect should start
-        switch (m_FromConn)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:
-            case TSP_Connector.IEPosition.IE_P_Right:  return m_From.y + (m_From.rectConnectors.height / 2);
-            case TSP_Connector.IEPosition.IE_P_Top:    return m_From.y - (m_From.topConnector.height   / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Bottom: return m_From.y +  m_From.rectConnectors.height + (m_From.bottomConnector.height / 2) + m_Margin;
-
-            default:
-                console.log("getStartY - unknown \"from\" connector - " + m_FromConn);
-                return 0;
-        }
+        return getYPos(m_From);
     }
 
     /**
@@ -245,20 +203,15 @@ T.Control
     {
         // to symbol should be defined
         if (!m_To)
-            return 0;
-
-        // search for the connector to which the message rect should end
-        switch (m_ToConn)
         {
-            case TSP_Connector.IEPosition.IE_P_Left:   return m_To.x - (m_To.leftConnector.width  / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Right:  return m_To.x +  m_To.rectConnectors.width + (m_To.rightConnector.width / 2) + m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Top:
-            case TSP_Connector.IEPosition.IE_P_Bottom: return m_To.x + (m_To.rectConnectors.width / 2);
+            // message is dragging, get mouse position from start connector
+            if (m_From)
+                return m_From.m_Symbol.x + m_From.connectorMouseArea.mouseX;
 
-            default:
-                console.log("getEndX - unknown \"to\" connector - " + m_ToConn);
-                return 0;
+            return 0;
         }
+
+        return getXPos(m_To);
     }
 
     /**
@@ -269,39 +222,99 @@ T.Control
     {
         // to symbol should be defined
         if (!m_To)
+        {
+            // message is dragging, get mouse position from start connector
+            if (m_From)
+                return m_From.m_Symbol.y + m_From.connectorMouseArea.mouseY;
+
+            return 0;
+        }
+
+        return getYPos(m_To);
+    }
+
+    /**
+    * Gets the message rect x position matching with the connector
+    *@return the message rect x position matching with the connector
+    */
+    function getXPos(connector)
+    {
+        // connector should be defined
+        if (!connector)
+            return 0;
+
+        // get the connector parent symbol
+        let symbol = connector.m_Symbol;
+
+        // parent symbol should be defined in the connector
+        if (!symbol)
+            return 0;
+
+        // search for the connector position from which the message rect position should be measured
+        switch (connector.m_Position)
+        {
+            case TSP_Connector.IEPosition.IE_P_Left:   return symbol.x - (connector.width  / 2)                               - m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Right:  return symbol.x +  symbol.rectConnectors.width + (connector.width / 2) + m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Top:
+            case TSP_Connector.IEPosition.IE_P_Bottom: return symbol.x + (symbol.rectConnectors.width / 2);
+
+            default:
+                console.log("getXPos - unknown connector position - " + connector.m_Position);
+                return 0;
+        }
+    }
+
+    /**
+    * Gets the message rect y position matching with the connector
+    *@return the message rect y position matching with the connector
+    */
+    function getYPos(connector)
+    {
+        // connector should be defined
+        if (!connector)
+            return 0;
+
+        // get the connector parent symbol
+        let symbol = connector.m_Symbol;
+
+        // parent symbol should be defined in the connector
+        if (!symbol)
             return 0;
 
         // search for the connector to which the message rect should end
-        switch (m_ToConn)
+        switch (connector.m_Position)
         {
             case TSP_Connector.IEPosition.IE_P_Left:
-            case TSP_Connector.IEPosition.IE_P_Right:  return m_To.y + (m_To.rectConnectors.height / 2);
-            case TSP_Connector.IEPosition.IE_P_Top:    return m_To.y - (m_To.topConnector.height   / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Bottom: return m_To.y +  m_To.rectConnectors.height + (m_To.bottomConnector.height / 2) + m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Right:  return symbol.y + (symbol.rectConnectors.height / 2);
+            case TSP_Connector.IEPosition.IE_P_Top:    return symbol.y - (connector.height             / 2)                     - m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Bottom: return symbol.y +  symbol.rectConnectors.height + (connector.height / 2) + m_Margin;
 
             default:
-                console.log("getEndY - unknown \"to\" connector - " + m_ToConn);
+                console.log("getYPos - unknown connector position - " + connector.m_Position);
                 return 0;
         }
     }
 
     /**
     * Gets the margin to apply to where the message is attached to
-    *@param onXAxis - if true, the margin will be get for the x axis, otherwise for the y axis
+    *@param onXAxis [bool] - if true, the margin will be get for the x axis, otherwise for the y axis
     *@return the to connector margin to apply
     */
     function getToConnectorMargin(onXAxis)
     {
+        if (!m_To)
+            return 0;
+
         // search for the connector to which the message rect should end
-        switch (m_ToConn)
+        switch (m_To.m_Position)
         {
-            case TSP_Connector.IEPosition.IE_P_Left:   return onXAxis ?     (m_To.leftConnector.width    / 2) - m_Margin : 0;
-            case TSP_Connector.IEPosition.IE_P_Right:  return onXAxis ?     (m_To.rightConnector.width   / 2) + m_Margin : 0;
-            case TSP_Connector.IEPosition.IE_P_Top:    return onXAxis ? 0 : (m_To.topConnector.height    / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Bottom: return onXAxis ? 0 : (m_To.bottomConnector.height / 2) + m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Left:   return onXAxis ?     (m_To.width  / 2) - m_Margin : 0;
+            case TSP_Connector.IEPosition.IE_P_Right:  return onXAxis ?     (m_To.width  / 2) + m_Margin : 0;
+            case TSP_Connector.IEPosition.IE_P_Top:    return onXAxis ? 0 : (m_To.height / 2) - m_Margin;
+            case TSP_Connector.IEPosition.IE_P_Bottom: return onXAxis ? 0 : (m_To.height / 2) + m_Margin;
 
             default:
-                console.log("getToConnectorMargin - unknown \"to\" connector - " + m_ToConn);
+                console.log("getToConnectorMargin - unknown \"to\" connector - " + m_To.m_Position);
                 return 0;
         }
     }
@@ -315,34 +328,9 @@ T.Control
         if (!m_From)
             return;
 
-        // remove all existing message instance from left connector
-        for (var i = m_From.leftConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_From.leftConnector.m_Messages[i] === this)
-                m_From.leftConnector.m_Messages.splice(i, 1);
-
-        // remove all existing message instance from top connector
-        for (var i = m_From.topConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_From.topConnector.m_Messages[i] === this)
-                m_From.topConnector.m_Messages.splice(i, 1);
-
-        // remove all existing message instance from right connector
-        for (var i = m_From.rightConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_From.rightConnector.m_Messages[i] === this)
-                m_From.rightConnector.m_Messages.splice(i, 1);
-
-        // remove all existing message instance from bottom connector
-        for (var i = m_From.bottomConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_From.bottomConnector.m_Messages[i] === this)
-                m_From.bottomConnector.m_Messages.splice(i, 1);
-
-        // search for the connector on which the message is attached on the from symbol
-        switch (m_FromConn)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:   m_From.leftConnector.m_Messages.push  (this); break;
-            case TSP_Connector.IEPosition.IE_P_Right:  m_From.rightConnector.m_Messages.push (this); break;
-            case TSP_Connector.IEPosition.IE_P_Top:    m_From.topConnector.m_Messages.push   (this); break;
-            case TSP_Connector.IEPosition.IE_P_Bottom: m_From.bottomConnector.m_Messages.push(this); break;
-        }
+        // unbind message from parent symbol, if previously binded
+        unbindMsgFromSymbol(m_From.m_Symbol);
+        m_From.m_Messages.push(this);
     }
 
     /**
@@ -354,33 +342,38 @@ T.Control
         if (!m_To)
             return;
 
+        // unbind message from parent symbol, if previously binded
+        unbindMsgFromSymbol(m_To.m_Symbol);
+        m_To.m_Messages.push(this);
+    }
+
+    /**
+    * Unbinds a message from a symbol
+    *@param symbol - symbol for which the message shoulkd be unbind
+    */
+    function unbindMsgFromSymbol(symbol)
+    {
+        if (!symbol)
+            return 0;
+
         // remove all existing message instance from left connector
-        for (var i = m_To.leftConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_To.leftConnector.m_Messages[i] === this)
-                m_To.leftConnector.m_Messages.splice(i, 1);
+        for (var i = symbol.leftConnector.m_Messages.length - 1; i >= 0; --i)
+            if (symbol.leftConnector.m_Messages[i] === this)
+                symbol.leftConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from top connector
-        for (var i = m_To.topConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_To.topConnector.m_Messages[i] === this)
-                m_To.topConnector.m_Messages.splice(i, 1);
+        for (var i = symbol.topConnector.m_Messages.length - 1; i >= 0; --i)
+            if (symbol.topConnector.m_Messages[i] === this)
+                symbol.topConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from right connector
-        for (var i = m_To.rightConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_To.rightConnector.m_Messages[i] === this)
-                m_To.rightConnector.m_Messages.splice(i, 1);
+        for (var i = symbol.rightConnector.m_Messages.length - 1; i >= 0; --i)
+            if (symbol.rightConnector.m_Messages[i] === this)
+                symbol.rightConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from bottom connector
-        for (var i = m_To.bottomConnector.m_Messages.length - 1; i >= 0; --i)
-            if (m_To.bottomConnector.m_Messages[i] === this)
-                m_To.bottomConnector.m_Messages.splice(i, 1);
-
-        // search for the connector on which the message is attached on the from symbol
-        switch (m_FromConn)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:   m_To.leftConnector.m_Messages.push  (this); break;
-            case TSP_Connector.IEPosition.IE_P_Right:  m_To.rightConnector.m_Messages.push (this); break;
-            case TSP_Connector.IEPosition.IE_P_Top:    m_To.topConnector.m_Messages.push   (this); break;
-            case TSP_Connector.IEPosition.IE_P_Bottom: m_To.bottomConnector.m_Messages.push(this); break;
-        }
+        for (var i = symbol.bottomConnector.m_Messages.length - 1; i >= 0; --i)
+            if (symbol.bottomConnector.m_Messages[i] === this)
+                symbol.bottomConnector.m_Messages.splice(i, 1);
     }
 }

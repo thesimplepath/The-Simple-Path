@@ -119,9 +119,6 @@
     <ClCompile Include="Classes\Core\TSP_Element.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Core\TSP_Model.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Page.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -134,14 +131,14 @@
     <ClCompile Include="Classes\Models\TSP_DocumentModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Models\TSP_ModelModel.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Models\TSP_ProcedureSymbolModel.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Common\TSP_JsonHelper.cpp">
       <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\TSP_AtlasModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Atlas.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,9 +314,6 @@
     <ClInclude Include="Classes\Core\TSP_Element.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Core\TSP_Model.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Page.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -331,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="Classes\Common\TSP_JsonHelper.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Atlas.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -348,12 +345,6 @@
     <None Include="UI\TSP_Main.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_ModelItem.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_ProcedureSymbol.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="UI\TSP_HandleControl.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
@@ -363,15 +354,18 @@
     <None Include="UI\TSP_Message.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
+    <None Include="UI\TSP_Box.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_AtlasItem.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h">
       <Filter>Header Files\Models</Filter>
     </QtMoc>
-    <QtMoc Include="Classes\Models\TSP_ModelModel.h">
-      <Filter>Header Files\Models</Filter>
-    </QtMoc>
-    <QtMoc Include="Classes\Models\TSP_ProcedureSymbolModel.h">
+    <QtMoc Include="Classes\Models\TSP_AtlasModel.h">
       <Filter>Header Files\Models</Filter>
     </QtMoc>
   </ItemGroup>
