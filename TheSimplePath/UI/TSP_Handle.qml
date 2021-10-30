@@ -33,6 +33,7 @@ T.Control
 
     // common properties
     id: ctHandle
+    objectName: "ctHandle"
     width: 7
     height: 7
 
@@ -43,6 +44,7 @@ T.Control
     {
         // common properties
         id: rcHandle
+        objectName: "rcHandle"
         anchors.fill: parent
         color: "#c0c0c0"
         border.color: "black"
@@ -57,6 +59,7 @@ T.Control
     {
         // common properties
         id: maHandle
+        objectName: "maHandle"
         anchors.fill: parent
         cursorShape: getCursorShape(ctHandle.m_Direction)
         acceptedButtons: Qt.LeftButton

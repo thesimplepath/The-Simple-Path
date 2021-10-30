@@ -20,7 +20,8 @@ T.Control
     property var m_Document: null
 
     // common properties
-    id: hcProcedureSymbol
+    id: ctBox
+    objectName: "ctBox"
 
     /**
     * Connectors
@@ -29,6 +30,7 @@ T.Control
     {
         // common properties
         id: rcConnectors
+        objectName: "rcConnectors"
         anchors.fill: parent
         color: "transparent"
 
@@ -39,13 +41,14 @@ T.Control
         {
             // common properties
             id: coLeft
+            objectName: "coLeft"
             x:   parent.x - (width + 2)
             y: ((parent.y + parent.height) / 2) - (height / 2)
             visible: true
 
             // advanced properties
-            m_Document: hcProcedureSymbol.m_Document
-            m_Symbol:   hcProcedureSymbol
+            m_Document: ctBox.m_Document
+            m_Symbol:   ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Left
         }
 
@@ -56,13 +59,14 @@ T.Control
         {
             // common properties
             id: coTop
+            objectName: "coTop"
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:   parent.y - (height + 2)
             visible: true
 
             // advanced properties
-            m_Document: hcProcedureSymbol.m_Document
-            m_Symbol:   hcProcedureSymbol
+            m_Document: ctBox.m_Document
+            m_Symbol:   ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Top
         }
 
@@ -73,13 +77,14 @@ T.Control
         {
             // common properties
             id: coRight
+            objectName: "coRight"
             x:   parent.x + parent.width + 2
             y: ((parent.y + parent.height) / 2) - (height / 2)
             visible: true
 
             // advanced properties
-            m_Document: hcProcedureSymbol.m_Document
-            m_Symbol:   hcProcedureSymbol
+            m_Document: ctBox.m_Document
+            m_Symbol:   ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Right
         }
 
@@ -90,13 +95,14 @@ T.Control
         {
             // common properties
             id: coBottom
+            objectName: "coBottom"
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:   parent.y + parent.height + 2
             visible: true
 
             // advanced properties
-            m_Document: hcProcedureSymbol.m_Document
-            m_Symbol:   hcProcedureSymbol
+            m_Document: ctBox.m_Document
+            m_Symbol:   ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Bottom
         }
     }
@@ -108,19 +114,20 @@ T.Control
     {
         // common properties
         id: hcBackground
+        objectName: "hcBackground"
         anchors.fill: parent
-        z: hcProcedureSymbol.activeFocus ? 0 : -1
+        z: ctBox.activeFocus ? 0 : -1
 
         // advanced properties
-        m_HandleVisible: hcProcedureSymbol.activeFocus
-        m_Target: hcProcedureSymbol
+        m_HandleVisible: ctBox.activeFocus
+        m_Target: ctBox
 
         /**
         * Called when the move and size mode should be disabled
         */
         function doDisableMoveSize()
         {
-            hcProcedureSymbol.activeFocus = false;
+            //REM? ctBox.activeFocus = false;
         }
     }
 
@@ -131,11 +138,12 @@ T.Control
     {
         // common properties
         id: rcContent
+        objectName: "rcContent"
         anchors.fill: parent
         color: "transparent"
         radius: 3
         anchors.margins: 2
-        z: hcProcedureSymbol.activeFocus ? -1 : 0
+        z: ctBox.activeFocus ? -1 : 0
         clip: true
 
         /**
@@ -145,6 +153,7 @@ T.Control
         {
             // common properties
             id: txName
+            objectName: "txName"
             text: "<b>Hello World!</b>"
             anchors.left: parent.left
             anchors.top: parent.top
@@ -163,6 +172,7 @@ T.Control
         {
             // common properties
             id: txObjNb
+            objectName: "txObjNb"
             text: "ID: 1234"
             anchors.left: parent.left
             anchors.top: txName.bottom
@@ -181,6 +191,7 @@ T.Control
         {
             // common properties
             id: txTeamName
+            objectName: "txTeamName"
             text: "Team: Alpha"
             anchors.left: parent.left
             anchors.top: txObjNb.bottom
@@ -199,12 +210,13 @@ T.Control
         {
             // common properties
             id: maMouseArea
+            objectName: "maMouseArea"
             anchors.fill: parent
 
             /// called when the view is clicked
             onClicked:
             {
-                hcProcedureSymbol.forceActiveFocus();
+                ctBox.forceActiveFocus();
             }
         }
     }

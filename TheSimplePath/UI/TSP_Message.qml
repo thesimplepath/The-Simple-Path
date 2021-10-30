@@ -10,109 +10,117 @@ import QtQuick.Templates 2.15 as T
 T.Control
 {
     // advanced properties
-    property var  m_From:       null
-    property var  m_To:         null
-    property int  m_Margin:     2
-    property int  m_StartX:     getStartX()
-    property int  m_StartY:     getStartY()
-    property int  m_EndX:       getEndX()
-    property int  m_EndY:       getEndY()
-    property int  m_BoxWidth:   m_InvertX ? m_StartX - m_EndX : m_EndX - m_StartX
-    property int  m_BoxHeight:  m_InvertY ? m_StartY - m_EndY : m_EndY - m_StartY
-    property bool m_InvertX:    m_StartX  > m_EndX
-    property bool m_InvertY:    m_StartY  > m_EndY
-    property bool m_FromIsHorz: m_From ? (m_From.m_Position === TSP_Connector.IEPosition.IE_P_Left || m_From.m_Position === TSP_Connector.IEPosition.IE_P_Right) : false
-    property bool m_ToIsHorz:   m_To   ? (m_To.m_Position   === TSP_Connector.IEPosition.IE_P_Left || m_To.m_Position   === TSP_Connector.IEPosition.IE_P_Right) : false
+    property var m_From:        null // box start connector at which message is attached
+    property var m_To:          null // box end connector at which message is attached, if null message is dragging
+    property var m_StartPoint:  getStartPoint()
+    property var m_CenterPoint: getCenterPoint()
+    property var m_EndPoint:    getEndPoint()
+    property var m_LabelPos:    Qt.vector2d(m_StartPoint.x + (((m_EndPoint.x - m_StartPoint.x) / 2.0) - (m_LabelSize.x / 2.0)),
+                                            m_StartPoint.y + (((m_EndPoint.y - m_StartPoint.y) / 2.0) - (m_LabelSize.y / 2.0)))
+    property var m_LabelSize:   Qt.vector2d(100, 50)
+    property var m_ArrowSize:   Qt.vector2d(3, 10)
+    property int m_Margin:      2
 
     // common properties
-    id:     itMessage
-    x:      m_InvertX                           ? m_EndX      : m_StartX
-    y:      m_InvertY                           ? m_EndY      : m_StartY
-    width:  m_BoxWidth  > spMessage.strokeWidth ? m_BoxWidth  : spMessage.strokeWidth
-    height: m_BoxHeight > spMessage.strokeWidth ? m_BoxHeight : spMessage.strokeWidth
+    id: itMessage
+    objectName: "itMessage"
+    anchors.fill: parent
 
     /**
-    * Message shape
+    * First connection line
     */
     Shape
     {
         // common properties
-        id:            shMessage
+        id:            shMsgFromLine
+        objectName:    "shMsgFromLine"
         anchors.fill:  parent
         layer.samples: 8
         layer.enabled: true
         smooth:        true
+        clip:          false
 
         /**
-        * Message path
+        * First connection line path
         */
         ShapePath
         {
             // common properties
-            id:          spMessage
+            id:          spMsgFromLine
+            objectName:  "spMsgFromLine"
             strokeColor: "#202020"
             fillColor:   "transparent"
             strokeWidth: 1
-            startX:      itMessage.m_InvertX ? itMessage.width  : 0
-            startY:      itMessage.m_InvertY ? itMessage.height : 0
+            startX:      m_StartPoint.x
+            startY:      m_StartPoint.y
 
             /**
-            * Message curve
+            * Line path
             */
-            PathCubic
-            {
-                // common properties
-                x:         itMessage.m_InvertX ? 0                                     : itMessage.width
-                y:         itMessage.m_InvertY ? 0                                     : itMessage.height
-                control1X: itMessage.m_InvertX ? (m_FromIsHorz ? 0 : itMessage.width)  : (m_FromIsHorz ? itMessage.width : 0)
-                control1Y: itMessage.m_InvertY ? (m_FromIsHorz ? itMessage.height : 0) : (m_FromIsHorz ? 0 : itMessage.height)
-                control2X: itMessage.m_InvertX ? (m_ToIsHorz   ? itMessage.width  : 0) : (m_ToIsHorz   ? 0 : itMessage.width)
-                control2Y: itMessage.m_InvertY ? (m_ToIsHorz   ? 0 : itMessage.height) : (m_ToIsHorz   ? itMessage.height : 0)
-            }
+            PathLine { x: m_CenterPoint.x; y: m_CenterPoint.y }
         }
     }
 
     /**
-    * Arrow shape
+    * Second connection line
     */
     Shape
     {
         // common properties
-        id:            shMessageArrow
+        id:            shMsgToLine
+        objectName:    "shMsgToLine"
+        anchors.fill:  parent
         layer.samples: 8
         layer.enabled: true
         smooth:        true
-        x:             itMessage.m_InvertX  ? -(width  / 2) + itMessage.getToConnectorMargin(true)  : itMessage.width  - (width  / 2) - itMessage.getToConnectorMargin(true)
-        y:             itMessage.m_InvertY  ? -(height / 2) + itMessage.getToConnectorMargin(false) : itMessage.height - (height / 2) - itMessage.getToConnectorMargin(false)
-        width:         itMessage.m_ToIsHorz ? 12 : 6
-        height:        itMessage.m_ToIsHorz ? 6  : 12
+        clip:          false
 
         /**
-        * Arrow path
+        * Second connection line path
         */
         ShapePath
         {
             // common properties
-            id:          spMessageArrow
-            strokeColor: "transparent"
-            fillColor:   "#202020"
-            strokeWidth: 0
-            startX:      itMessage.m_InvertX ? shMessageArrow.width  : 0
-            startY:      itMessage.m_InvertY ? shMessageArrow.height : 0
+            id:          spMsgToLine
+            objectName:  "spMsgToLine"
+            strokeColor: "#202020"
+            fillColor:   "transparent"
+            strokeWidth: 1
+            startX:      m_CenterPoint.x
+            startY:      m_CenterPoint.y
 
             /**
-            * Arrow path SVG
+            * Line path
             */
-            PathSvg
-            {
-                // advanced properties
-                property int m_FirstX:  itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? shMessageArrow.width : 0)  : (itMessage.m_InvertX ? 0 : shMessageArrow.width)
-                property int m_FirstY:  itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? 0 : shMessageArrow.height) : (itMessage.m_InvertY ? shMessageArrow.height : 0)
-                property int m_SecondX: itMessage.m_ToIsHorz ? (itMessage.m_InvertX ? 0 : shMessageArrow.width)  : shMessageArrow.width / 2
-                property int m_SecondY: itMessage.m_ToIsHorz ? shMessageArrow.height / 2                         : (itMessage.m_InvertY ? 0 : shMessageArrow.height)
+            PathLine { x: m_EndPoint.x; y: m_EndPoint.y }
+        }
 
-                path: "L " + m_FirstX + " " + m_FirstY + " L " + m_SecondX + " " + m_SecondY + " z"
-            }
+        /**
+        * Arrow
+        */
+        ShapePath
+        {
+            property var m_Dir:    Qt.vector2d(m_EndPoint.x - m_CenterPoint.x, m_EndPoint.y - m_CenterPoint.y).normalized()
+            property var m_DirCCW: Qt.vector2d(-m_Dir.y,  m_Dir.x)
+            property var m_DirCW:  Qt.vector2d( m_Dir.y, -m_Dir.x)
+
+            // common properties
+            id:          spMsgArrow
+            objectName:  "spMsgArrow"
+            strokeColor: "#202020"
+            fillColor:   "#202020"
+            strokeWidth: 1
+            startX:      m_CenterPoint.x
+            startY:      m_CenterPoint.y
+
+            /**
+            * Arrow path
+            */
+            PathMove { x: m_EndPoint.x; y: m_EndPoint.y }
+            PathLine { x: m_EndPoint.x - (m_ArrowSize.y * spMsgArrow.m_Dir.x) + (m_ArrowSize.x * spMsgArrow.m_DirCCW.x)
+                       y: m_EndPoint.y - (m_ArrowSize.y * spMsgArrow.m_Dir.y) + (m_ArrowSize.x * spMsgArrow.m_DirCCW.y) }
+            PathLine { x: m_EndPoint.x - (m_ArrowSize.y * spMsgArrow.m_Dir.x) + (m_ArrowSize.x * spMsgArrow.m_DirCW.x)
+                       y: m_EndPoint.y - (m_ArrowSize.y * spMsgArrow.m_Dir.y) + (m_ArrowSize.x * spMsgArrow.m_DirCW.y)  }
         }
     }
 
@@ -122,32 +130,88 @@ T.Control
     Rectangle
     {
         // common properties
-        x:            (itMessage.width / 2) - (width / 2)
-        y:            itMessage.m_ToIsHorz ? (itMessage.m_InvertY ? -(height / 2) : itMessage.height - (height / 2)) : (itMessage.height / 2) - (height / 2)
-        width:        100
-        height:       50
-        color:        "white"
-        border.color: "#202020"
-        border.width: 1
-        radius:       3
+        id:         rcBackground
+        objectName: "rcBackground"
+        x:          m_LabelPos.x
+        y:          m_LabelPos.y
+        width:      m_LabelSize.x
+        height:     m_LabelSize.y
+        color:      "transparent"
 
         /**
-        * Message label
+        * Handle control
         */
-        Text
+        TSP_HandleControl
         {
             // common properties
-            id:                  itLabel
-            text:                "Message"
-            anchors.fill:        parent
-            anchors.margins:     2
-            font.family:         "Arial"
-            font.pointSize:      10
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment:   Text.AlignVCenter
-            wrapMode:            Text.WordWrap
-            color:               "#202020"
-            clip:                true
+            id:           hcBackground
+            objectName:   "hcBackground"
+            anchors.fill: parent
+            z:            rcBackground.activeFocus ? 0 : -1
+
+            // advanced properties
+            m_HandleVisible: rcBackground.activeFocus
+            m_Target: rcBackground
+
+            /**
+            * Called when the move and size mode should be disabled
+            */
+            function doDisableMoveSize()
+            {
+                rcBackground.activeFocus = false;
+            }
+        }
+
+        /**
+        * Message content
+        */
+        Rectangle
+        {
+            // common properties
+            id:           rcContent
+            objectName:   "rcContent"
+            anchors.fill: parent
+            color:        "white"
+            border.color: "#202020"
+            border.width: 1
+            radius:       3
+            z:            rcBackground.activeFocus ? -1 : 0
+
+            /**
+            * Message label
+            */
+            Text
+            {
+                // common properties
+                id:                  itLabel
+                text:                "Message"
+                anchors.fill:        parent
+                anchors.margins:     2
+                font.family:         "Arial"
+                font.pointSize:      10
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment:   Text.AlignVCenter
+                wrapMode:            Text.WordWrap
+                color:               "#202020"
+                clip:                true
+            }
+
+            /**
+            * Split view mouse area
+            */
+            MouseArea
+            {
+                // common properties
+                id: maMouseArea
+                objectName: "maMouseArea"
+                anchors.fill: parent
+
+                /// called when the view is clicked
+                onClicked:
+                {
+                    rcBackground.forceActiveFocus();
+                }
+            }
         }
     }
 
@@ -167,156 +231,6 @@ T.Control
     {
         //console.log("onM_ToChanged");
         bindMsgToDstSymbol();
-    }
-
-    /**
-    * Gets the message rect start position on x axis
-    *@return the message rect start position on x axis
-    */
-    function getStartX()
-    {
-        // from symbol should be defined
-        if (!m_From)
-            return 0;
-
-        return getXPos(m_From);
-    }
-
-    /**
-    * Gets the message rect start position on y axis
-    *@return the message rect start position on y axis
-    */
-    function getStartY()
-    {
-        // from symbol should be defined
-        if (!m_From)
-            return 0;
-
-        return getYPos(m_From);
-    }
-
-    /**
-    * Gets the message rect end position on x axis
-    *@return the message rect end position on x axis
-    */
-    function getEndX()
-    {
-        // to symbol should be defined
-        if (!m_To)
-        {
-            // message is dragging, get mouse position from start connector
-            if (m_From)
-                return m_From.m_Symbol.x + m_From.connectorMouseArea.mouseX;
-
-            return 0;
-        }
-
-        return getXPos(m_To);
-    }
-
-    /**
-    * Gets the message rect end position on y axis
-    *@return the message rect end position on y axis
-    */
-    function getEndY()
-    {
-        // to symbol should be defined
-        if (!m_To)
-        {
-            // message is dragging, get mouse position from start connector
-            if (m_From)
-                return m_From.m_Symbol.y + m_From.connectorMouseArea.mouseY;
-
-            return 0;
-        }
-
-        return getYPos(m_To);
-    }
-
-    /**
-    * Gets the message rect x position matching with the connector
-    *@return the message rect x position matching with the connector
-    */
-    function getXPos(connector)
-    {
-        // connector should be defined
-        if (!connector)
-            return 0;
-
-        // get the connector parent symbol
-        let symbol = connector.m_Symbol;
-
-        // parent symbol should be defined in the connector
-        if (!symbol)
-            return 0;
-
-        // search for the connector position from which the message rect position should be measured
-        switch (connector.m_Position)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:   return symbol.x - (connector.width  / 2)                               - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Right:  return symbol.x +  symbol.rectConnectors.width + (connector.width / 2) + m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Top:
-            case TSP_Connector.IEPosition.IE_P_Bottom: return symbol.x + (symbol.rectConnectors.width / 2);
-
-            default:
-                console.log("getXPos - unknown connector position - " + connector.m_Position);
-                return 0;
-        }
-    }
-
-    /**
-    * Gets the message rect y position matching with the connector
-    *@return the message rect y position matching with the connector
-    */
-    function getYPos(connector)
-    {
-        // connector should be defined
-        if (!connector)
-            return 0;
-
-        // get the connector parent symbol
-        let symbol = connector.m_Symbol;
-
-        // parent symbol should be defined in the connector
-        if (!symbol)
-            return 0;
-
-        // search for the connector to which the message rect should end
-        switch (connector.m_Position)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:
-            case TSP_Connector.IEPosition.IE_P_Right:  return symbol.y + (symbol.rectConnectors.height / 2);
-            case TSP_Connector.IEPosition.IE_P_Top:    return symbol.y - (connector.height             / 2)                     - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Bottom: return symbol.y +  symbol.rectConnectors.height + (connector.height / 2) + m_Margin;
-
-            default:
-                console.log("getYPos - unknown connector position - " + connector.m_Position);
-                return 0;
-        }
-    }
-
-    /**
-    * Gets the margin to apply to where the message is attached to
-    *@param onXAxis [bool] - if true, the margin will be get for the x axis, otherwise for the y axis
-    *@return the to connector margin to apply
-    */
-    function getToConnectorMargin(onXAxis)
-    {
-        if (!m_To)
-            return 0;
-
-        // search for the connector to which the message rect should end
-        switch (m_To.m_Position)
-        {
-            case TSP_Connector.IEPosition.IE_P_Left:   return onXAxis ?     (m_To.width  / 2) - m_Margin : 0;
-            case TSP_Connector.IEPosition.IE_P_Right:  return onXAxis ?     (m_To.width  / 2) + m_Margin : 0;
-            case TSP_Connector.IEPosition.IE_P_Top:    return onXAxis ? 0 : (m_To.height / 2) - m_Margin;
-            case TSP_Connector.IEPosition.IE_P_Bottom: return onXAxis ? 0 : (m_To.height / 2) + m_Margin;
-
-            default:
-                console.log("getToConnectorMargin - unknown \"to\" connector - " + m_To.m_Position);
-                return 0;
-        }
     }
 
     /**
@@ -375,5 +289,89 @@ T.Control
         for (var i = symbol.bottomConnector.m_Messages.length - 1; i >= 0; --i)
             if (symbol.bottomConnector.m_Messages[i] === this)
                 symbol.bottomConnector.m_Messages.splice(i, 1);
+    }
+
+    /**
+    * Gets the start point
+    *@return the start point in pixels
+    */
+    function getStartPoint()
+    {
+        // from symbol should be defined
+        if (!m_From)
+            return Qt.vector2d();
+
+        return getPoint(m_From);
+    }
+
+    /**
+    * Gets the end point
+    *@return the end point in pixels
+    */
+    function getEndPoint()
+    {
+        // to symbol should be defined
+        if (!m_To)
+        {
+            // message is dragging, get mouse position from start connector
+            if (m_From)
+                return Qt.vector2d(m_From.m_Symbol.x + m_From.connectorMouseArea.mouseX,
+                                   m_From.m_Symbol.y + m_From.connectorMouseArea.mouseY);
+
+            return Qt.vector2d();
+        }
+
+        return getPoint(m_To);
+    }
+
+    /**
+    * Gets the center point
+    *@return the center point on y axis in pixels
+    */
+    function getCenterPoint()
+    {
+        return Qt.vector2d(rcBackground.x + (rcBackground.width  / 2.0),
+                           rcBackground.y + (rcBackground.height / 2.0));
+    }
+
+    /**
+    * Gets the point centered in the connector
+    *@return the point centered in the connector
+    */
+    function getPoint(connector)
+    {
+        // connector should be defined
+        if (!connector)
+            return Qt.vector2d();
+
+        // get the connector parent symbol
+        let symbol = connector.m_Symbol;
+
+        // parent symbol should be defined in the connector
+        if (!symbol)
+            return Qt.vector2d();
+
+        // get the connector center point
+        switch (connector.m_Position)
+        {
+            case TSP_Connector.IEPosition.IE_P_Left:
+                return Qt.vector2d(symbol.x - (connector.width              / 2) - m_Margin,
+                                   symbol.y + (symbol.rectConnectors.height / 2));
+
+            case TSP_Connector.IEPosition.IE_P_Right:
+                return Qt.vector2d(symbol.x +  symbol.rectConnectors.width + (connector.width / 2) + m_Margin,
+                                   symbol.y + (symbol.rectConnectors.height                   / 2));
+
+            case TSP_Connector.IEPosition.IE_P_Top:
+                return Qt.vector2d(symbol.x + (symbol.rectConnectors.width / 2), symbol.y - (connector.height / 2) - m_Margin);
+
+            case TSP_Connector.IEPosition.IE_P_Bottom:
+                return Qt.vector2d(symbol.x + (symbol.rectConnectors.width                      / 2),
+                                   symbol.y +  symbol.rectConnectors.height + (connector.height / 2) + m_Margin);
+
+            default:
+                console.log("getYPos - unknown connector position - " + connector.m_Position);
+                return Qt.vector2d();
+        }
     }
 }

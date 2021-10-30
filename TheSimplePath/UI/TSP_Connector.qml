@@ -32,6 +32,7 @@ T.Control
 
     // common properties
     id: ctConnector
+    objectName: "ctConnector"
     width: 14
     height: 14
 
@@ -42,6 +43,7 @@ T.Control
     {
         // common properties
         id: rcConnector
+        objectName: "rcConnector"
         anchors.fill: parent
         color: "transparent"
         border.color: "#c0c0c0"
@@ -58,6 +60,7 @@ T.Control
 
         // common properties
         id: maConnector
+        objectName: "maConnector"
         anchors.fill: parent
         cursorShape: Qt.CrossCursor
         acceptedButtons: Qt.LeftButton

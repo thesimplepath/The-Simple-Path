@@ -12,7 +12,9 @@ T.Control
     property var  m_Target:        null
     property bool m_HandleVisible: true
 
-    id: ctHandlesControl
+    // common properties
+    id: ctHandleControl
+    objectName: "ctHandleControl"
 
     /**
     * Handles control background
@@ -20,6 +22,8 @@ T.Control
     Rectangle
     {
         // common properties
+        id: rcHandleControl
+        objectName: "rcHandleControl"
         anchors.fill: parent
         color: "transparent"
         border.color: "#202020"
@@ -38,12 +42,13 @@ T.Control
             property int m_MouseDeltaY: 0
 
             // common properties
-            id: maHandlesControl
+            id: maHandleControl
+            objectName: "maHandleControl"
             anchors.fill: parent
             cursorShape: Qt.SizeAllCursor
             acceptedButtons: Qt.LeftButton
             hoverEnabled: true
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             /// called when mouse is pressed above the control
             onPressed: function(mouseEvent)
@@ -71,25 +76,25 @@ T.Control
             /// called when mouse moved on the x axis above the handle
             onMouseXChanged:
             {
-                if (!ctHandlesControl.m_Target)
+                if (!ctHandleControl.m_Target)
                     return;
 
                 if (!pressed)
                     return;
 
-                ctHandlesControl.m_Target.x += mouseX - m_MouseDeltaX;
+                ctHandleControl.m_Target.x += mouseX - m_MouseDeltaX;
             }
 
             /// called when mouse moved on the y axis above the handle
             onMouseYChanged:
             {
-                if (!ctHandlesControl.m_Target)
+                if (!ctHandleControl.m_Target)
                     return;
 
                 if (!pressed)
                     return;
 
-                ctHandlesControl.m_Target.y += mouseY - m_MouseDeltaY;
+                ctHandleControl.m_Target.y += mouseY - m_MouseDeltaY;
             }
         }
 
@@ -99,12 +104,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haLeftHandle
+            objectName: "haLeftHandle"
             x:   parent.x                       - 5
             y: ((parent.y + parent.height) / 2) - (height / 2)
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_Left
         }
 
@@ -114,12 +121,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haLeftTopHandle
+            objectName: "haLeftTopHandle"
             x: parent.x - 5
             y: parent.y - 5
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_LeftTop
         }
 
@@ -129,12 +138,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haTopHandle
+            objectName: "haTopHandle"
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:  parent.y - 5
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_Top
         }
 
@@ -144,12 +155,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haTopRightHandle
+            objectName: "haTopRightHandle"
             x: (parent.x + parent.width) - 2
             y:  parent.y                 - 5
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_RightTop
         }
 
@@ -159,12 +172,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haRightHandle
+            objectName: "haRightHandle"
             x:  (parent.x + parent.width)       - 2
             y: ((parent.y + parent.height) / 2) - (height / 2)
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_Right
         }
 
@@ -174,12 +189,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haRightBottomHandle
+            objectName: "haRightBottomHandle"
             x: (parent.x + parent.width)  - 2
             y: (parent.y + parent.height) - 2
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_RightBottom
         }
 
@@ -189,12 +206,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haBottomHandle
+            objectName: "haBottomHandle"
             x: ((parent.x + parent.width) / 2) - (width / 2)
             y:  (parent.y + parent.height)     - 2
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_Bottom
         }
 
@@ -204,12 +223,14 @@ T.Control
         TSP_Handle
         {
             // common properties
+            id: haBottomLeftHandle
+            objectName: "haBottomLeftHandle"
             x:  parent.x                  - 5
             y: (parent.y + parent.height) - 2
-            visible: ctHandlesControl.m_HandleVisible
+            visible: ctHandleControl.m_HandleVisible
 
             // advanced proeprties
-            m_Target: ctHandlesControl.m_Target
+            m_Target: ctHandleControl.m_Target
             m_Direction: TSP_Handle.IEDirection.IE_D_LeftBottom
         }
     }
