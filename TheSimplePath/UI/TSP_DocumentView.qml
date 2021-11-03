@@ -14,6 +14,7 @@ T.Frame
 
     // common properties
     id: frDocumentView
+    objectName: "frDocumentView"
 
     /**
     * Document background
@@ -21,6 +22,8 @@ T.Frame
     Rectangle
     {
         // common properties
+        id: rcDocumentView
+        objectName: "rcDocumentView"
         anchors.fill: parent
         color: "#808080"
 
@@ -30,6 +33,8 @@ T.Frame
         StackView
         {
             // common properties
+            id: svDocumentView
+            objectName: "svDocumentView"
             anchors.fill: parent
         }
     }
@@ -40,6 +45,8 @@ T.Frame
     Connections
     {
         // common properties
+        id: cnDocumentView
+        objectName: "cnDocumentView"
         target: m_Model
 
         /**
@@ -93,6 +100,9 @@ T.Frame
                                                                "objectName": "ctMessage" + index,
                                                                "m_From":     from,
                                                                "m_To":       to});
+
+            console.error("Add message - new item - " + item.objectName);
+
             ++index;
             return item;
     }

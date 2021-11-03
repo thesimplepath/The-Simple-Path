@@ -454,6 +454,7 @@
     <None Include="UI\TSP_DocumentView.qml" />
     <None Include="UI\TSP_Handle.qml" />
     <None Include="UI\TSP_HandleControl.qml" />
+    <None Include="UI\TSP_JSHelper.js" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_Message.qml" />
   </ItemGroup>

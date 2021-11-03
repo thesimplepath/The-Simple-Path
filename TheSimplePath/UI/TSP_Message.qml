@@ -1,13 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
-import QtQuick.Templates 2.15 as T
 
 /**
 * Message, it's a link between 2 symbols
 *@author Jean-Milost Reymond
 */
-T.Control
+Item
 {
     // advanced properties
     property var m_From:        null // box start connector at which message is attached
@@ -137,6 +136,7 @@ T.Control
         width:      m_LabelSize.x
         height:     m_LabelSize.y
         color:      "transparent"
+        visible:    m_From !== null && m_To !== null
 
         /**
         * Handle control
@@ -183,7 +183,8 @@ T.Control
             Text
             {
                 // common properties
-                id:                  itLabel
+                id:                  txLabel
+                objectName:          "txLabel"
                 text:                "Message"
                 anchors.fill:        parent
                 anchors.margins:     2
@@ -216,88 +217,88 @@ T.Control
     }
 
     /**
-    * Called when the from symbol changed
+    * Called when the from connector changed
     */
     onM_FromChanged:
     {
         //console.log("onM_FromChanged");
-        bindMsgToSrcSymbol();
+        bindMsgToSrcBox();
     }
 
     /**
-    * Called when the to symbol changed
+    * Called when the to connector changed
     */
     onM_ToChanged:
     {
         //console.log("onM_ToChanged");
-        bindMsgToDstSymbol();
+        bindMsgToDstBox();
     }
 
     /**
-    * Bind message to source symbol
+    * Bind message to source box
     */
-    function bindMsgToSrcSymbol()
+    function bindMsgToSrcBox()
     {
-        // from symbol should be defined
+        // from connector should be defined
         if (!m_From)
             return;
 
-        // unbind message from parent symbol, if previously binded
-        unbindMsgFromSymbol(m_From.m_Symbol);
+        // unbind message from parent box, if previously binded
+        unbindMsgFromBox(m_From.m_Box);
         m_From.m_Messages.push(this);
     }
 
     /**
-    * Bind message to destination symbol
+    * Bind message to destination box
     */
-    function bindMsgToDstSymbol()
+    function bindMsgToDstBox()
     {
-        // to symbol should be defined
+        // to connector should be defined
         if (!m_To)
             return;
 
-        // unbind message from parent symbol, if previously binded
-        unbindMsgFromSymbol(m_To.m_Symbol);
+        // unbind message from parent box, if previously binded
+        unbindMsgFromBox(m_To.m_Box);
         m_To.m_Messages.push(this);
     }
 
     /**
-    * Unbinds a message from a symbol
-    *@param symbol - symbol for which the message shoulkd be unbind
+    * Unbinds a message from a box
+    *@param box - box for which the message should be unbind
     */
-    function unbindMsgFromSymbol(symbol)
+    function unbindMsgFromBox(box)
     {
-        if (!symbol)
+        if (!box)
             return 0;
 
         // remove all existing message instance from left connector
-        for (var i = symbol.leftConnector.m_Messages.length - 1; i >= 0; --i)
-            if (symbol.leftConnector.m_Messages[i] === this)
-                symbol.leftConnector.m_Messages.splice(i, 1);
+        for (var i = box.leftConnector.m_Messages.length - 1; i >= 0; --i)
+            if (box.leftConnector.m_Messages[i] === this)
+                box.leftConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from top connector
-        for (var i = symbol.topConnector.m_Messages.length - 1; i >= 0; --i)
-            if (symbol.topConnector.m_Messages[i] === this)
-                symbol.topConnector.m_Messages.splice(i, 1);
+        for (var i = box.topConnector.m_Messages.length - 1; i >= 0; --i)
+            if (box.topConnector.m_Messages[i] === this)
+                box.topConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from right connector
-        for (var i = symbol.rightConnector.m_Messages.length - 1; i >= 0; --i)
-            if (symbol.rightConnector.m_Messages[i] === this)
-                symbol.rightConnector.m_Messages.splice(i, 1);
+        for (var i = box.rightConnector.m_Messages.length - 1; i >= 0; --i)
+            if (box.rightConnector.m_Messages[i] === this)
+                box.rightConnector.m_Messages.splice(i, 1);
 
         // remove all existing message instance from bottom connector
-        for (var i = symbol.bottomConnector.m_Messages.length - 1; i >= 0; --i)
-            if (symbol.bottomConnector.m_Messages[i] === this)
-                symbol.bottomConnector.m_Messages.splice(i, 1);
+        for (var i = box.bottomConnector.m_Messages.length - 1; i >= 0; --i)
+            if (box.bottomConnector.m_Messages[i] === this)
+                box.bottomConnector.m_Messages.splice(i, 1);
     }
 
     /**
     * Gets the start point
-    *@return the start point in pixels
+    *@return the start point in pixels, empty point on error
     */
     function getStartPoint()
     {
-        // from symbol should be defined
+        // from connector should be defined
         if (!m_From)
             return Qt.vector2d();
 
@@ -306,17 +307,22 @@ T.Control
 
     /**
     * Gets the end point
-    *@return the end point in pixels
+    *@return the end point in pixels, empty point on error
     */
     function getEndPoint()
     {
-        // to symbol should be defined
+        // to connector should be defined
         if (!m_To)
         {
             // message is dragging, get mouse position from start connector
             if (m_From)
-                return Qt.vector2d(m_From.m_Symbol.x + m_From.connectorMouseArea.mouseX,
-                                   m_From.m_Symbol.y + m_From.connectorMouseArea.mouseY);
+            {
+                // get the delta between the connector and its parent box
+                let startDelta = getStartDelta(m_From);
+
+                return Qt.vector2d(m_From.m_Box.x + m_From.connectorMouseArea.mouseX + startDelta.x,
+                                   m_From.m_Box.y + m_From.connectorMouseArea.mouseY + startDelta.y);
+            }
 
             return Qt.vector2d();
         }
@@ -326,7 +332,7 @@ T.Control
 
     /**
     * Gets the center point
-    *@return the center point on y axis in pixels
+    *@return the center point on y axis in pixels, empty point on error
     */
     function getCenterPoint()
     {
@@ -336,7 +342,7 @@ T.Control
 
     /**
     * Gets the point centered in the connector
-    *@return the point centered in the connector
+    *@return the point centered in the connector in pixels, empty point on error
     */
     function getPoint(connector)
     {
@@ -344,33 +350,68 @@ T.Control
         if (!connector)
             return Qt.vector2d();
 
-        // get the connector parent symbol
-        let symbol = connector.m_Symbol;
+        // get the connector parent box
+        let box = connector.m_Box;
 
-        // parent symbol should be defined in the connector
-        if (!symbol)
+        // parent box should always be defined in the connector
+        if (!box)
             return Qt.vector2d();
 
         // get the connector center point
         switch (connector.m_Position)
         {
             case TSP_Connector.IEPosition.IE_P_Left:
-                return Qt.vector2d(symbol.x - (connector.width              / 2) - m_Margin,
-                                   symbol.y + (symbol.rectConnectors.height / 2));
+                return Qt.vector2d(box.x - (connector.width           / 2) - m_Margin,
+                                   box.y + (box.rectConnectors.height / 2));
 
             case TSP_Connector.IEPosition.IE_P_Right:
-                return Qt.vector2d(symbol.x +  symbol.rectConnectors.width + (connector.width / 2) + m_Margin,
-                                   symbol.y + (symbol.rectConnectors.height                   / 2));
+                return Qt.vector2d(box.x +  box.rectConnectors.width + (connector.width / 2) + m_Margin,
+                                   box.y + (box.rectConnectors.height                   / 2));
 
             case TSP_Connector.IEPosition.IE_P_Top:
-                return Qt.vector2d(symbol.x + (symbol.rectConnectors.width / 2), symbol.y - (connector.height / 2) - m_Margin);
+                return Qt.vector2d(box.x + (box.rectConnectors.width / 2), box.y - (connector.height / 2) - m_Margin);
 
             case TSP_Connector.IEPosition.IE_P_Bottom:
-                return Qt.vector2d(symbol.x + (symbol.rectConnectors.width                      / 2),
-                                   symbol.y +  symbol.rectConnectors.height + (connector.height / 2) + m_Margin);
+                return Qt.vector2d(box.x + (box.rectConnectors.width                      / 2),
+                                   box.y +  box.rectConnectors.height + (connector.height / 2) + m_Margin);
 
             default:
-                console.log("getYPos - unknown connector position - " + connector.m_Position);
+                console.log("getPoint - unknown connector position - " + connector.m_Position);
+                return Qt.vector2d();
+        }
+    }
+
+    /**
+    * Gets the start delta to apply to mouse position
+    *@param connector - connector from which the start delta should be calculated
+    *@return the start delta in pixels, empty point on error
+    */
+    function getStartDelta(connector)
+    {
+        // connector should be defined
+        if (!connector)
+            return Qt.vector2d();
+
+        // get the connector parent box
+        let box = connector.m_Box;
+
+        // parent box should always be defined in the connector
+        if (!box)
+            return Qt.vector2d(0.0, 0.0);
+
+        // get the connector center point
+        switch (connector.m_Position)
+        {
+            case TSP_Connector.IEPosition.IE_P_Left:   return Qt.vector2d(-(connector.width + m_Margin),
+                                                                           (box.rectConnectors.height / 2) - (connector.height / 2));
+            case TSP_Connector.IEPosition.IE_P_Right:  return Qt.vector2d(  box.rectConnectors.width + m_Margin,
+                                                                           (box.rectConnectors.height / 2) - (connector.height / 2));
+            case TSP_Connector.IEPosition.IE_P_Top:    return Qt.vector2d( (box.rectConnectors.width  / 2) - (connector.width  / 2),
+                                                                          -(connector.height + m_Margin));
+            case TSP_Connector.IEPosition.IE_P_Bottom: return Qt.vector2d( (box.rectConnectors.width  / 2) - (connector.width  / 2),
+                                                                            box.rectConnectors.height + m_Margin);
+            default:
+                console.log("getStartDelta - unknown connector position - " + connector.m_Position);
                 return Qt.vector2d();
         }
     }

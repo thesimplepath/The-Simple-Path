@@ -8,5 +8,6 @@
         <file>UI/TSP_Message.qml</file>
         <file>UI/TSP_AtlasItem.qml</file>
         <file>UI/TSP_Box.qml</file>
+        <file>UI/TSP_JSHelper.js</file>
     </qresource>
 </RCC>

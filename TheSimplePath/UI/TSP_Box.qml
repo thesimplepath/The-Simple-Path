@@ -48,7 +48,7 @@ T.Control
 
             // advanced properties
             m_Document: ctBox.m_Document
-            m_Symbol:   ctBox
+            m_Box:      ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Left
         }
 
@@ -66,7 +66,7 @@ T.Control
 
             // advanced properties
             m_Document: ctBox.m_Document
-            m_Symbol:   ctBox
+            m_Box:      ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Top
         }
 
@@ -84,7 +84,7 @@ T.Control
 
             // advanced properties
             m_Document: ctBox.m_Document
-            m_Symbol:   ctBox
+            m_Box:      ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Right
         }
 
@@ -102,7 +102,7 @@ T.Control
 
             // advanced properties
             m_Document: ctBox.m_Document
-            m_Symbol:   ctBox
+            m_Box:      ctBox
             m_Position: TSP_Connector.IEPosition.IE_P_Bottom
         }
     }
@@ -126,9 +126,7 @@ T.Control
         * Called when the move and size mode should be disabled
         */
         function doDisableMoveSize()
-        {
-            //REM? ctBox.activeFocus = false;
-        }
+        {}
     }
 
     /**
