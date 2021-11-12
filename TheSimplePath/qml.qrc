@@ -6,8 +6,9 @@
         <file>UI/TSP_Connector.qml</file>
         <file>UI/TSP_HandleControl.qml</file>
         <file>UI/TSP_Message.qml</file>
-        <file>UI/TSP_AtlasItem.qml</file>
         <file>UI/TSP_Box.qml</file>
         <file>UI/TSP_JSHelper.js</file>
+        <file>UI/TSP_AtlasView.qml</file>
+        <file>UI/TSP_PageView.qml</file>
     </qresource>
 </RCC>

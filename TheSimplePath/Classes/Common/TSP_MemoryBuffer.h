@@ -115,5 +115,5 @@ class TSP_MemoryBuffer : public TSP_Buffer
 
     protected:
         std::vector<std::uint8_t> m_Data;
-        std::size_t               m_Offset;
+        std::size_t               m_Offset = 0;
 };

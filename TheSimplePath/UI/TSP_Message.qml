@@ -158,7 +158,7 @@ Item
             */
             function doDisableMoveSize()
             {
-                rcBackground.activeFocus = false;
+                rcBackground.forceActiveFocus();
             }
         }
 
@@ -264,7 +264,7 @@ Item
 
     /**
     * Unbinds a message from a box
-    *@param box - box for which the message should be unbind
+    *@param {TSP_Box} box - box for which the message should be unbind
     */
     function unbindMsgFromBox(box)
     {
@@ -342,6 +342,7 @@ Item
 
     /**
     * Gets the point centered in the connector
+    *@param {TSP_Connector} connector - the connector for which the center point should be get
     *@return the point centered in the connector in pixels, empty point on error
     */
     function getPoint(connector)
@@ -383,7 +384,7 @@ Item
 
     /**
     * Gets the start delta to apply to mouse position
-    *@param connector - connector from which the start delta should be calculated
+    *@param {TSP_Connector} connector - connector from which the start delta should be calculated
     *@return the start delta in pixels, empty point on error
     */
     function getStartDelta(connector)

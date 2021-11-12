@@ -3,8 +3,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Shapes 1.15
 
-Window
+ApplicationWindow
 {
+    // advanced properties
+    property ApplicationWindow m_MainWindow: wiMainWnd
+
+    // common properties
     id: wiMainWnd
     objectName: "wiMainWnd"
     visible: true
@@ -41,94 +45,58 @@ Window
         anchors.top: rcToolbox.bottom
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
-        m_Parent: rcPage
     }
 
-    /*REM*/
-    Rectangle
-    {
-        id:           rcPage
-        objectName:   "rcPage"
-        anchors.fill: parent
+    /*REM
+    ScrollView {
+        width: 200
+        height: 200
+        clip: true
 
-        MouseArea
-        {
-            property var m_Target: parent
+        Label {
+            text: "ABC"
+            font.pixelSize: 224
+        }
+    }
+    */
+    /*REM
+    Rectangle {
+        id: frame
+        clip: true
+        width: 160
+        height: 160
+        border.color: "black"
+        anchors.centerIn: parent
 
-            id: maPage
-            objectName: "maPage"
-            anchors.fill: parent
+        Text {
+            id: content
+            text: "ABC"
+            font.pixelSize: 160
+            x: -hbar.position * width
+            y: -vbar.position * height
+        }
+
+        ScrollBar {
+            id: vbar
             hoverEnabled: true
-
-            onPressed: function(mouseEvent)
-            {
-                if (m_Target)
-                    m_Target.forceActiveFocus(true);
-            }
+            active: hovered || pressed
+            orientation: Qt.Vertical
+            size: frame.height / content.height
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
         }
 
-        /*REM*/
-        TSP_Box
-        {
-            id: symbol1
-            objectName: "symbol1"
-            x: 50
-            y: 50
-            width: 100
-            height: 80
-
-            m_Document: dvDocumentView
-
-            //nameLabel.text: "1"
+        ScrollBar {
+            id: hbar
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Horizontal
+            size: frame.width / content.width
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
         }
-
-        TSP_Box
-        {
-            id: symbol2
-            objectName: "symbol2"
-            x: 200
-            y: 400
-            width: 100
-            height: 80
-
-            m_Document: dvDocumentView
-
-            //nameLabel.text: "2"
-        }
-
-        TSP_Box
-        {
-            id: symbol3
-            objectName: "symbol3"
-            x: 400
-            y: 150
-            width: 100
-            height: 80
-
-            m_Document: dvDocumentView
-
-            //nameLabel.text: "3"
-        }
-        /**/
-
-        /*REM*/
-        TSP_Message
-        {
-            id: message1
-            objectName: "message1"
-            m_From: symbol1.bottomConnector
-            m_To: symbol2.topConnector
-        }
-
-        TSP_Message
-        {
-            id: message2
-            objectName: "message2"
-            m_From: symbol1.bottomConnector
-            m_To: symbol3.leftConnector
-        }
-        /**/
     }
-    /**/
+    */
 }

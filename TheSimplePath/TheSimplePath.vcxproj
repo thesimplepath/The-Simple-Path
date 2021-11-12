@@ -448,7 +448,7 @@
     <Text Include="CodeConvention.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="UI\TSP_AtlasItem.qml" />
+    <None Include="UI\TSP_AtlasView.qml" />
     <None Include="UI\TSP_Box.qml" />
     <None Include="UI\TSP_Connector.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
@@ -457,6 +457,7 @@
     <None Include="UI\TSP_JSHelper.js" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_Message.qml" />
+    <None Include="UI\TSP_PageView.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

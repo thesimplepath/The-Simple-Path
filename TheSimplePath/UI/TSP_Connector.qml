@@ -28,7 +28,6 @@ T.Control
     property alias connectorMouseArea: maConnector
 
     // advanced properties
-    property var m_Document: null
     property var m_Box:      null
     property var m_Messages: []
     property int m_Position: TSP_Connector.IEPosition.IE_P_None
@@ -74,12 +73,12 @@ T.Control
         onPressed: function(mouseEvent)
         {
             // add a new message and start to drag it
-            if (m_Document)
+            if (m_Page && m_Box)
             {
                 console.log("Connector - adding a new message - start box - " + m_Box.objectName +
                             " - start connector - "                           + ctConnector.objectName);
 
-                m_AddingMsg = m_Document.addMessage(ctConnector, null);
+                m_AddingMsg = m_Page.addMessage(ctConnector, null);
             }
         }
 
@@ -90,6 +89,10 @@ T.Control
             if (!m_AddingMsg)
                 return;
 
+            // no document?
+            if (!m_Document)
+                return;
+
             let doRemoveMsg = false;
             let targetConn  = null;
 
@@ -98,7 +101,7 @@ T.Control
                 let result = [];
 
                 // get all controls located above the mouse onto the document
-                JSHelper.getItemsAbovePoint(m_Document.m_Parent, this.mapToGlobal(mouseEvent.x, mouseEvent.y), result);
+                JSHelper.getItemsAbovePoint(m_Document, this.mapToGlobal(mouseEvent.x, mouseEvent.y), result);
 
                 // search for target connector
                 for (let i = 0; i < result.length; ++i)

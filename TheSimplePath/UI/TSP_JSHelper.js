@@ -1,6 +1,6 @@
 /**
 * Logs all the children contained in an item
-*@param item [item] - start item from which the children should be logged
+*@param {item} item - start item from which the children should be logged
 *@note Start item will also be logged
 */
 function logAllChildren(item)
@@ -15,9 +15,9 @@ function logAllChildren(item)
 
 /**
 * Finds the items below a point
-*@param item [item] - start item from which the children should be logged
-*@param point [point] - point above which the items should be found
-*@param result [array] - found items
+*@param {item} item - start item from which the children should be logged
+*@param {point} point - point above which the items should be found
+*@param {array} result - found items
 *@note Start item will also be checked
 */
 function getItemsAbovePoint(item, point, result)

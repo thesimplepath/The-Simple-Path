@@ -357,10 +357,13 @@
     <None Include="UI\TSP_Box.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_AtlasItem.qml">
+    <None Include="UI\TSP_JSHelper.js">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_JSHelper.js">
+    <None Include="UI\TSP_AtlasView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_PageView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
   </ItemGroup>

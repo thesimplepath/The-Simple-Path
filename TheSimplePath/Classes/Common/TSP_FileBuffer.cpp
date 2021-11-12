@@ -33,8 +33,7 @@
 // TSP_FileBuffer
 //---------------------------------------------------------------------------
 TSP_FileBuffer::TSP_FileBuffer() :
-    TSP_Buffer(),
-    m_Mode(IEMode::IE_M_Unknown)
+    TSP_Buffer()
 {}
 //---------------------------------------------------------------------------
 TSP_FileBuffer::~TSP_FileBuffer()

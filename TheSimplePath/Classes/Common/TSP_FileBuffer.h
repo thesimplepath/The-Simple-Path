@@ -73,7 +73,7 @@ class TSP_FileBuffer : public TSP_Buffer
         virtual bool Open(const std::wstring& fileName, IEMode mode);
 
     protected:
-        IEMode m_Mode;
+        IEMode m_Mode = IEMode::IE_M_Unknown;
 
         /**
         * Closes file

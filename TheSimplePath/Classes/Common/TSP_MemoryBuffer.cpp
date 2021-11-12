@@ -36,8 +36,7 @@
 // TSP_MemoryBuffer
 //---------------------------------------------------------------------------
 TSP_MemoryBuffer::TSP_MemoryBuffer() :
-    TSP_Buffer(),
-    m_Offset(0)
+    TSP_Buffer()
 {}
 //---------------------------------------------------------------------------
 TSP_MemoryBuffer::~TSP_MemoryBuffer()

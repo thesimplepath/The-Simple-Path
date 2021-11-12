@@ -16,9 +16,6 @@ T.Control
     property alias rightConnector:  coRight
     property alias bottomConnector: coBottom
 
-    // advanced properties
-    property var m_Document: null
-
     // common properties
     id: ctBox
     objectName: "ctBox"
@@ -47,8 +44,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Document: ctBox.m_Document
-            m_Box:      ctBox
+            m_Box:      rcConnectors.parent
             m_Position: TSP_Connector.IEPosition.IE_P_Left
         }
 
@@ -65,8 +61,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Document: ctBox.m_Document
-            m_Box:      ctBox
+            m_Box:      rcConnectors.parent
             m_Position: TSP_Connector.IEPosition.IE_P_Top
         }
 
@@ -83,8 +78,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Document: ctBox.m_Document
-            m_Box:      ctBox
+            m_Box:      rcConnectors.parent
             m_Position: TSP_Connector.IEPosition.IE_P_Right
         }
 
@@ -101,8 +95,7 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Document: ctBox.m_Document
-            m_Box:      ctBox
+            m_Box:      rcConnectors.parent
             m_Position: TSP_Connector.IEPosition.IE_P_Bottom
         }
     }

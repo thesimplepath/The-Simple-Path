@@ -39,8 +39,7 @@
 // TSP_StdFileBuffer
 //---------------------------------------------------------------------------
 TSP_StdFileBuffer::TSP_StdFileBuffer() :
-    TSP_FileBuffer(),
-    m_FileBuffer(nullptr)
+    TSP_FileBuffer()
 {}
 //---------------------------------------------------------------------------
 TSP_StdFileBuffer::~TSP_StdFileBuffer()
