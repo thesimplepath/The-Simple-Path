@@ -17,14 +17,6 @@ T.Control
     objectName: "ctAtlasView"
     anchors.fill: parent
 
-    /*REM
-    Rectangle
-    {
-        anchors.fill: parent
-        color: "#ff0000"
-    }
-    */
-
     /**
     * Models stack view
     */
