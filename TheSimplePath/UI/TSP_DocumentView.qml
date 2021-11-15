@@ -9,7 +9,7 @@ import QtQuick.Templates 2.15 as T
 T.Control
 {
     // advanced properties
-    property var m_Document: ctDocumentView
+    property var m_Document: this
     property var m_Model:    rpmDocumentModel
 
     // common properties

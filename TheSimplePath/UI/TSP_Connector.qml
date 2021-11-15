@@ -47,7 +47,7 @@ T.Control
         id: rcConnector
         objectName: "rcConnector"
         anchors.fill: parent
-        color: "transparent"
+        color: "white"
         border.color: "#c0c0c0"
         border.width: 3
         radius: 7

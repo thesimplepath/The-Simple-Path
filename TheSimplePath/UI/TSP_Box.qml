@@ -16,6 +16,9 @@ T.Control
     property alias rightConnector:  coRight
     property alias bottomConnector: coBottom
 
+    // advanced properties
+    property var m_PageContent: parent
+
     // common properties
     id: ctBox
     objectName: "ctBox"
@@ -131,9 +134,9 @@ T.Control
         id: rcContent
         objectName: "rcContent"
         anchors.fill: parent
-        color: "transparent"
+        color: "white"
         radius: 3
-        anchors.margins: 2
+        anchors.margins: 1
         z: ctBox.activeFocus ? -1 : 0
         clip: true
 

@@ -11,6 +11,7 @@ Item
     // advanced properties
     property var m_From:        null // box start connector at which message is attached
     property var m_To:          null // box end connector at which message is attached, if null message is dragging
+    property var m_PageContent: parent
     property var m_StartPoint:  getStartPoint()
     property var m_CenterPoint: getCenterPoint()
     property var m_EndPoint:    getEndPoint()

@@ -2,6 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
+// javascript
+import "TSP_JSHelper.js" as JSHelper
+
 /**
 * Page view
 *@author Jean-Milost Reymond
@@ -9,7 +12,7 @@ import QtQuick.Templates 2.15 as T
 T.Control
 {
     // advanced properties
-    property var m_Page:  ctPageView
+    property var m_Page:  this
     property var m_Model: null
 
     // common properties
@@ -65,14 +68,17 @@ T.Control
             /// called when mouse position changed above page
             onPositionChanged: function(mouseEvent)
             {
+                // do nothing if mouse button is not pressed
                 if (!pressed)
                     return;
 
+                // calculate next horizontal scroll position, and apply it
                 let deltaX    = (m_PrevX - mouseEvent.x) / rcPageContent.width;
-                hbar.position = Math.min(Math.max(hbar.position + deltaX, 0.0), 1.0 - (hbar.size));
+                hbar.position = JSHelper.clamp(hbar.position + deltaX, 0.0, 1.0 - (hbar.size));
 
+                // calculate next vertical scroll position, and apply it
                 let deltaY    = (m_PrevY - mouseEvent.y) / rcPageContent.height;
-                vbar.position = Math.min(Math.max(vbar.position + deltaY, 0.0), 1.0 - (vbar.size));
+                vbar.position = JSHelper.clamp(vbar.position + deltaY, 0.0, 1.0 - (vbar.size));
 
                 m_PrevX = mouseEvent.x;
                 m_PrevY = mouseEvent.y;
@@ -96,11 +102,50 @@ T.Control
             // common properties
             id: rcPageContent
             objectName: "rcPageContent"
-            color: "red"//"white"
+            color: "white"
             x: -hbar.position * width
             y: -vbar.position * height
             width: 2480
             height: 3508
+
+            /**
+            * Page background
+            */
+            Canvas
+            {
+                // common properties
+                id: cvPageBackground
+                anchors.fill: parent
+
+                /// called when canvas is painted
+                onPaint:
+                {
+                    // get drawing context
+                    let context = getContext("2d");
+
+                    // fill page content
+                    context.fillStyle = "transparent";
+                    context.fillRect(0, 0, width, height);
+
+                    let pointSize = 2;
+                    let step      = 20;
+
+                    // configure line properties
+                    context.lineWidth   = 1;
+                    context.strokeStyle = "grey";
+                    context.setLineDash([pointSize, step - pointSize]);
+
+                    // iterate through lines to draw
+                    for (let i = 1; i < height / step; ++i)
+                    {
+                        // draw a line of points
+                        context.beginPath();
+                        context.moveTo(0,         (i * step));
+                        context.lineTo(width - 1, (i * step));
+                        context.stroke();
+                    }
+                }
+            }
 
             /*REM*/
             TSP_Box
@@ -238,25 +283,25 @@ T.Control
     // todo FIXME -cFeature -oJean: Misplaced, should be moved to model view
     function addMessage(from, to)
     {
-            // load the item component
-            let component = Qt.createComponent('TSP_Message.qml');
+        // load the item component
+        let component = Qt.createComponent('TSP_Message.qml');
 
-            // succeeded?
-            if (component.status !== Component.Ready)
-            {
-                console.error("Add message - an error occurred while the item was created - " + component.errorString());
-                return;
-            }
+        // succeeded?
+        if (component.status !== Component.Ready)
+        {
+            console.error("Add message - an error occurred while the item was created - " + component.errorString());
+            return;
+        }
 
-            // create and show new item object
-            let item = component.createObject(rcPage, {"id":         "ctMessage" + index, //REM FIXME
-                                                       "objectName": "ctMessage" + index,
-                                                       "m_From":     from,
-                                                       "m_To":       to});
+        // create and show new item object
+        let item = component.createObject(rcPageContent, {"id":         "ctMessage" + index, //REM FIXME
+                                                          "objectName": "ctMessage" + index,
+                                                          "m_From":     from,
+                                                          "m_To":       to});
 
-            console.error("Add message - new item - " + item.objectName);
+        console.error("Add message - new item - " + item.objectName);
 
-            ++index;
-            return item;
+        ++index;
+        return item;
     }
 }
