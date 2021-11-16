@@ -59,7 +59,8 @@ T.Control
     MouseArea
     {
         // advanced properties
-        property var m_AddingMsg: null
+        property var  m_AddingMsg:       null
+        property real m_AutoScrollSpeed: 0.0025
 
         // common properties
         id: maConnector
@@ -79,6 +80,10 @@ T.Control
                             " - start connector - "                           + ctConnector.objectName);
 
                 m_AddingMsg = m_Page.addMessage(ctConnector, null);
+
+                // notify the page that a message is currently dragging
+                if (m_AddingMsg && m_Box.m_PageContent)
+                    m_Box.m_PageContent.m_DraggingMsg = true;
             }
         }
 
@@ -88,6 +93,10 @@ T.Control
             // not adding a new message?
             if (!m_AddingMsg)
                 return;
+
+            // notify the page that the message is no longer dragging
+            if (m_Box && m_Box.m_PageContent)
+                m_Box.m_PageContent.m_DraggingMsg = false;
 
             // no document?
             if (!m_Document)
@@ -157,6 +166,48 @@ T.Control
 
             // since now message is no longer adding
             m_AddingMsg = null;
+        }
+
+        /// called when mouse moved on the x axis above the handle
+        onMouseXChanged: function(mouseEvent)
+        {
+            // not adding a new message?
+            if (!m_AddingMsg)
+                return;
+
+            if (!pressed)
+                return;
+
+            // convert mouse pointer to page content coordinate system
+            let localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+
+            // auto-scroll the page if the mouse exceeds its viewport limits
+            if (localMouse.x < Math.abs(m_PageContent.x))
+                hbar.position = Math.min(Math.max(hbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+            else
+            if (localMouse.x > Math.abs(m_PageContent.x) + m_Page.width)
+                hbar.position = Math.min(Math.max(hbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+        }
+
+        /// called when mouse moved on the y axis above the handle
+        onMouseYChanged: function(mouseEvent)
+        {
+            // not adding a new message?
+            if (!m_AddingMsg)
+                return;
+
+            if (!pressed)
+                return;
+
+            // convert mouse pointer to page content coordinate system
+            let localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+
+            // auto-scroll the page if the mouse exceeds its viewport limits
+            if (localMouse.y < Math.abs(m_PageContent.y))
+                vbar.position = Math.min(Math.max(vbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
+            else
+            if (localMouse.y > Math.abs(m_PageContent.y) + m_Page.height)
+                vbar.position = Math.min(Math.max(vbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
         }
     }
 }

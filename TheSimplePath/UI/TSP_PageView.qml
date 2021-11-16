@@ -37,16 +37,17 @@ T.Control
         MouseArea
         {
             // advanced properties
-            property var m_Target: parent
-            property int m_PrevX:  0
-            property int m_PrevY:  0
+            property var  m_Target:  parent
+            property int  m_PrevX:   0
+            property int  m_PrevY:   0
+            property bool m_Panning: false
 
             // common properties
             id: maPage
             objectName: "maPage"
             anchors.fill: parent
             hoverEnabled: true
-            cursorShape: Qt.OpenHandCursor;
+            cursorShape: rcPageContent.m_DraggingMsg ? Qt.CrossCursor : (m_Panning ? Qt.ClosedHandCursor : Qt.OpenHandCursor);
 
             /// called when mouse is pressed above page
             onPressed: function(mouseEvent)
@@ -54,15 +55,15 @@ T.Control
                 if (m_Target)
                     m_Target.forceActiveFocus(true);
 
-                m_PrevX     = mouseEvent.x;
-                m_PrevY     = mouseEvent.y;
-                cursorShape = Qt.ClosedHandCursor;
+                m_PrevX   = mouseEvent.x;
+                m_PrevY   = mouseEvent.y;
+                m_Panning = true;
             }
 
             /// called when mouse is released after been pressed above page
             onReleased: function(mouseEvent)
             {
-                cursorShape = Qt.OpenHandCursor;
+                m_Panning = false;
             }
 
             /// called when mouse position changed above page
@@ -99,6 +100,9 @@ T.Control
         */
         Rectangle
         {
+            // advanced properties
+            property bool m_DraggingMsg: false
+
             // common properties
             id: rcPageContent
             objectName: "rcPageContent"
@@ -299,7 +303,8 @@ T.Control
                                                           "m_From":     from,
                                                           "m_To":       to});
 
-        console.error("Add message - new item - " + item.objectName);
+        // REM
+        console.log("Add message - new item - " + item.objectName);
 
         ++index;
         return item;

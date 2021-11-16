@@ -199,7 +199,7 @@ Item
             }
 
             /**
-            * Split view mouse area
+            * Message mouse area
             */
             MouseArea
             {
