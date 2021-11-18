@@ -11,9 +11,19 @@ import "TSP_JSHelper.js" as JSHelper
 */
 T.Control
 {
+    // aliases
+    property alias pageContent:   rcPageContent
+    property alias horzScrollBar: sbHorz
+    property alias vertScrollBar: sbVert
+
     // advanced properties
-    property var m_Page:  this
-    property var m_Model: null
+    property var m_Page:     this
+    property var m_Model:    null
+    property int m_GenIndex: 0
+
+    // signals
+    signal linkAdded(var link)
+    signal linkCanceled()
 
     // common properties
     id:           ctPageView
@@ -75,11 +85,11 @@ T.Control
 
                 // calculate next horizontal scroll position, and apply it
                 let deltaX    = (m_PrevX - mouseEvent.x) / rcPageContent.width;
-                hbar.position = JSHelper.clamp(hbar.position + deltaX, 0.0, 1.0 - (hbar.size));
+                sbHorz.position = JSHelper.clamp(sbHorz.position + deltaX, 0.0, 1.0 - (sbHorz.size));
 
                 // calculate next vertical scroll position, and apply it
                 let deltaY    = (m_PrevY - mouseEvent.y) / rcPageContent.height;
-                vbar.position = JSHelper.clamp(vbar.position + deltaY, 0.0, 1.0 - (vbar.size));
+                sbVert.position = JSHelper.clamp(sbVert.position + deltaY, 0.0, 1.0 - (sbVert.size));
 
                 m_PrevX = mouseEvent.x;
                 m_PrevY = mouseEvent.y;
@@ -89,7 +99,7 @@ T.Control
             onWheel: function(mouseWheel)
             {
                 let offset    = mouseWheel.angleDelta.y * 0.0001;
-                vbar.position = Math.min(Math.max(vbar.position - offset, 0.0), 1.0 - (vbar.size));
+                sbVert.position = Math.min(Math.max(sbVert.position - offset, 0.0), 1.0 - (sbVert.size));
 
                 mouseWheel.accepted = true;
             }
@@ -107,8 +117,8 @@ T.Control
             id: rcPageContent
             objectName: "rcPageContent"
             color: "white"
-            x: -hbar.position * width
-            y: -vbar.position * height
+            x: -sbHorz.position * width
+            y: -sbVert.position * height
             width: 2480
             height: 3508
 
@@ -150,71 +160,6 @@ T.Control
                     }
                 }
             }
-
-            /*REM*/
-            TSP_Box
-            {
-                id: symbol1
-                objectName: "symbol1"
-                x: 50
-                y: 50
-                width: 100
-                height: 80
-
-                //nameLabel.text: "1"
-            }
-
-            TSP_Box
-            {
-                id: symbol2
-                objectName: "symbol2"
-                x: 200
-                y: 400
-                width: 100
-                height: 80
-
-                //nameLabel.text: "2"
-            }
-
-            TSP_Box
-            {
-                id: symbol3
-                objectName: "symbol3"
-                x: 400
-                y: 150
-                width: 100
-                height: 80
-
-                //nameLabel.text: "3"
-            }
-            /**/
-
-            /*REM*/
-            TSP_Message
-            {
-                id: message1
-                objectName: "message1"
-
-                m_From: symbol1.bottomConnector
-                m_To: symbol2.topConnector
-            }
-
-            TSP_Message
-            {
-                id: message2
-                objectName: "message2"
-
-                m_From: symbol1.bottomConnector
-                m_To: symbol3.leftConnector
-            }
-            /**/
-
-            /*REM
-            Component.onCompleted:
-            {
-                rcPage.contentChildren.push(symbol1);
-            }
-            */
         }
 
         /**
@@ -223,7 +168,7 @@ T.Control
         ScrollBar
         {
             // common properties
-            id: hbar
+            id: sbHorz
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Horizontal
@@ -231,7 +176,7 @@ T.Control
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.rightMargin: vbar.width
+            anchors.rightMargin: sbVert.width
         }
 
         /**
@@ -240,7 +185,7 @@ T.Control
         ScrollBar
         {
             // common properties
-            id: vbar
+            id: sbVert
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Vertical
@@ -248,21 +193,21 @@ T.Control
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: hbar.height
+            anchors.bottomMargin: sbHorz.height
         }
 
         /// called when page viewport width changed
         onWidthChanged:
         {
-            hbar.size     = rcPage.width / rcPageContent.width
-            hbar.position = Math.min(Math.max(hbar.position, 0.0), 1.0 - (hbar.size));
+            sbHorz.size     = rcPage.width / rcPageContent.width
+            sbHorz.position = Math.min(Math.max(sbHorz.position, 0.0), 1.0 - (sbHorz.size));
         }
 
         /// called when page viewport height changed
         onHeightChanged:
         {
-            vbar.size     = rcPage.height / rcPageContent.height
-            vbar.position = Math.min(Math.max(vbar.position, 0.0), 1.0 - (vbar.size));
+            sbVert.size     = rcPage.height / rcPageContent.height
+            sbVert.position = Math.min(Math.max(sbVert.position, 0.0), 1.0 - (sbVert.size));
         }
     }
 
@@ -275,38 +220,99 @@ T.Control
         target: m_Model
     }
 
-    property int index: 0 // REM FIXME
-
     /**
-    * Adds a message component to the document
-    *@param from [var] - symbol the message is attached from
-    *@param to [var] - symbol the message is attached to, if null the message is dragging
-    *@param fromConn [var] - connector the message is attached from
-    *@param toConn [var] - connector the message is attached to, if null the message is dragging
+    * Adds a box component to the page
+    *@param title [string] - box title
+    *@param description [string] - box description
+    *@param comments [string] - box comments
+    *@param x [number] - component x position, in pixels
+    *@param y [number] - component y position, in pixels
+    *@param width [number] - component width, in pixels
+    *@param height [number] - component height, in pixels
+    *@return [TSP_Box] added box, null on error
     */
-    // todo FIXME -cFeature -oJean: Misplaced, should be moved to model view
-    function addMessage(from, to)
+    function addBox(title, description, comments, x, y, width, height)
     {
         // load the item component
-        let component = Qt.createComponent('TSP_Message.qml');
+        let component = Qt.createComponent('TSP_Box.qml');
 
         // succeeded?
         if (component.status !== Component.Ready)
         {
-            console.error("Add message - an error occurred while the item was created - " + component.errorString());
-            return;
+            console.error("Add box - an error occurred while the item was created - " + component.errorString());
+            return null;
         }
 
         // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":         "ctMessage" + index, //REM FIXME
-                                                          "objectName": "ctMessage" + index,
+        let item = component.createObject(rcPageContent, {"id":            "bxBox" + m_GenIndex,
+                                                          "objectName":    "bxBox" + m_GenIndex,
+                                                          "m_Title":       title,
+                                                          "m_Description": description,
+                                                          "m_Comments":    comments,
+                                                          "x":             x,
+                                                          "y":             y,
+                                                          "width":         width,
+                                                          "height":        height});
+
+        console.log("Add box - succeeded - new item - " + item.objectName);
+
+        ++m_GenIndex;
+        return item;
+    }
+
+    /**
+    * Adds a link component to the page
+    *@param title [string] - link title
+    *@param from [TSP_Connector] - connector belonging to box the link is attached from
+    *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
+    *@return [TSP_Link] added link, null on error
+    */
+    function addLink(title, from, to)
+    {
+        // load the item component
+        let component = Qt.createComponent('TSP_Link.qml');
+
+        // succeeded?
+        if (component.status !== Component.Ready)
+        {
+            console.error("Add link - an error occurred while the item was created - " + component.errorString());
+
+            // emit signal that link adding was canceled
+            if (to)
+                linkCanceled();
+
+            return null;
+        }
+
+        // create and show new item object
+        let item = component.createObject(rcPageContent, {"id":         "lkLink" + m_GenIndex,
+                                                          "objectName": "lkLink" + m_GenIndex,
+                                                          "m_Title":    title,
                                                           "m_From":     from,
                                                           "m_To":       to});
 
-        // REM
-        console.log("Add message - new item - " + item.objectName);
+        // emit signal and log only if destination connector is defined
+        if (to)
+        {
+            // emit signal that link was added
+            linkAdded(item);
 
-        ++index;
+            console.log("Add link - succeeded - new item - " + item.objectName);
+        }
+
+        ++m_GenIndex;
         return item;
+    }
+
+    /**
+    * Called when a link should be added
+    *@param from [TSP_Connector] - connector belonging to box the link is attached from
+    *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
+    *@param linkType [string] - optional link type
+    *@return [TSP_Link] added link, null on error
+    */
+    function doAddLink(from, to, linkType)
+    {
+        return addLink("", from, to);
     }
 }

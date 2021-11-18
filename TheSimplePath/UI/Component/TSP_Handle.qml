@@ -28,8 +28,10 @@ T.Control
     property alias handleRect: rcHandle
 
     // advanced properties
-    property var m_Target:    null
-    property int m_Direction: IEDirection.IE_D_None
+    property var    m_Target:      null
+    property string m_Color:       "#c0c0c0"
+    property string m_BorderColor: "black"
+    property int    m_Direction:   IEDirection.IE_D_None
 
     // common properties
     id: ctHandle
@@ -46,8 +48,8 @@ T.Control
         id: rcHandle
         objectName: "rcHandle"
         anchors.fill: parent
-        color: "#c0c0c0"
-        border.color: "black"
+        color: m_Color
+        border.color: m_BorderColor
         border.width: 1
         radius: 3
     }

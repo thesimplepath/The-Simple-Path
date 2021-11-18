@@ -69,6 +69,9 @@
     <Filter Include="Third-Party\RapidJSON\msinttypes">
       <UniqueIdentifier>{ada65912-bfb9-4b2c-abdb-1ff916b75b87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\UI\Component">
+      <UniqueIdentifier>{c03914ee-3992-4fcb-80d7-5667f80a2077}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -339,31 +342,49 @@
     <None Include="UI\TSP_DocumentView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_Handle.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="UI\TSP_Main.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_HandleControl.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Connector.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Message.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Box.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_JSHelper.js">
       <Filter>Resource Files\UI</Filter>
     </None>
     <None Include="UI\TSP_AtlasView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_PageView.qml">
+    <None Include="UI\Component\TSP_Box.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\Component\TSP_Connector.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\Component\TSP_Handle.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\Component\TSP_HandleControl.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\Component\TSP_JSHelper.js">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\Component\TSP_PageView.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\TSP_Activity.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Start.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\Component\TSP_Link.qml">
+      <Filter>Resource Files\UI\Component</Filter>
+    </None>
+    <None Include="UI\TSP_Message.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_PageBreak.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Process.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_End.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
   </ItemGroup>

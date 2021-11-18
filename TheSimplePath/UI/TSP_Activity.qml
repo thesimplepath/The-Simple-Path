@@ -5,10 +5,8 @@ import QtQuick.Controls 2.15
 import "Component"
 
 /**
-* Message
+* Activity symbol
 *@author Jean-Milost Reymond
 */
-TSP_Link
-{
-    m_Color: "#cc0099"
-}
+TSP_Box
+{}

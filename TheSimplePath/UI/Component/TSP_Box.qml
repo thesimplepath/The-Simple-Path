@@ -17,7 +17,17 @@ T.Control
     property alias bottomConnector: coBottom
 
     // advanced properties
-    property var m_PageContent: parent
+    property var    m_PageContent:       parent
+    property string m_Color:             "#202020"
+    property string m_BgColor:           "white"
+    property string m_TextColor:         "#202020"
+    property string m_HandleColor:       "#c0c0c0"
+    property string m_HandleBorderColor: "black"
+    property string m_Title:             ""
+    property string m_Description:       ""
+    property string m_Comments:          ""
+    property int    m_BorderWidth:       1
+    property int    m_Radius:            3
 
     // common properties
     id: ctBox
@@ -33,6 +43,7 @@ T.Control
         objectName: "rcConnectors"
         anchors.fill: parent
         color: "transparent"
+        z: -2
 
         /**
         * Left connector
@@ -104,7 +115,7 @@ T.Control
     }
 
     /**
-    * Symbol background, also handles gesture
+    * Box background, also handles gesture
     */
     TSP_HandleControl
     {
@@ -115,8 +126,13 @@ T.Control
         z: ctBox.activeFocus ? 0 : -1
 
         // advanced properties
-        m_HandleVisible: ctBox.activeFocus
         m_Target: ctBox
+        m_HandleColor: ctBox.m_HandleColor
+        m_HandleBorderColor: ctBox.m_HandleBorderColor
+        m_BorderColor: ctBox.m_Color
+        m_BorderWidth: ctBox.m_BorderWidth
+        m_Radius: ctBox.m_Radius
+        m_HandleVisible: ctBox.activeFocus
 
         /**
         * Called when the move and size mode should be disabled
@@ -126,7 +142,7 @@ T.Control
     }
 
     /**
-    * Symbol content
+    * Box content
     */
     Rectangle
     {
@@ -134,9 +150,9 @@ T.Control
         id: rcContent
         objectName: "rcContent"
         anchors.fill: parent
-        color: "white"
-        radius: 3
-        anchors.margins: 1
+        color: ctBox.m_BgColor
+        radius: ctBox.m_Radius >= ctBox.m_BorderWidth ? ctBox.m_Radius - ctBox.m_BorderWidth : 0
+        anchors.margins: ctBox.m_BorderWidth
         z: ctBox.activeFocus ? -1 : 0
         clip: true
 
@@ -148,14 +164,14 @@ T.Control
             // common properties
             id: txName
             objectName: "txName"
-            text: "<b>Hello World!</b>"
+            text: m_Title
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.right: parent.right
             font.family: "Arial"
             font.pointSize: 12
             wrapMode: Text.WordWrap
-            color: "#202020"
+            color: m_TextColor
             clip: true
         }
 
@@ -167,14 +183,14 @@ T.Control
             // common properties
             id: txObjNb
             objectName: "txObjNb"
-            text: "ID: 1234"
+            text: m_Description
             anchors.left: parent.left
             anchors.top: txName.bottom
             anchors.right: parent.right
             font.family: "Arial"
             font.pointSize: 10
             wrapMode: Text.WordWrap
-            color: "#202020"
+            color: m_TextColor
             clip: true
         }
 
@@ -186,14 +202,14 @@ T.Control
             // common properties
             id: txTeamName
             objectName: "txTeamName"
-            text: "Team: Alpha"
+            text: m_Comments
             anchors.left: parent.left
             anchors.top: txObjNb.bottom
             anchors.right: parent.right
             font.family: "Arial"
             font.pointSize: 10
             wrapMode: Text.WordWrap
-            color: "#202020"
+            color: m_TextColor
             clip: true
         }
 

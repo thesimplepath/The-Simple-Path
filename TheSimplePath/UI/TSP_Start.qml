@@ -5,10 +5,13 @@ import QtQuick.Controls 2.15
 import "Component"
 
 /**
-* Message
+* Start symbol
 *@author Jean-Milost Reymond
 */
-TSP_Link
+TSP_Box
 {
-    m_Color: "#cc0099"
+    m_Color:       "#00b050"
+    m_BgColor:     "white"
+    m_Radius:      0
+    m_BorderWidth: 2
 }

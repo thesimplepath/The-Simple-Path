@@ -1,14 +1,20 @@
 <RCC>
     <qresource prefix="/">
         <file>UI/TSP_DocumentView.qml</file>
-        <file>UI/TSP_Handle.qml</file>
         <file>UI/TSP_Main.qml</file>
-        <file>UI/TSP_Connector.qml</file>
-        <file>UI/TSP_HandleControl.qml</file>
-        <file>UI/TSP_Message.qml</file>
-        <file>UI/TSP_Box.qml</file>
-        <file>UI/TSP_JSHelper.js</file>
         <file>UI/TSP_AtlasView.qml</file>
-        <file>UI/TSP_PageView.qml</file>
+        <file>UI/Component/TSP_Box.qml</file>
+        <file>UI/Component/TSP_Connector.qml</file>
+        <file>UI/Component/TSP_Handle.qml</file>
+        <file>UI/Component/TSP_HandleControl.qml</file>
+        <file>UI/Component/TSP_JSHelper.js</file>
+        <file>UI/Component/TSP_PageView.qml</file>
+        <file>UI/TSP_Activity.qml</file>
+        <file>UI/TSP_Start.qml</file>
+        <file>UI/Component/TSP_Link.qml</file>
+        <file>UI/TSP_Message.qml</file>
+        <file>UI/TSP_End.qml</file>
+        <file>UI/TSP_PageBreak.qml</file>
+        <file>UI/TSP_Process.qml</file>
     </qresource>
 </RCC>

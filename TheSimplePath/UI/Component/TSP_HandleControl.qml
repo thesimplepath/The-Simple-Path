@@ -11,9 +11,18 @@ import "TSP_JSHelper.js" as JSHelper
 */
 T.Control
 {
+    // aliases
+    property alias handleBackground: rcHandleControl
+
     // advanced properties
-    property var  m_Target:        null
-    property bool m_HandleVisible: true
+    property var    m_Target:            null
+    property string m_Color:             "transparent"
+    property string m_BorderColor:       "#202020"
+    property string m_HandleColor:       "#c0c0c0"
+    property string m_HandleBorderColor: "black"
+    property int    m_BorderWidth:       1
+    property int    m_Radius:            3
+    property bool   m_HandleVisible:     true
 
     // common properties
     id: ctHandleControl
@@ -28,10 +37,10 @@ T.Control
         id: rcHandleControl
         objectName: "rcHandleControl"
         anchors.fill: parent
-        color: "transparent"
-        border.color: "#202020"
-        border.width: 1
-        radius: 3
+        color: m_Color
+        border.color: m_BorderColor
+        border.width: m_BorderWidth
+        radius: m_Radius
 
         /**
         * Control mouse area
@@ -94,10 +103,12 @@ T.Control
 
                 // auto-scroll the page if the box exceeds its viewport limits
                 if (ctHandleControl.m_Target.x < Math.abs(m_PageContent.x))
-                    hbar.position = Math.min(Math.max(hbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+                    m_Page.horzScrollBar.position =
+                            Math.min(Math.max(m_Page.horzScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
                 else
                 if (ctHandleControl.m_Target.x + ctHandleControl.m_Target.width > Math.abs(m_PageContent.x) + m_Page.width)
-                    hbar.position = Math.min(Math.max(hbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+                    m_Page.horzScrollBar.position =
+                            Math.min(Math.max(m_Page.horzScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
             }
 
             /// called when mouse moved on the y axis above the handle
@@ -117,10 +128,12 @@ T.Control
 
                 // auto-scroll the page if the box exceeds its viewport limits
                 if (ctHandleControl.m_Target.y < Math.abs(m_PageContent.y))
-                    vbar.position = Math.min(Math.max(vbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
+                    m_Page.vertScrollBar.position =
+                            Math.min(Math.max(m_Page.vertScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
                 else
                 if (ctHandleControl.m_Target.y + ctHandleControl.m_Target.height > Math.abs(m_PageContent.y) + m_Page.height)
-                    vbar.position = Math.min(Math.max(vbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
+                    m_Page.vertScrollBar.position =
+                            Math.min(Math.max(m_Page.vertScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
             }
         }
 
@@ -138,6 +151,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_Left
         }
 
@@ -155,6 +170,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_LeftTop
         }
 
@@ -172,6 +189,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_Top
         }
 
@@ -189,6 +208,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_RightTop
         }
 
@@ -206,6 +227,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_Right
         }
 
@@ -223,6 +246,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_RightBottom
         }
 
@@ -240,6 +265,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_Bottom
         }
 
@@ -257,6 +284,8 @@ T.Control
 
             // advanced proeprties
             m_Target: ctHandleControl.m_Target
+            m_Color: ctHandleControl.m_HandleColor
+            m_BorderColor: ctHandleControl.m_HandleBorderColor
             m_Direction: TSP_Handle.IEDirection.IE_D_LeftBottom
         }
     }

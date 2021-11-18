@@ -6,7 +6,7 @@ import QtQuick.Templates 2.15 as T
 import "TSP_JSHelper.js" as JSHelper
 
 /**
-* Connector, used to connect two symbols with a message
+* Connector, used to connect two boxes with a link
 *@author Jean-Milost Reymond
 */
 T.Control
@@ -29,7 +29,7 @@ T.Control
 
     // advanced properties
     property var m_Box:      null
-    property var m_Messages: []
+    property var m_Links:    []
     property int m_Position: TSP_Connector.IEPosition.IE_P_None
 
     // common properties
@@ -59,7 +59,7 @@ T.Control
     MouseArea
     {
         // advanced properties
-        property var  m_AddingMsg:       null
+        property var  m_AddingLinkItem:  null
         property real m_AutoScrollSpeed: 0.0025
 
         // common properties
@@ -73,30 +73,31 @@ T.Control
         /// Called when the mouse button is pressed above the control
         onPressed: function(mouseEvent)
         {
-            // add a new message and start to drag it
+            // add a new link and start to drag it
             if (m_Page && m_Box)
             {
-                console.log("Connector - adding a new message - start box - " + m_Box.objectName +
+                console.log("Connector - adding a new link - start box - " + m_Box.objectName +
                             " - start connector - "                           + ctConnector.objectName);
 
-                m_AddingMsg = m_Page.addMessage(ctConnector, null);
+                // send signal to notify that a new link should be added from this connector
+                m_AddingLinkItem = m_Page.doAddLink(ctConnector, null, "link");
 
-                // notify the page that a message is currently dragging
-                if (m_AddingMsg && m_Box.m_PageContent)
-                    m_Box.m_PageContent.m_DraggingMsg = true;
+                // notify the page that a link is currently dragging
+                if (m_AddingLinkItem && m_PageContent)
+                    m_PageContent.m_DraggingMsg = true;
             }
         }
 
         /// Called when the mouse button is released after been pressed (above or outside the control)
         onReleased: function(mouseEvent)
         {
-            // not adding a new message?
-            if (!m_AddingMsg)
+            // not adding a link?
+            if (!m_AddingLinkItem)
                 return;
 
-            // notify the page that the message is no longer dragging
-            if (m_Box && m_Box.m_PageContent)
-                m_Box.m_PageContent.m_DraggingMsg = false;
+            // notify the page that the link is no longer dragging
+            if (m_Box && m_PageContent)
+                m_PageContent.m_DraggingMsg = false;
 
             // no document?
             if (!m_Document)
@@ -127,16 +128,16 @@ T.Control
                 // found a valid target connector?
                 if (targetConn && targetConn.m_Box != m_Box)
                 {
-                    console.log("Connector - message added successfully - name - " + m_AddingMsg.objectName);
+                    console.log("Connector - link added successfully - name - " + m_AddingLinkItem.objectName);
 
-                    // yes, attach the new message to it
-                    m_AddingMsg.m_To = targetConn;
+                    // yes, attach the new link to it
+                    m_AddingLinkItem.m_To = targetConn;
                 }
                 else
                 {
-                    console.log("Connector - message adding - CANCELED");
+                    console.log("Connector - link adding - CANCELED");
 
-                    // no, remove the currently adding message
+                    // no, remove the currently adding link
                     doRemoveMsg = true;
                 }
             }
@@ -147,32 +148,38 @@ T.Control
                 let targetConnName =  targetConn                      ? targetConn.objectName       : "<unknown>";
 
                 // log error
-                console.error("Connector - add message - FAILED - start box name - " + startBoxName           +
-                              " - end box name - "                                   + endBoxName             +
-                              " - start connector - "                                + ctConnector.objectName +
-                              " - end connector - "                                  + targetConnName         +
-                              " - error - "                                          + exception);
+                console.error("Connector - add link - FAILED - start box name - " + startBoxName           +
+                              " - end box name - "                                + endBoxName             +
+                              " - start connector - "                             + ctConnector.objectName +
+                              " - end connector - "                               + targetConnName         +
+                              " - error - "                                       + exception);
 
-                // remove the incompletely added message
+                // remove the incompletely added link
                 doRemoveMsg = true;
             }
 
-            // do remove the message?
+            // do remove the link?
             if (doRemoveMsg)
             {
-                m_AddingMsg.unbindMsgFromBox(m_Box)
-                m_AddingMsg.destroy();
-            }
+                m_AddingLinkItem.unbindMsgFromBox(m_Box)
+                m_AddingLinkItem.destroy();
 
-            // since now message is no longer adding
-            m_AddingMsg = null;
+                // emit signal that link adding was canceled
+                m_Page.linkCanceled();
+            }
+            else
+                // emit signal that link was added
+                m_Page.linkAdded(m_AddingLinkItem);
+
+            // since now link is no longer adding
+            m_AddingLinkItem = null;
         }
 
         /// called when mouse moved on the x axis above the handle
         onMouseXChanged: function(mouseEvent)
         {
-            // not adding a new message?
-            if (!m_AddingMsg)
+            // not adding a link?
+            if (!m_AddingLinkItem)
                 return;
 
             if (!pressed)
@@ -183,17 +190,19 @@ T.Control
 
             // auto-scroll the page if the mouse exceeds its viewport limits
             if (localMouse.x < Math.abs(m_PageContent.x))
-                hbar.position = Math.min(Math.max(hbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+                m_Page.horzScrollBar.position =
+                        Math.min(Math.max(m_Page.horzScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
             else
             if (localMouse.x > Math.abs(m_PageContent.x) + m_Page.width)
-                hbar.position = Math.min(Math.max(hbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (hbar.size));
+                m_Page.horzScrollBar.position =
+                        Math.min(Math.max(m_Page.horzScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
         }
 
         /// called when mouse moved on the y axis above the handle
         onMouseYChanged: function(mouseEvent)
         {
-            // not adding a new message?
-            if (!m_AddingMsg)
+            // not adding a link?
+            if (!m_AddingLinkItem)
                 return;
 
             if (!pressed)
@@ -204,10 +213,12 @@ T.Control
 
             // auto-scroll the page if the mouse exceeds its viewport limits
             if (localMouse.y < Math.abs(m_PageContent.y))
-                vbar.position = Math.min(Math.max(vbar.position - m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
+                m_Page.vertScrollBar.position =
+                        Math.min(Math.max(m_Page.vertScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
             else
             if (localMouse.y > Math.abs(m_PageContent.y) + m_Page.height)
-                vbar.position = Math.min(Math.max(vbar.position + m_AutoScrollSpeed, 0.0), 1.0 - (vbar.size));
+                m_Page.vertScrollBar.position =
+                        Math.min(Math.max(m_Page.vertScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
         }
     }
 }

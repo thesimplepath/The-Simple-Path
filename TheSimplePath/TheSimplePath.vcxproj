@@ -448,16 +448,22 @@
     <Text Include="CodeConvention.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="UI\Component\TSP_Box.qml" />
+    <None Include="UI\Component\TSP_Connector.qml" />
+    <None Include="UI\Component\TSP_Handle.qml" />
+    <None Include="UI\Component\TSP_HandleControl.qml" />
+    <None Include="UI\Component\TSP_JSHelper.js" />
+    <None Include="UI\Component\TSP_Link.qml" />
+    <None Include="UI\Component\TSP_PageView.qml" />
+    <None Include="UI\TSP_Activity.qml" />
     <None Include="UI\TSP_AtlasView.qml" />
-    <None Include="UI\TSP_Box.qml" />
-    <None Include="UI\TSP_Connector.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
-    <None Include="UI\TSP_Handle.qml" />
-    <None Include="UI\TSP_HandleControl.qml" />
-    <None Include="UI\TSP_JSHelper.js" />
+    <None Include="UI\TSP_End.qml" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_Message.qml" />
-    <None Include="UI\TSP_PageView.qml" />
+    <None Include="UI\TSP_PageBreak.qml" />
+    <None Include="UI\TSP_Process.qml" />
+    <None Include="UI\TSP_Start.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
