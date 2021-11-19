@@ -307,7 +307,7 @@ Item
     {
         // from connector should be defined
         if (!m_From)
-            return Qt.vector2d();
+            return Qt.vector2d(0.0, 0.0);
 
         return getPoint(m_From);
     }
@@ -331,7 +331,7 @@ Item
                                    m_From.m_Box.y + m_From.connectorMouseArea.mouseY + startDelta.y);
             }
 
-            return Qt.vector2d();
+            return Qt.vector2d(0.0, 0.0);
         }
 
         return getPoint(m_To);
@@ -356,14 +356,14 @@ Item
     {
         // connector should be defined
         if (!connector)
-            return Qt.vector2d();
+            return Qt.vector2d(0.0, 0.0);
 
         // get the connector parent box
         let box = connector.m_Box;
 
         // parent box should always be defined in the connector
         if (!box)
-            return Qt.vector2d();
+            return Qt.vector2d(0.0, 0.0);
 
         // get the connector center point
         switch (connector.m_Position)
@@ -386,7 +386,7 @@ Item
 
             default:
                 console.log("getPoint - unknown connector position - " + connector.m_Position);
-                return Qt.vector2d();
+                return Qt.vector2d(0.0, 0.0);
         }
     }
 
@@ -399,7 +399,7 @@ Item
     {
         // connector should be defined
         if (!connector)
-            return Qt.vector2d();
+            return Qt.vector2d(0.0, 0.0);
 
         // get the connector parent box
         let box = connector.m_Box;
@@ -425,7 +425,7 @@ Item
 
             default:
                 console.log("getStartDelta - unknown connector position - " + connector.m_Position);
-                return Qt.vector2d();
+                return Qt.vector2d(0.0, 0.0);
         }
     }
 }

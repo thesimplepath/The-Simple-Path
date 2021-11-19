@@ -227,7 +227,7 @@ T.Control
             */
             function doAddLink(from, to, linkType)
             {
-                return addMessage(from, to);
+                return addMessage("", from, to);
             }
 
             /// called when page is loaded
