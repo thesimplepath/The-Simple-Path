@@ -9,4 +9,8 @@ import "Component"
 *@author Jean-Milost Reymond
 */
 TSP_Box
-{}
+{
+    // common properties
+    m_Radius:      5
+    m_BorderWidth: 2
+}

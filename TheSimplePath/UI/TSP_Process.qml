@@ -10,9 +10,17 @@ import "Component"
 */
 TSP_Box
 {
+    // common properties
     m_Color:       "black"
     m_BgColor:     "#009ed6"
     m_TextColor:   "white"
     m_Radius:      10
     m_BorderWidth: 3
+
+    // child components
+    titleText.anchors.bottom:      rectContents.bottom
+    titleText.horizontalAlignment: Text.AlignHCenter
+    titleText.verticalAlignment:   Text.AlignVCenter
+    descriptionText.visible:       false
+    commentsText.visible:          false
 }

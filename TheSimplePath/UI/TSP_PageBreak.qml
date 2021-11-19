@@ -10,5 +10,14 @@ import "Component"
 */
 TSP_Box
 {
-    m_Radius: 0
+    // common properties
+    m_Radius:      0
+    m_BorderWidth: 3
+
+    // child components
+    titleText.anchors.bottom:      rectContents.bottom
+    titleText.horizontalAlignment: Text.AlignHCenter
+    titleText.verticalAlignment:   Text.AlignVCenter
+    descriptionText.visible:       false
+    commentsText.visible:          false
 }

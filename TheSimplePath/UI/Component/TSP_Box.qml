@@ -9,7 +9,10 @@ import QtQuick.Templates 2.15 as T
 T.Control
 {
     // aliases
-    property alias nameLabel:       txName
+    property alias titleText:       txTitle
+    property alias descriptionText: txDescription
+    property alias commentsText:    txComments
+    property alias rectContents:    rcContent
     property alias rectConnectors:  rcConnectors
     property alias leftConnector:   coLeft
     property alias topConnector:    coTop
@@ -28,6 +31,7 @@ T.Control
     property string m_Comments:          ""
     property int    m_BorderWidth:       1
     property int    m_Radius:            3
+    property int    m_TextMargin:        2
 
     // common properties
     id: ctBox
@@ -157,17 +161,19 @@ T.Control
         clip: true
 
         /**
-        * Top label
+        * Title label
         */
         Text
         {
             // common properties
-            id: txName
-            objectName: "txName"
+            id: txTitle
+            objectName: "txTitle"
             text: m_Title
             anchors.left: parent.left
+            anchors.leftMargin: m_TextMargin
             anchors.top: parent.top
             anchors.right: parent.right
+            anchors.rightMargin: m_TextMargin
             font.family: "Arial"
             font.pointSize: 12
             wrapMode: Text.WordWrap
@@ -176,17 +182,19 @@ T.Control
         }
 
         /**
-        * Middle label
+        * Description label
         */
         Text
         {
             // common properties
-            id: txObjNb
-            objectName: "txObjNb"
+            id: txDescription
+            objectName: "txDescription"
             text: m_Description
             anchors.left: parent.left
-            anchors.top: txName.bottom
+            anchors.leftMargin: m_TextMargin
+            anchors.top: txTitle.bottom
             anchors.right: parent.right
+            anchors.rightMargin: m_TextMargin
             font.family: "Arial"
             font.pointSize: 10
             wrapMode: Text.WordWrap
@@ -195,17 +203,19 @@ T.Control
         }
 
         /**
-        * Bottom label
+        * Comments label
         */
         Text
         {
             // common properties
-            id: txTeamName
-            objectName: "txTeamName"
+            id: txComments
+            objectName: "txComments"
             text: m_Comments
             anchors.left: parent.left
-            anchors.top: txObjNb.bottom
+            anchors.leftMargin: m_TextMargin
+            anchors.top: txDescription.bottom
             anchors.right: parent.right
+            anchors.rightMargin: m_TextMargin
             font.family: "Arial"
             font.pointSize: 10
             wrapMode: Text.WordWrap
