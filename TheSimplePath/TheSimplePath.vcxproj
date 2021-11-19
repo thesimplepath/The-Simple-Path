@@ -349,6 +349,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TSP_Application.cpp" />
     <ClCompile Include="TSP_GlobalSettings.cpp" />
+    <ClCompile Include="TSP_MainFormProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -401,6 +402,7 @@
     <ClInclude Include="Classes\Core\TSP_Page.h" />
     <ClInclude Include="Classes\Core\TSP_ProcedureSymbol.h" />
     <ClInclude Include="Classes\Core\TSP_Symbol.h" />
+    <QtMoc Include="TSP_MainFormProxy.h" />
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h" />
     <QtMoc Include="Classes\Models\TSP_AtlasModel.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h" />

@@ -143,6 +143,9 @@
     <ClCompile Include="Classes\Core\TSP_Atlas.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="TSP_MainFormProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -394,6 +397,9 @@
     </QtMoc>
     <QtMoc Include="Classes\Models\TSP_AtlasModel.h">
       <Filter>Header Files\Models</Filter>
+    </QtMoc>
+    <QtMoc Include="TSP_MainFormProxy.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

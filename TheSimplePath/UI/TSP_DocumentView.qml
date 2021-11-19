@@ -10,7 +10,7 @@ T.Control
 {
     // advanced properties
     property var m_Document: this
-    property var m_Model:    rpmDocumentModel
+    property var m_Model:    tspDocumentModel
 
     // common properties
     id: ctDocumentView

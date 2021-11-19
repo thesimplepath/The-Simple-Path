@@ -82,16 +82,16 @@ class TSP_DocumentModel : public QAbstractListModel
         virtual TSP_AtlasModel* GetAtlasModel() const;
 
         /**
-        * Adds a business model
-        *@param name - business model name
+        * Adds an atlas
+        *@param name - atlas name
         */
-        virtual Q_INVOKABLE void addModel(const QString& name);
+        virtual Q_INVOKABLE void addAtlas(const QString& name);
 
         /**
-        * Removes a business model
-        *@param index - business model index to remove
+        * Removes an atlas
+        *@param index - atlas index to remove
         */
-        virtual Q_INVOKABLE void removeModel(std::size_t index);
+        virtual Q_INVOKABLE void removeAtlas(std::size_t index);
 
         /**
         * Get row count

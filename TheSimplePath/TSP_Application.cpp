@@ -36,16 +36,18 @@
 // TSP_Application
 //---------------------------------------------------------------------------
 TSP_Application::TSP_Application(int argc, char* argv[], const std::wstring& url) :
-    m_URL(url),
-    m_pApp(new QGuiApplication(argc, argv)),
-    m_pEngine(new QQmlApplicationEngine()),
-    m_pDocumentModel(new TSP_DocumentModel())
-{}
+    m_URL(url)
+{
+    InitializeQt(argc, argv);
+}
 //---------------------------------------------------------------------------
 TSP_Application::~TSP_Application()
 {
     if (m_pDocumentModel)
         delete m_pDocumentModel;
+
+    if (m_pMainFormProxy)
+        delete m_pMainFormProxy;
 
     if (m_pEngine)
         delete m_pEngine;
@@ -92,18 +94,53 @@ int TSP_Application::Execute()
     M_LogT("Execute - initialization terminated successfully - now application starts");
 
     //REM
-    m_pDocumentModel->addModel(QString("Test model"));
+    m_pDocumentModel->addAtlas(QString("Test atlas"));
+    //m_pDocumentModel->GetDocument()->Save(L"__TEST.json");
     //REM END
 
     return m_pApp->exec();
+}
+//---------------------------------------------------------------------------
+void TSP_Application::InitializeQt(int argc, char* argv[])
+{
+    // configure the Qt attributes
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    // redirect QT log messages to application logger
+    qInstallMessageHandler(RedirectQmlLogs);
+
+    // initialize application instances
+    m_pApp           = new QGuiApplication(argc, argv);
+    m_pEngine        = new QQmlApplicationEngine();
+    m_pMainFormProxy = new TSP_MainFormProxy();
+    m_pDocumentModel = new TSP_DocumentModel();
 }
 //---------------------------------------------------------------------------
 void TSP_Application::DeclareContextProperties()
 {
     M_LogT("Execute - declaring context properties...");
 
-    m_pEngine->rootContext()->setContextProperty("rpmDocumentModel", m_pDocumentModel);
+    m_pEngine->rootContext()->setContextProperty("tspMainFormProxy", m_pMainFormProxy);
+    m_pEngine->rootContext()->setContextProperty("tspDocumentModel", m_pDocumentModel);
 
     M_LogT("Execute - context properties declared");
+}
+//---------------------------------------------------------------------------
+void TSP_Application::RedirectQmlLogs(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    const std::wstring message = msg.toStdWString();
+    const std::string  file(context.file     ? context.file     : "");
+    const std::string  func(context.function ? context.function : "");
+
+    // redirect qml log to application log
+    switch (type)
+    {
+        case QtDebugMsg:
+        case QtInfoMsg:     M_LogT     ("Qml - " << message << " - " << file << ":" << context.line << ", " << func); break;
+        case QtWarningMsg:  M_LogWarnT ("Qml - " << message << " - " << file << ":" << context.line << ", " << func); break;
+        case QtCriticalMsg:
+        case QtFatalMsg:    M_LogErrorT("Qml - " << message << " - " << file << ":" << context.line << ", " << func); break;
+        default:            M_LogT     ("Qml - " << message << " - " << file << ":" << context.line << ", " << func); break;
+    }
 }
 //---------------------------------------------------------------------------

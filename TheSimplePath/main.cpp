@@ -60,9 +60,6 @@ int main(int argc, char *argv[])
 
     try
     {
-        // configure the Qt attributes
-        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
         // create and run the application
         auto pApplication = std::make_unique<TSP_Application>(argc, argv, L"UI/TSP_Main.qml");
              result       = pApplication->Execute();

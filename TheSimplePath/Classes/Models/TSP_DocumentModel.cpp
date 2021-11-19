@@ -57,7 +57,7 @@ TSP_AtlasModel* TSP_DocumentModel::GetAtlasModel() const
     return m_pAtlasModel;
 }
 //---------------------------------------------------------------------------
-void TSP_DocumentModel::addModel(const QString& name)
+void TSP_DocumentModel::addAtlas(const QString& name)
 {
     if (!m_pDocument)
         return;
@@ -69,7 +69,7 @@ void TSP_DocumentModel::addModel(const QString& name)
     endInsertRows();
 }
 //---------------------------------------------------------------------------
-void TSP_DocumentModel::removeModel(std::size_t index)
+void TSP_DocumentModel::removeAtlas(std::size_t index)
 {
     if (!m_pDocument)
         return;

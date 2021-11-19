@@ -6,7 +6,8 @@ import QtQuick.Shapes 1.15
 ApplicationWindow
 {
     // advanced properties
-    property ApplicationWindow m_MainWindow: wiMainWnd
+    property ApplicationWindow m_MainWindow:    this
+    property var               m_MainFormProxy: tspMainFormProxy
 
     // common properties
     id: wiMainWnd
@@ -27,13 +28,19 @@ ApplicationWindow
 
         Button
         {
-            id: btAddProc
-            objectName: "btAddProc"
+            id: btAddActivity
+            objectName: "btAddActivity"
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             height: 75
-            text: "Add Procedure"
+            text: "Add Activity"
+
+            onClicked:
+            {
+                if (m_MainFormProxy)
+                    m_MainFormProxy.onAddActivityClicked();
+            }
         }
     }
 

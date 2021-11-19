@@ -1,7 +1,8 @@
 /****************************************************************************
- * ==> TSP_Application -----------------------------------------------------*
+ * ==> TSP_MainFormProxy ---------------------------------------------------*
  ****************************************************************************
- * Description:  The main application class                                 *
+ * Description:  The main form proxy between c++ application and qml        *
+ *               interface                                                  *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -33,77 +34,27 @@
 #include <string>
 
 // qt
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-
-// core classes
-#include "Models\TSP_DocumentModel.h"
-
-// application
-#include "TSP_MainFormProxy.h"
+#include <QObject>
 
 /**
-* Main application
+* Main form proxy
 *@author Jean-Milost Reymond
 */
-class TSP_Application
+class TSP_MainFormProxy : public QObject
 {
+    Q_OBJECT
+
     public:
         /**
         * Constructor
-        *@param argc - argument count contained in argv
-        *@param argv - argument vector passed by the user
-        *@param url - qml resources url to load
+        *@param pParent - parent object owning this object
         */
-        TSP_Application(int argc, char* argv[], const std::wstring& url);
+        TSP_MainFormProxy(QObject* pParent = nullptr);
 
-        virtual ~TSP_Application();
+        virtual ~TSP_MainFormProxy();
 
         /**
-        * Gets the Qt application
-        *@return the Qt application, nullptr if not found or on error
+        * Called when the add activity button was clicked on the user interface
         */
-        virtual QGuiApplication* GetQtApp() const;
-
-        /**
-        * Gets the Qt application engine
-        *@return the Qt application engine, nullptr if not found or on error
-        */
-        virtual QQmlApplicationEngine* GetQtEngine() const;
-
-        /**
-        * Gets the main document model
-        *@return the main document model, nullptr if not found or on error
-        */
-        virtual TSP_DocumentModel* GetDocumentModel() const;
-
-        /**
-        * Executes the main application
-        *@return success or error code
-        */
-        virtual int Execute();
-
-    private:
-        std::wstring           m_URL;
-        QGuiApplication*       m_pApp           = nullptr;
-        QQmlApplicationEngine* m_pEngine        = nullptr;
-        TSP_MainFormProxy*     m_pMainFormProxy = nullptr;
-        TSP_DocumentModel*     m_pDocumentModel = nullptr;
-
-        /**
-        * Initializes the qt application
-        *@param argc - argument count contained in argv
-        *@param argv - argument vector passed by the user
-        */
-        void InitializeQt(int argc, char* argv[]);
-
-        /**
-        * Declares the context properties (i.e models linked with qml, ...)
-        */
-        void DeclareContextProperties();
-
-        /**
-        * Redirects qml logs to application logger
-        */
-        static void RedirectQmlLogs(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+        virtual Q_INVOKABLE void onAddActivityClicked();
 };
