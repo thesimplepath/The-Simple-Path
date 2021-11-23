@@ -450,6 +450,8 @@
     <Text Include="CodeConvention.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Images\PageBreak_Logo_Normal.svg" />
+    <None Include="Resources\Images\PageBreak_Logo_Process.svg" />
     <None Include="UI\Component\TSP_Box.qml" />
     <None Include="UI\Component\TSP_Connector.qml" />
     <None Include="UI\Component\TSP_Handle.qml" />

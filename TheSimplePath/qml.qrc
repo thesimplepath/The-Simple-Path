@@ -16,5 +16,7 @@
         <file>UI/TSP_End.qml</file>
         <file>UI/TSP_PageBreak.qml</file>
         <file>UI/TSP_Process.qml</file>
+        <file>Resources/Images/PageBreak_Logo_Normal.svg</file>
+        <file>Resources/Images/PageBreak_Logo_Process.svg</file>
     </qresource>
 </RCC>

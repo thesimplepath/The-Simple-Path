@@ -72,6 +72,12 @@
     <Filter Include="Resource Files\UI\Component">
       <UniqueIdentifier>{c03914ee-3992-4fcb-80d7-5667f80a2077}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Resources">
+      <UniqueIdentifier>{e04e9f4e-7be3-418d-90c1-07ce98e2262e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Resources\Images">
+      <UniqueIdentifier>{0908b82c-574f-49d0-8b9c-6ab2a694d056}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -389,6 +395,12 @@
     </None>
     <None Include="UI\TSP_End.qml">
       <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="Resources\Images\PageBreak_Logo_Normal.svg">
+      <Filter>Resource Files\Resources\Images</Filter>
+    </None>
+    <None Include="Resources\Images\PageBreak_Logo_Process.svg">
+      <Filter>Resource Files\Resources\Images</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
