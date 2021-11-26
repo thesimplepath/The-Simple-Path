@@ -23,6 +23,7 @@ Item
     property string m_BgColor:     "white"
     property string m_TextColor:   "#202020"
     property string m_Title:       ""
+    property real   m_ScaleFactor: 1
 
     // common properties
     id: itLink
@@ -220,6 +221,23 @@ Item
                     rcBackground.forceActiveFocus();
                 }
             }
+        }
+    }
+
+    /**
+    * Signal connectors
+    */
+    Connections
+    {
+        target: pageContent
+
+        /**
+        * Called when the page scale factor changed
+        *@param {number} factor - scale factor
+        */
+        function onPageScaleChanged(factor)
+        {
+            m_ScaleFactor = factor;
         }
     }
 

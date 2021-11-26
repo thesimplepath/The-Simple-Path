@@ -11,11 +11,11 @@ import "Component"
 TSP_Box
 {
     // common properties
-    m_Color:       "black"
+    m_Color:       "#202020"
     m_BgColor:     "#009ed6"
     m_TextColor:   "white"
     m_Radius:      10
-    m_BorderWidth: 3
+    m_BorderWidth: 2
 
     // child components
     titleText.anchors.bottom:      rectContents.bottom

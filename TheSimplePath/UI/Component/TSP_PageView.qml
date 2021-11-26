@@ -12,14 +12,17 @@ import "TSP_JSHelper.js" as JSHelper
 T.Control
 {
     // aliases
+    property alias pageViewport:  rcPageViewport
     property alias pageContent:   rcPageContent
     property alias horzScrollBar: sbHorz
     property alias vertScrollBar: sbVert
 
     // advanced properties
-    property var m_Page:     this
-    property var m_Model:    null
-    property int m_GenIndex: 0
+    property var m_Page:       this
+    property var m_Model:      null
+    property int m_PageWidth:  794  // default A4 width in pixels, under 96 dpi
+    property int m_PageHeight: 1123 // default A4 height in pixels, under 96 dpi
+    property int m_GenIndex:   0
 
     // signals
     signal linkAdded(var link)
@@ -35,9 +38,15 @@ T.Control
     */
     Rectangle
     {
+        // advanced properties
+        property real m_SbHorzPos:  0
+        property real m_SbHorzSize: rcPageViewport.width / rcPageContainer.width
+        property real m_SbVertPos:  0
+        property real m_SbVertSize: rcPageViewport.height / rcPageContainer.height
+
         // common properties
-        id: rcPage
-        objectName: "rcPage"
+        id: rcPageViewport
+        objectName: "rcPageViewport"
         anchors.fill: parent
         clip: true
 
@@ -47,10 +56,11 @@ T.Control
         MouseArea
         {
             // advanced properties
-            property var  m_Target:  parent
-            property int  m_PrevX:   0
-            property int  m_PrevY:   0
-            property bool m_Panning: false
+            property var  m_Target:      parent
+            property int  m_PrevX:       0
+            property int  m_PrevY:       0
+            property real m_ScaleFactor: 1
+            property bool m_Panning:     false
 
             // common properties
             id: maPage
@@ -84,11 +94,11 @@ T.Control
                     return;
 
                 // calculate next horizontal scroll position, and apply it
-                let deltaX    = (m_PrevX - mouseEvent.x) / rcPageContent.width;
+                let deltaX      = (m_PrevX - mouseEvent.x) / rcPageContainer.width;
                 sbHorz.position = JSHelper.clamp(sbHorz.position + deltaX, 0.0, 1.0 - (sbHorz.size));
 
                 // calculate next vertical scroll position, and apply it
-                let deltaY    = (m_PrevY - mouseEvent.y) / rcPageContent.height;
+                let deltaY      = (m_PrevY - mouseEvent.y) / rcPageContainer.height;
                 sbVert.position = JSHelper.clamp(sbVert.position + deltaY, 0.0, 1.0 - (sbVert.size));
 
                 m_PrevX = mouseEvent.x;
@@ -98,66 +108,120 @@ T.Control
             /// called when mouse wheel was rolled above page
             onWheel: function(mouseWheel)
             {
-                let offset    = mouseWheel.angleDelta.y * 0.0001;
-                sbVert.position = Math.min(Math.max(sbVert.position - offset, 0.0), 1.0 - (sbVert.size));
+                // todo FIXME -cBug -oJean: For now not working very well, there are many side effects. Fix them then re-enable
+                /*
+                // do change the zoom level?
+                if (mouseWheel.modifiers & Qt.ControlModifier)
+                {
+                    // calculate the next scale factor and resize page
+                    const offset  = mouseWheel.angleDelta.y * 0.001;
+                    m_ScaleFactor = JSHelper.clamp(m_ScaleFactor + offset, 0.5, 5.0);
+
+                    // notify page and children that teh zoom changed
+                    rcPageContent.pageScaleChanged(m_ScaleFactor);
+                    return;
+                }
+                */
+
+                // calculate next vertical scroll position, and apply it
+                const offset    = mouseWheel.angleDelta.y * 0.0001;
+                sbVert.position = JSHelper.clamp(sbVert.position - offset, 0.0, 1.0 - (sbVert.size));
 
                 mouseWheel.accepted = true;
             }
         }
 
         /**
-        * Page content
+        * Page container
         */
         Rectangle
         {
-            // advanced properties
-            property bool m_DraggingMsg: false
-
             // common properties
-            id: rcPageContent
-            objectName: "rcPageContent"
-            color: "white"
-            x: -sbHorz.position * width
-            y: -sbVert.position * height
-            width: 2480
-            height: 3508
+            id: rcPageContainer
+            objectName: "rcPageContainer"
+            x: (rcPageViewport.width  < width)  ? -sbHorz.position * width  : 0
+            y: (rcPageViewport.height < height) ? -sbVert.position * height : 0
+            width:  m_PageWidth  * rcPageContent.m_ScaleFactor
+            height: m_PageHeight * rcPageContent.m_ScaleFactor
 
             /**
-            * Page background
+            * Page content
             */
-            Canvas
+            Rectangle
             {
+                // advanced properties
+                property bool m_DraggingMsg: false
+                property real m_ScaleFactor: 1
+
+                // signals
+                signal pageScaleChanged(double factor)
+
                 // common properties
-                id: cvPageBackground
-                anchors.fill: parent
+                id: rcPageContent
+                objectName: "rcPageContent"
+                color: "white"
+                x: 0
+                y: 0
+                width: m_PageWidth
+                height: m_PageHeight
 
-                /// called when canvas is painted
-                onPaint:
+                transform: Scale
                 {
-                    // get drawing context
-                    let context = getContext("2d");
+                    origin.x: 0
+                    origin.y: 0
+                    xScale: rcPageContent.m_ScaleFactor
+                    yScale: rcPageContent.m_ScaleFactor
+                }
 
-                    // fill page content
-                    context.fillStyle = "transparent";
-                    context.fillRect(0, 0, width, height);
+                /**
+                * Page background
+                */
+                Canvas
+                {
+                    // common properties
+                    id: cvPageBackground
+                    anchors.fill: parent
 
-                    let pointSize = 2;
-                    let step      = 20;
-
-                    // configure line properties
-                    context.lineWidth   = 1;
-                    context.strokeStyle = "grey";
-                    context.setLineDash([pointSize, step - pointSize]);
-
-                    // iterate through lines to draw
-                    for (let i = 1; i < height / step; ++i)
+                    /// called when canvas is painted
+                    onPaint:
                     {
-                        // draw a line of points
-                        context.beginPath();
-                        context.moveTo(0,         (i * step));
-                        context.lineTo(width - 1, (i * step));
-                        context.stroke();
+                        // get drawing context
+                        let context = getContext("2d");
+
+                        // fill page content
+                        context.fillStyle = "transparent";
+                        context.fillRect(0, 0, width, height);
+
+                        let pointSize = 2;
+                        let step      = 20;
+
+                        // configure line properties
+                        context.lineWidth   = 1;
+                        context.strokeStyle = "grey";
+                        context.setLineDash([pointSize, step - pointSize]);
+
+                        // iterate through lines to draw
+                        for (let i = 0; i < height / step; ++i)
+                        {
+                            // draw a line of points
+                            context.beginPath();
+                            context.moveTo(0,         (i * step) + 1);
+                            context.lineTo(width - 1, (i * step) + 1);
+                            context.stroke();
+                        }
                     }
+                }
+
+                /// called when page scale changed
+                onPageScaleChanged:
+                {
+                    m_ScaleFactor = factor;
+
+                    // recalculate the scroll position and size
+                    rcPageViewport.m_SbHorzSize = rcPageViewport.width / rcPageContainer.width
+                    rcPageViewport.m_SbHorzPos  = JSHelper.clamp(rcPageViewport.m_SbHorzPos, 0.0, 1.0 - rcPageViewport.m_SbHorzSize);
+                    rcPageViewport.m_SbVertSize = rcPageViewport.height / rcPageContainer.height
+                    rcPageViewport.m_SbVertPos  = JSHelper.clamp(rcPageViewport.m_SbVertPos, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
                 }
             }
         }
@@ -172,7 +236,8 @@ T.Control
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Horizontal
-            size: rcPage.width / rcPageContent.width
+            position: rcPageViewport.m_SbHorzPos
+            size: rcPageViewport.m_SbHorzSize
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -189,7 +254,8 @@ T.Control
             hoverEnabled: true
             active: hovered || pressed
             orientation: Qt.Vertical
-            size: rcPage.height / rcPageContent.height
+            position: rcPageViewport.m_SbVertPos
+            size: rcPageViewport.m_SbVertSize
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -199,15 +265,15 @@ T.Control
         /// called when page viewport width changed
         onWidthChanged:
         {
-            sbHorz.size     = rcPage.width / rcPageContent.width
-            sbHorz.position = Math.min(Math.max(sbHorz.position, 0.0), 1.0 - (sbHorz.size));
+            rcPageViewport.m_SbHorzSize = rcPageViewport.width / rcPageContainer.width
+            rcPageViewport.m_SbHorzPos  = JSHelper.clamp(rcPageViewport.m_SbHorzPos, 0.0, 1.0 - rcPageViewport.m_SbHorzSize);
         }
 
         /// called when page viewport height changed
         onHeightChanged:
         {
-            sbVert.size     = rcPage.height / rcPageContent.height
-            sbVert.position = Math.min(Math.max(sbVert.position, 0.0), 1.0 - (sbVert.size));
+            rcPageViewport.m_SbVertSize = rcPageViewport.height / rcPageContainer.height
+            rcPageViewport.m_SbVertPos  = JSHelper.clamp(rcPageViewport.m_SbVertPos, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
         }
     }
 

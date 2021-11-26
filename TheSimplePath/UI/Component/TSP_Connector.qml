@@ -77,7 +77,7 @@ T.Control
             if (m_Page && m_Box)
             {
                 console.log("Connector - adding a new link - start box - " + m_Box.objectName +
-                            " - start connector - "                           + ctConnector.objectName);
+                            " - start connector - "                        + ctConnector.objectName);
 
                 // send signal to notify that a new link should be added from this connector
                 m_AddingLinkItem = m_Page.doAddLink(ctConnector, null, "link");
@@ -126,7 +126,7 @@ T.Control
                     }
 
                 // found a valid target connector?
-                if (targetConn && targetConn.m_Box != m_Box)
+                if (targetConn && targetConn.visible && targetConn.m_Box != m_Box)
                 {
                     console.log("Connector - link added successfully - name - " + m_AddingLinkItem.objectName);
 

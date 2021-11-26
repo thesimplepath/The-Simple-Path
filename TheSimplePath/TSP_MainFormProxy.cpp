@@ -30,6 +30,12 @@
 
 #include "TSP_MainFormProxy.h"
 
+// qt
+#include <QSize>
+
+// windows
+#include <windows.h>
+
 //---------------------------------------------------------------------------
 // TSP_MainFormProxy
 //---------------------------------------------------------------------------
@@ -39,6 +45,44 @@ TSP_MainFormProxy::TSP_MainFormProxy(QObject* pParent) :
 //---------------------------------------------------------------------------
 TSP_MainFormProxy::~TSP_MainFormProxy()
 {}
+//---------------------------------------------------------------------------
+int TSP_MainFormProxy::getPageWidth() const
+{
+    int width = 0;
+    HDC hDC   = ::GetDC(nullptr);
+
+    try
+    {
+        const float ppx   = ::GetDeviceCaps(hDC, LOGPIXELSX);
+                    width = std::ceilf(m_PageSize.size(QPageSize::PageSizeId::A4, QPageSize::Unit::Point).width() * (ppx / 72.0f));
+    }
+    catch (...)
+    {}
+
+    if (hDC)
+        ::ReleaseDC(nullptr, hDC);
+
+    return width;
+}
+//---------------------------------------------------------------------------
+int TSP_MainFormProxy::getPageHeight() const
+{
+    int height = 0;
+    HDC hDC    = ::GetDC(nullptr);
+
+    try
+    {
+        const float ppx    = ::GetDeviceCaps(hDC, LOGPIXELSY);
+                    height = std::ceilf(m_PageSize.size(QPageSize::PageSizeId::A4, QPageSize::Unit::Point).height() * (ppx / 72.0f));
+    }
+    catch (...)
+    {}
+
+    if (hDC)
+        ::ReleaseDC(nullptr, hDC);
+
+    return height;
+}
 //---------------------------------------------------------------------------
 void TSP_MainFormProxy::onAddActivityClicked()
 {

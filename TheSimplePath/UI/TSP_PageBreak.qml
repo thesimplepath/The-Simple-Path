@@ -17,11 +17,11 @@ TSP_Box
     property bool   m_IsExit:     false
 
     // common properties
-    m_Color:       m_IsProcess ? "black"   : "#202020"
+    m_Color:       "#202020"
     m_BgColor:     m_IsProcess ? "#009ed6" : "white"
     m_TextColor:   m_IsProcess ? "white"   : "#202020"
     m_Radius:      0
-    m_BorderWidth: 3
+    m_BorderWidth: 2
 
     // child components
     titleText.anchors.bottom:      rectContents.bottom
@@ -40,7 +40,7 @@ TSP_Box
         source: m_IsProcess ? m_ProcessURL : m_NormalURL
         sourceSize.width: width
         sourceSize.height:height
-        x: -(width  / 2) + 7
+        x: -(width  / 2) + 6
         y: -(height / 2) + 2
         width: 60
         height: 50
@@ -58,7 +58,7 @@ TSP_Box
         source: m_IsProcess ? m_ProcessURL : m_NormalURL
         sourceSize.width: width
         sourceSize.height:height
-        x: parent.width  - (width  / 2) - 7
+        x: parent.width  - (width  / 2) - 6
         y: parent.height - (height / 2) - 2
         width: 60
         height: 50

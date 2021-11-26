@@ -29,6 +29,7 @@ T.Control
     property string m_Title:             ""
     property string m_Description:       ""
     property string m_Comments:          ""
+    property real   m_ScaleFactor:       1
     property int    m_BorderWidth:       1
     property int    m_Radius:            3
     property int    m_TextMargin:        2
@@ -238,6 +239,23 @@ T.Control
             {
                 ctBox.forceActiveFocus();
             }
+        }
+    }
+
+    /**
+    * Signal connectors
+    */
+    Connections
+    {
+        target: pageContent
+
+        /**
+        * Called when the page scale factor changed
+        *@param {number} factor - scale factor
+        */
+        function onPageScaleChanged(factor)
+        {
+            m_ScaleFactor = factor;
         }
     }
 }

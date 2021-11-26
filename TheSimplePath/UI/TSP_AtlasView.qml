@@ -34,13 +34,17 @@ T.Control
 
     Component
     {
+        // common properties
         id: cpPageItem
 
         TSP_PageView
         {
-            // property int m_GenIndex: 0
-
+            // common properties
             id: pvPageView
+
+            // advanced properties
+            m_PageWidth:  m_MainFormProxy.getPageWidth()
+            m_PageHeight: m_MainFormProxy.getPageHeight()
 
             /**
             * Adds a start component to the document
@@ -111,10 +115,31 @@ T.Control
             *@param y [number] - component y position, in pixels
             *@param width [number] - component width, in pixels
             *@param height [number] - component height, in pixels
+            *@param isProcess - if true, the page break links to a process instead of a page
+            *@param isExit - if true, the page break is an exit instead of an input
             */
-            function addPageBreak(title, description, comments, x, y, width, height)
+            function addPageBreak(title, description, comments, x, y, width, height, isProcess, isExit)
             {
-                return addSymbol("pageBreak", title, description, comments, x, y, width, height, false, false, false, false);
+                let symbol = addSymbol("pageBreak",
+                                       title,
+                                       description,
+                                       comments,
+                                       x,
+                                       y,
+                                       width,
+                                       height,
+                                       false,
+                                       !isProcess && !isExit,
+                                       false,
+                                       !isProcess && isExit);
+
+                if (!symbol)
+                    return null;
+
+                symbol.m_IsProcess = isProcess;
+                symbol.m_IsExit    = isExit;
+
+                return symbol;
             }
 
             /**
@@ -127,7 +152,18 @@ T.Control
             *@param width [number] - component width, in pixels
             *@param height [number] - component height, in pixels
             */
-            function addSymbol(name, title, description, comments, x, y, width, height, leftConnVisible, topConnVisible, rightConnVisible, bottomConnVIsible)
+            function addSymbol(name,
+                               title,
+                               description,
+                               comments,
+                               x,
+                               y,
+                               width,
+                               height,
+                               leftConnVisible,
+                               topConnVisible,
+                               rightConnVisible,
+                               bottomConnVIsible)
             {
                 let componentName;
 
@@ -237,7 +273,10 @@ T.Control
                 let activity = addActivity("<b>Activity</b>", "ID: 5678", "Team: Bravo", 200, 250, 100, 80);
                 let end = addEnd("<b>End</b>", "ID: 9012", "Team: Zulu", 200, 450, 100, 80);
                 let process = addProcess("<b>Process</b>", "", "", 400, 200, 100, 80);
-                let pageBreak = addPageBreak("<b>Page break</b>", "", "", 400, 400, 100, 80);
+                let pageBreak = addPageBreak("<b>Page break</b>", "", "", 400, 400, 100, 80, false, false);
+                let pageBreak2 = addPageBreak("<b>Page break</b>", "", "", 550, 400, 100, 80, false, true);
+                let pageBreak3 = addPageBreak("<b>Process break</b>", "", "", 400, 500, 100, 80, true, false);
+                let pageBreak4 = addPageBreak("<b>Process break</b>", "", "", 550, 500, 100, 80, true, true);
                 addMessage("Message 1", start.bottomConnector, activity.topConnector);
                 addMessage("Message 2", activity.bottomConnector, end.topConnector);
             }

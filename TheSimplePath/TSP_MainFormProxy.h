@@ -35,6 +35,7 @@
 
 // qt
 #include <QObject>
+#include <QPageSize>
 
 /**
 * Main form proxy
@@ -54,7 +55,22 @@ class TSP_MainFormProxy : public QObject
         virtual ~TSP_MainFormProxy();
 
         /**
+        * Gets page width, in pixels
+        *@return page width, in pixels
+        */
+        virtual Q_INVOKABLE int getPageWidth() const;
+
+        /**
+        * Gets page height, in pixels
+        *@return page height, in pixels
+        */
+        virtual Q_INVOKABLE int getPageHeight() const;
+
+        /**
         * Called when the add activity button was clicked on the user interface
         */
         virtual Q_INVOKABLE void onAddActivityClicked();
+
+    private:
+        QPageSize m_PageSize;
 };
