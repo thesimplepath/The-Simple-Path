@@ -2,6 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
+// javascript
+import "TSP_JSHelper.js" as JSHelper
+
 /**
 * Link (between 2 boxes)
 *@author Jean-Milost Reymond
@@ -133,6 +136,10 @@ Item
     */
     Rectangle
     {
+        // advanced properties
+        property int m_MouseStartX: 0
+        property int m_MouseStartY: 0
+
         // common properties
         id:         rcBackground
         objectName: "rcBackground"
@@ -142,6 +149,12 @@ Item
         height:     m_LabelSize.y
         color:      "transparent"
         visible:    m_From !== null && m_To !== null
+
+        // signals
+        signal moveStart()
+        signal move(int deltaX, int deltaY)
+        signal moveEnd()
+        signal resize(int direction, int deltaX, int deltaY)
 
         /**
         * Handle control
@@ -160,14 +173,6 @@ Item
 
             // aliases
             handleBackground.border.color: m_Color
-
-            /**
-            * Called when the move and size mode should be disabled
-            */
-            function doDisableMoveSize()
-            {
-                rcBackground.forceActiveFocus();
-            }
         }
 
         /**
@@ -221,6 +226,107 @@ Item
                     rcBackground.forceActiveFocus();
                 }
             }
+        }
+
+        /// called when box starts to move
+        onMoveStart: function()
+        {
+            m_MouseStartX = x;
+            m_MouseStartY = y;
+        }
+
+        /// called when box is moving
+        onMove: function(deltaX, deltaY)
+        {
+            // move box and limit it in owning page
+            x += deltaX;
+            x  = JSHelper.clamp(x, 0, m_PageContent.width - width);
+            y += deltaY;
+            y  = JSHelper.clamp(y, 0, m_PageContent.height - height);
+
+            // notify that auto-scroll may be applied
+            if (m_PageContent)
+            {
+                const linkX      = x      * m_ScaleFactor;
+                const linkY      = y      * m_ScaleFactor;
+                const linkWidth  = width  * m_ScaleFactor;
+                const linkHeight = height * m_ScaleFactor;
+
+                m_PageContent.doAutoScroll(linkX, linkX + linkWidth, linkY, linkY + linkHeight);
+            }
+        }
+
+        /// called when box ends to move
+        onMoveEnd: function()
+        {
+            // was control dragged?
+            if (Math.abs(x - m_MouseStartX) >= 5 || Math.abs(y - m_MouseStartY) >= 5)
+                return;
+
+            if (m_PageContent)
+                m_PageContent.doDisableMoveSize(this);
+        }
+
+        /// called when box should be resized
+        onResize: function(direction, deltaX, deltaY)
+        {
+            // resize box width
+            if (deltaX)
+                switch (direction)
+                {
+                    case TSP_Handle.IEDirection.IE_D_Left:
+                    case TSP_Handle.IEDirection.IE_D_LeftTop:
+                    case TSP_Handle.IEDirection.IE_D_LeftBottom:
+                        x     += deltaX;
+                        width -= deltaX;
+
+                        if (x < 0 || width < 30)
+                        {
+                            x     -= deltaX;
+                            width += deltaX;
+                        }
+
+                        break;
+
+                    case TSP_Handle.IEDirection.IE_D_Right:
+                    case TSP_Handle.IEDirection.IE_D_RightTop:
+                    case TSP_Handle.IEDirection.IE_D_RightBottom:
+                        width += deltaX;
+
+                        if (width < 30)
+                            width -= deltaX;
+
+                        break;
+                }
+
+            // resize box height
+            if (deltaY)
+                switch (direction)
+                {
+                    case TSP_Handle.IEDirection.IE_D_Top:
+                    case TSP_Handle.IEDirection.IE_D_LeftTop:
+                    case TSP_Handle.IEDirection.IE_D_RightTop:
+                        y      += deltaY;
+                        height -= deltaY;
+
+                        if (y < 0 || height < 30)
+                        {
+                            y      -= deltaY;
+                            height += deltaY;
+                        }
+
+                        break;
+
+                    case TSP_Handle.IEDirection.IE_D_Bottom:
+                    case TSP_Handle.IEDirection.IE_D_LeftBottom:
+                    case TSP_Handle.IEDirection.IE_D_RightBottom:
+                        height += deltaY;
+
+                        if (height < 30)
+                            height -= deltaY;
+
+                        break;
+                }
         }
     }
 

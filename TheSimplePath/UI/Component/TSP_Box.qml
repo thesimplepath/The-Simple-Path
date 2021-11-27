@@ -2,6 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
+// javascript
+import "TSP_JSHelper.js" as JSHelper
+
 /**
 * Box, it's a basic component which can be moved and resized, and contain connectors
 *@author Jean-Milost Reymond
@@ -30,6 +33,8 @@ T.Control
     property string m_Description:       ""
     property string m_Comments:          ""
     property real   m_ScaleFactor:       1
+    property int    m_MouseStartX:       0
+    property int    m_MouseStartY:       0
     property int    m_BorderWidth:       1
     property int    m_Radius:            3
     property int    m_TextMargin:        2
@@ -37,6 +42,12 @@ T.Control
     // common properties
     id: ctBox
     objectName: "ctBox"
+
+    // signals
+    signal moveStart()
+    signal move(int deltaX, int deltaY)
+    signal moveEnd()
+    signal resize(int direction, int deltaX, int deltaY)
 
     /**
     * Connectors
@@ -138,12 +149,6 @@ T.Control
         m_BorderWidth: ctBox.m_BorderWidth
         m_Radius: ctBox.m_Radius
         m_HandleVisible: ctBox.activeFocus
-
-        /**
-        * Called when the move and size mode should be disabled
-        */
-        function doDisableMoveSize()
-        {}
     }
 
     /**
@@ -240,6 +245,107 @@ T.Control
                 ctBox.forceActiveFocus();
             }
         }
+    }
+
+    /// called when box starts to move
+    onMoveStart: function()
+    {
+        m_MouseStartX = x;
+        m_MouseStartY = y;
+    }
+
+    /// called when box is moving
+    onMove: function(deltaX, deltaY)
+    {
+        // move box and limit it in owning page
+        x += deltaX;
+        x  = JSHelper.clamp(x, 0, m_PageContent.width - width);
+        y += deltaY;
+        y  = JSHelper.clamp(y, 0, m_PageContent.height - height);
+
+        // notify that auto-scroll may be applied
+        if (m_PageContent)
+        {
+            const boxX      = x      * m_ScaleFactor;
+            const boxY      = y      * m_ScaleFactor;
+            const boxWidth  = width  * m_ScaleFactor;
+            const boxHeight = height * m_ScaleFactor;
+
+            m_PageContent.doAutoScroll(boxX, boxX + boxWidth, boxY, boxY + boxHeight);
+        }
+    }
+
+    /// called when box ends to move
+    onMoveEnd: function()
+    {
+        // was control dragged?
+        if (Math.abs(x - m_MouseStartX) >= 5 || Math.abs(y - m_MouseStartY) >= 5)
+            return;
+
+        if (m_PageContent)
+            m_PageContent.doDisableMoveSize(this);
+    }
+
+    /// called when box should be resized
+    onResize: function(direction, deltaX, deltaY)
+    {
+        // resize box width
+        if (deltaX)
+            switch (direction)
+            {
+                case TSP_Handle.IEDirection.IE_D_Left:
+                case TSP_Handle.IEDirection.IE_D_LeftTop:
+                case TSP_Handle.IEDirection.IE_D_LeftBottom:
+                    x     += deltaX;
+                    width -= deltaX;
+
+                    if (x < 0 || width < 30)
+                    {
+                        x     -= deltaX;
+                        width += deltaX;
+                    }
+
+                    break;
+
+                case TSP_Handle.IEDirection.IE_D_Right:
+                case TSP_Handle.IEDirection.IE_D_RightTop:
+                case TSP_Handle.IEDirection.IE_D_RightBottom:
+                    width += deltaX;
+
+                    if (width < 30)
+                        width -= deltaX;
+
+                    break;
+            }
+
+        // resize box height
+        if (deltaY)
+            switch (direction)
+            {
+                case TSP_Handle.IEDirection.IE_D_Top:
+                case TSP_Handle.IEDirection.IE_D_LeftTop:
+                case TSP_Handle.IEDirection.IE_D_RightTop:
+                    y      += deltaY;
+                    height -= deltaY;
+
+                    if (y < 0 || height < 30)
+                    {
+                        y      -= deltaY;
+                        height += deltaY;
+                    }
+
+                    break;
+
+                case TSP_Handle.IEDirection.IE_D_Bottom:
+                case TSP_Handle.IEDirection.IE_D_LeftBottom:
+                case TSP_Handle.IEDirection.IE_D_RightBottom:
+                    height += deltaY;
+
+                    if (height < 30)
+                        height -= deltaY;
+
+                    break;
+            }
     }
 
     /**

@@ -28,9 +28,10 @@ T.Control
     property alias connectorMouseArea: maConnector
 
     // advanced properties
-    property var m_Box:      null
-    property var m_Links:    []
-    property int m_Position: TSP_Connector.IEPosition.IE_P_None
+    property var  m_Box:         null
+    property var  m_Links:       []
+    property real m_ScaleFactor: 1
+    property int  m_Position:    TSP_Connector.IEPosition.IE_P_None
 
     // common properties
     id: ctConnector
@@ -185,17 +186,16 @@ T.Control
             if (!pressed)
                 return;
 
-            // convert mouse pointer to page content coordinate system
-            let localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+            if (m_PageContent)
+            {
+                // convert mouse pointer to page content coordinate system
+                const localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+                const pointX     = localMouse.x * m_ScaleFactor;
+                const pointY     = localMouse.y * m_ScaleFactor;
 
-            // auto-scroll the page if the mouse exceeds its viewport limits
-            if (localMouse.x < Math.abs(m_PageContent.x))
-                m_Page.horzScrollBar.position =
-                        Math.min(Math.max(m_Page.horzScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
-            else
-            if (localMouse.x > Math.abs(m_PageContent.x) + m_Page.width)
-                m_Page.horzScrollBar.position =
-                        Math.min(Math.max(m_Page.horzScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
+                // notify page that auto-scroll may be applied
+                m_PageContent.doAutoScroll(pointX, pointX, pointY, pointY);
+            }
         }
 
         /// called when mouse moved on the y axis above the handle
@@ -208,17 +208,33 @@ T.Control
             if (!pressed)
                 return;
 
-            // convert mouse pointer to page content coordinate system
-            let localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+            if (m_PageContent)
+            {
+                // convert mouse pointer to page content coordinate system
+                const localMouse = mapToItem(m_PageContent, mouseEvent.x, mouseEvent.y);
+                const pointX     = localMouse.x * m_ScaleFactor;
+                const pointY     = localMouse.y * m_ScaleFactor;
 
-            // auto-scroll the page if the mouse exceeds its viewport limits
-            if (localMouse.y < Math.abs(m_PageContent.y))
-                m_Page.vertScrollBar.position =
-                        Math.min(Math.max(m_Page.vertScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
-            else
-            if (localMouse.y > Math.abs(m_PageContent.y) + m_Page.height)
-                m_Page.vertScrollBar.position =
-                        Math.min(Math.max(m_Page.vertScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
+                // notify page that auto-scroll may be applied
+                m_PageContent.doAutoScroll(pointX, pointX, pointY, pointY);
+            }
+        }
+    }
+
+    /**
+    * Signal connectors
+    */
+    Connections
+    {
+        target: pageContent
+
+        /**
+        * Called when the page scale factor changed
+        *@param {number} factor - scale factor
+        */
+        function onPageScaleChanged(factor)
+        {
+            m_ScaleFactor = factor;
         }
     }
 }

@@ -13,16 +13,18 @@ T.Control
 {
     // aliases
     property alias pageViewport:  rcPageViewport
+    property alias pageContainer: rcPageContainer
     property alias pageContent:   rcPageContent
     property alias horzScrollBar: sbHorz
     property alias vertScrollBar: sbVert
 
     // advanced properties
-    property var m_Page:       this
-    property var m_Model:      null
-    property int m_PageWidth:  794  // default A4 width in pixels, under 96 dpi
-    property int m_PageHeight: 1123 // default A4 height in pixels, under 96 dpi
-    property int m_GenIndex:   0
+    property var  m_Page:            this
+    property var  m_Model:           null
+    property real m_AutoScrollSpeed: 0.0025
+    property int  m_PageWidth:       794  // default A4 width in pixels, under 96 dpi
+    property int  m_PageHeight:      1123 // default A4 height in pixels, under 96 dpi
+    property int  m_GenIndex:        0
 
     // signals
     signal linkAdded(var link)
@@ -94,12 +96,12 @@ T.Control
                     return;
 
                 // calculate next horizontal scroll position, and apply it
-                let deltaX      = (m_PrevX - mouseEvent.x) / rcPageContainer.width;
-                sbHorz.position = JSHelper.clamp(sbHorz.position + deltaX, 0.0, 1.0 - (sbHorz.size));
+                let deltaX                 = (m_PrevX - mouseEvent.x) / rcPageContainer.width;
+                rcPageViewport.m_SbHorzPos = JSHelper.clamp(rcPageViewport.m_SbHorzPos + deltaX, 0.0, 1.0 - (rcPageViewport.m_SbHorzSize));
 
                 // calculate next vertical scroll position, and apply it
-                let deltaY      = (m_PrevY - mouseEvent.y) / rcPageContainer.height;
-                sbVert.position = JSHelper.clamp(sbVert.position + deltaY, 0.0, 1.0 - (sbVert.size));
+                let deltaY                 = (m_PrevY - mouseEvent.y) / rcPageContainer.height;
+                rcPageViewport.m_SbVertPos = JSHelper.clamp(rcPageViewport.m_SbVertPos + deltaY, 0.0, 1.0 - (rcPageViewport.m_SbVertSize));
 
                 m_PrevX = mouseEvent.x;
                 m_PrevY = mouseEvent.y;
@@ -108,8 +110,6 @@ T.Control
             /// called when mouse wheel was rolled above page
             onWheel: function(mouseWheel)
             {
-                // todo FIXME -cBug -oJean: For now not working very well, there are many side effects. Fix them then re-enable
-                /*
                 // do change the zoom level?
                 if (mouseWheel.modifiers & Qt.ControlModifier)
                 {
@@ -121,11 +121,14 @@ T.Control
                     rcPageContent.pageScaleChanged(m_ScaleFactor);
                     return;
                 }
-                */
 
                 // calculate next vertical scroll position, and apply it
-                const offset    = mouseWheel.angleDelta.y * 0.0001;
-                sbVert.position = JSHelper.clamp(sbVert.position - offset, 0.0, 1.0 - (sbVert.size));
+                const offset = mouseWheel.angleDelta.y * 0.0001;
+
+                if (mouseWheel.modifiers & Qt.ShiftModifier)
+                    rcPageViewport.m_SbHorzPos = JSHelper.clamp(rcPageViewport.m_SbHorzPos - offset, 0.0, 1.0 - (rcPageViewport.m_SbHorzSize));
+                else
+                    rcPageViewport.m_SbVertPos = JSHelper.clamp(rcPageViewport.m_SbVertPos - offset, 0.0, 1.0 - (rcPageViewport.m_SbVertSize));
 
                 mouseWheel.accepted = true;
             }
@@ -154,6 +157,8 @@ T.Control
                 property real m_ScaleFactor: 1
 
                 // signals
+                signal doDisableMoveSize(var box)
+                signal doAutoScroll(int minX, int maxX, int minY, int maxY)
                 signal pageScaleChanged(double factor)
 
                 // common properties
@@ -210,6 +215,28 @@ T.Control
                             context.stroke();
                         }
                     }
+                }
+
+                /// called when auto-scroll should be applied
+                onDoAutoScroll: function(minX, maxX, minY, maxY)
+                {
+                    // auto-scroll the page on x axis if the box exceeds its viewport limits
+                    if (minX < Math.abs(rcPageContainer.x))
+                        rcPageViewport.m_SbHorzPos =
+                                JSHelper.clamp(rcPageViewport.m_SbHorzPos - m_AutoScrollSpeed, 0.0, 1.0 - rcPageViewport.m_SbHorzSize);
+                    else
+                    if (maxX > Math.abs(rcPageContainer.x) + rcPageViewport.width)
+                        rcPageViewport.m_SbHorzPos =
+                                JSHelper.clamp(rcPageViewport.m_SbHorzPos + m_AutoScrollSpeed, 0.0, 1.0 - rcPageViewport.m_SbHorzSize);
+
+                    // auto-scroll the page on y axis if the box exceeds its viewport limits
+                    if (minY < Math.abs(rcPageContainer.y))
+                        rcPageViewport.m_SbVertPos =
+                                JSHelper.clamp(rcPageViewport.m_SbVertPos - m_AutoScrollSpeed, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
+                    else
+                    if (maxY > Math.abs(rcPageContainer.y) + rcPageViewport.height)
+                        rcPageViewport.m_SbVertPos =
+                                JSHelper.clamp(rcPageViewport.m_SbVertPos + m_AutoScrollSpeed, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
                 }
 
                 /// called when page scale changed

@@ -195,8 +195,8 @@ T.Control
                     return;
                 }
 
-                let connectorWidth  = 14;
-                let connectorHeight = 14;
+                const connectorWidth  = 14;
+                const connectorHeight = 14;
 
                 // create and show new item object
                 let item = component.createObject(pvPageView.pageContent, {"id":                      "acStart" + m_GenIndex,

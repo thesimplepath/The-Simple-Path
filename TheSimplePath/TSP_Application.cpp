@@ -43,14 +43,19 @@ TSP_Application::TSP_Application(int argc, char* argv[], const std::wstring& url
 //---------------------------------------------------------------------------
 TSP_Application::~TSP_Application()
 {
+    // disconnect qml logger
+    qInstallMessageHandler(nullptr);
+
+    // engine should be deleted first, as it contains the qml interface with
+    // all its associated signals
+    if (m_pEngine)
+        delete m_pEngine;
+
     if (m_pDocumentModel)
         delete m_pDocumentModel;
 
     if (m_pMainFormProxy)
         delete m_pMainFormProxy;
-
-    if (m_pEngine)
-        delete m_pEngine;
 
     if (m_pApp)
         delete m_pApp;
@@ -79,15 +84,16 @@ int TSP_Application::Execute()
 
     const QUrl url(QStringLiteral("qrc:/") + QString::fromStdWString(m_URL));
 
-    QObject::connect(m_pEngine,
-                     &QQmlApplicationEngine::objectCreated,
-                     m_pApp,
-                     [url](QObject* pObj, const QUrl& objUrl)
-                     {
-                         if (!pObj && url == objUrl)
-                             QCoreApplication::exit(-1);
-                     },
-                     Qt::QueuedConnection);
+    // listen to onAppCreated signal
+    (void)QObject::connect(m_pEngine,
+                           &QQmlApplicationEngine::objectCreated,
+                           m_pApp,
+                           [url](QObject* pObj, const QUrl& objUrl)
+                           {
+                               if (!pObj && url == objUrl)
+                                   QCoreApplication::exit(-1);
+                           },
+                           Qt::QueuedConnection);
 
     m_pEngine->load(url);
 

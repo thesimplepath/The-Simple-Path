@@ -23,4 +23,17 @@ TSP_Box
     titleText.verticalAlignment:   Text.AlignVCenter
     descriptionText.visible:       false
     commentsText.visible:          false
+
+    /// called when process should be resized
+    onResize: function(direction, deltaX, deltaY)
+    {
+        const connectorWidth  = 14;
+        const connectorHeight = 14;
+
+        // update connectors positions
+        leftConnector.x   =  -((connectorWidth  / 2) + 2);
+        topConnector.y    =  -((connectorHeight / 2) + 2);
+        rightConnector.x  =   width  + 2 - (connectorWidth  / 2);
+        bottomConnector.y =   height + 2 - (connectorHeight / 2);
+    }
 }

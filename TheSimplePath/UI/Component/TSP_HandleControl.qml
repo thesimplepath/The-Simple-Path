@@ -2,9 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
-// javascript
-import "TSP_JSHelper.js" as JSHelper
-
 /**
 * Control surrounded by handles, which may be moved and resized
 *@author Jean-Milost Reymond
@@ -48,11 +45,8 @@ T.Control
         MouseArea
         {
             // advanced proeprties
-            property int  m_MouseStartX:     0
-            property int  m_MouseStartY:     0
-            property int  m_MouseDeltaX:     0
-            property int  m_MouseDeltaY:     0
-            property real m_AutoScrollSpeed: 0.0025
+            property int m_MouseDeltaX: 0
+            property int m_MouseDeltaY: 0
 
             // common properties
             id: maHandleControl
@@ -67,10 +61,7 @@ T.Control
             onPressed: function(mouseEvent)
             {
                 if (m_Target)
-                {
-                    m_MouseStartX = m_Target.x;
-                    m_MouseStartY = m_Target.y;
-                }
+                    m_Target.moveStart();
 
                 m_MouseDeltaX = mouseEvent.x - parent.x;
                 m_MouseDeltaY = mouseEvent.y - parent.y;
@@ -79,61 +70,28 @@ T.Control
             /// called when mouse is released after pressed above the control
             onReleased: function(mouseEvent)
             {
-                // was control dragged?
-                if (m_Target && Math.abs(m_Target.x - m_MouseStartX) >= 5 || Math.abs(m_Target.y - m_MouseStartY) >= 5)
-                    return;
-
-                doDisableMoveSize();
+                if (m_Target)
+                    m_Target.moveEnd();
             }
 
             /// called when mouse moved on the x axis above the handle
             onMouseXChanged: function(mouseEvent)
             {
-                if (!ctHandleControl.m_Target)
-                    return;
-
                 if (!pressed)
                     return;
 
-                // move parent component and limit it in owning page
-                ctHandleControl.m_Target.x += mouseX - m_MouseDeltaX;
-                ctHandleControl.m_Target.x  = JSHelper.clamp(ctHandleControl.m_Target.x,
-                                                             0,
-                                                             m_PageContent.width - ctHandleControl.m_Target.width);
-
-                // auto-scroll the page if the box exceeds its viewport limits
-                if (ctHandleControl.m_Target.x < Math.abs(m_PageContent.x))
-                    m_Page.horzScrollBar.position =
-                            Math.min(Math.max(m_Page.horzScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
-                else
-                if (ctHandleControl.m_Target.x + ctHandleControl.m_Target.width > Math.abs(m_PageContent.x) + m_Page.width)
-                    m_Page.horzScrollBar.position =
-                            Math.min(Math.max(m_Page.horzScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.horzScrollBar.size));
+                if (m_Target)
+                    m_Target.move(mouseX - m_MouseDeltaX, 0);
             }
 
             /// called when mouse moved on the y axis above the handle
             onMouseYChanged: function(mouseEvent)
             {
-                if (!ctHandleControl.m_Target)
-                    return;
-
                 if (!pressed)
                     return;
 
-                // move parent component and limit it in owning page
-                ctHandleControl.m_Target.y += mouseY - m_MouseDeltaY;
-                ctHandleControl.m_Target.y  = JSHelper.clamp(ctHandleControl.m_Target.y,
-                                                             0,
-                                                             m_PageContent.height - ctHandleControl.m_Target.height);
-
-                // auto-scroll the page if the box exceeds its viewport limits
-                if (ctHandleControl.m_Target.y < Math.abs(m_PageContent.y))
-                    m_Page.vertScrollBar.position =
-                            Math.min(Math.max(m_Page.vertScrollBar.position - m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
-                else
-                if (ctHandleControl.m_Target.y + ctHandleControl.m_Target.height > Math.abs(m_PageContent.y) + m_Page.height)
-                    m_Page.vertScrollBar.position =
-                            Math.min(Math.max(m_Page.vertScrollBar.position + m_AutoScrollSpeed, 0.0), 1.0 - (m_Page.vertScrollBar.size));
+                if (m_Target)
+                    m_Target.move(0, mouseY - m_MouseDeltaY);
             }
         }
 
@@ -289,10 +247,4 @@ T.Control
             m_Direction: TSP_Handle.IEDirection.IE_D_LeftBottom
         }
     }
-
-    /**
-    * onDoDisableResizeMove callback function to override
-    */
-    function doDisableMoveSize()
-    {}
 }
