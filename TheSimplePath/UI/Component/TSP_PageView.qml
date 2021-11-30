@@ -21,6 +21,9 @@ T.Control
     // advanced properties
     property var  m_Page:            this
     property var  m_Model:           null
+    property real m_ScaleFactor:     1
+    property real m_ZoomMin:         0.5
+    property real m_ZoomMax:         5.0
     property real m_AutoScrollSpeed: 0.0025
     property int  m_PageWidth:       794  // default A4 width in pixels, under 96 dpi
     property int  m_PageHeight:      1123 // default A4 height in pixels, under 96 dpi
@@ -58,11 +61,10 @@ T.Control
         MouseArea
         {
             // advanced properties
-            property var  m_Target:      parent
-            property int  m_PrevX:       0
-            property int  m_PrevY:       0
-            property real m_ScaleFactor: 1
-            property bool m_Panning:     false
+            property var  m_Target:  parent
+            property int  m_PrevX:   0
+            property int  m_PrevY:   0
+            property bool m_Panning: false
 
             // common properties
             id: maPage
@@ -115,9 +117,9 @@ T.Control
                 {
                     // calculate the next scale factor and resize page
                     const offset  = mouseWheel.angleDelta.y * 0.001;
-                    m_ScaleFactor = JSHelper.clamp(m_ScaleFactor + offset, 0.5, 5.0);
+                    m_ScaleFactor = JSHelper.clamp(m_ScaleFactor + offset, m_ZoomMin, m_ZoomMax);
 
-                    // notify page and children that teh zoom changed
+                    // notify page and children that the zoom level changed
                     rcPageContent.pageScaleChanged(m_ScaleFactor);
                     return;
                 }
@@ -144,8 +146,8 @@ T.Control
             objectName: "rcPageContainer"
             x: (rcPageViewport.width  < width)  ? -sbHorz.position * width  : 0
             y: (rcPageViewport.height < height) ? -sbVert.position * height : 0
-            width:  m_PageWidth  * rcPageContent.m_ScaleFactor
-            height: m_PageHeight * rcPageContent.m_ScaleFactor
+            width:  m_PageWidth  * m_ScaleFactor
+            height: m_PageHeight * m_ScaleFactor
 
             /**
             * Page content
@@ -154,7 +156,6 @@ T.Control
             {
                 // advanced properties
                 property bool m_DraggingMsg: false
-                property real m_ScaleFactor: 1
 
                 // signals
                 signal doDisableMoveSize(var box)
@@ -174,8 +175,8 @@ T.Control
                 {
                     origin.x: 0
                     origin.y: 0
-                    xScale: rcPageContent.m_ScaleFactor
-                    yScale: rcPageContent.m_ScaleFactor
+                    xScale: m_ScaleFactor
+                    yScale: m_ScaleFactor
                 }
 
                 /**
@@ -242,8 +243,6 @@ T.Control
                 /// called when page scale changed
                 onPageScaleChanged:
                 {
-                    m_ScaleFactor = factor;
-
                     // recalculate the scroll position and size
                     rcPageViewport.m_SbHorzSize = rcPageViewport.width / rcPageContainer.width
                     rcPageViewport.m_SbHorzPos  = JSHelper.clamp(rcPageViewport.m_SbHorzPos, 0.0, 1.0 - rcPageViewport.m_SbHorzSize);
@@ -345,7 +344,8 @@ T.Control
                                                           "x":             x,
                                                           "y":             y,
                                                           "width":         width,
-                                                          "height":        height});
+                                                          "height":        height,
+                                                          "m_ScaleFactor": m_ScaleFactor});
 
         console.log("Add box - succeeded - new item - " + item.objectName);
 
@@ -378,11 +378,12 @@ T.Control
         }
 
         // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":         "lkLink" + m_GenIndex,
-                                                          "objectName": "lkLink" + m_GenIndex,
-                                                          "m_Title":    title,
-                                                          "m_From":     from,
-                                                          "m_To":       to});
+        let item = component.createObject(rcPageContent, {"id":            "lkLink" + m_GenIndex,
+                                                          "objectName":    "lkLink" + m_GenIndex,
+                                                          "m_Title":       title,
+                                                          "m_From":        from,
+                                                          "m_To":          to,
+                                                          "m_ScaleFactor": m_ScaleFactor});
 
         // emit signal and log only if destination connector is defined
         if (to)

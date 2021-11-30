@@ -257,22 +257,22 @@ T.Control
     /// called when box is moving
     onMove: function(deltaX, deltaY)
     {
+        if (!m_PageContent)
+            return;
+
         // move box and limit it in owning page
         x += deltaX;
         x  = JSHelper.clamp(x, 0, m_PageContent.width - width);
         y += deltaY;
         y  = JSHelper.clamp(y, 0, m_PageContent.height - height);
 
-        // notify that auto-scroll may be applied
-        if (m_PageContent)
-        {
-            const boxX      = x      * m_ScaleFactor;
-            const boxY      = y      * m_ScaleFactor;
-            const boxWidth  = width  * m_ScaleFactor;
-            const boxHeight = height * m_ScaleFactor;
+        const boxX      = x      * m_ScaleFactor;
+        const boxY      = y      * m_ScaleFactor;
+        const boxWidth  = width  * m_ScaleFactor;
+        const boxHeight = height * m_ScaleFactor;
 
-            m_PageContent.doAutoScroll(boxX, boxX + boxWidth, boxY, boxY + boxHeight);
-        }
+        // notify that auto-scroll may be applied
+        m_PageContent.doAutoScroll(boxX, boxX + boxWidth, boxY, boxY + boxHeight);
     }
 
     /// called when box ends to move

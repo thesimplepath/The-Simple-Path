@@ -238,22 +238,22 @@ Item
         /// called when box is moving
         onMove: function(deltaX, deltaY)
         {
+            if (!m_PageContent)
+                return;
+
             // move box and limit it in owning page
             x += deltaX;
             x  = JSHelper.clamp(x, 0, m_PageContent.width - width);
             y += deltaY;
             y  = JSHelper.clamp(y, 0, m_PageContent.height - height);
 
-            // notify that auto-scroll may be applied
-            if (m_PageContent)
-            {
-                const linkX      = x      * m_ScaleFactor;
-                const linkY      = y      * m_ScaleFactor;
-                const linkWidth  = width  * m_ScaleFactor;
-                const linkHeight = height * m_ScaleFactor;
+            const linkX      = x      * m_ScaleFactor;
+            const linkY      = y      * m_ScaleFactor;
+            const linkWidth  = width  * m_ScaleFactor;
+            const linkHeight = height * m_ScaleFactor;
 
-                m_PageContent.doAutoScroll(linkX, linkX + linkWidth, linkY, linkY + linkHeight);
-            }
+            // notify that auto-scroll may be applied
+            m_PageContent.doAutoScroll(linkX, linkX + linkWidth, linkY, linkY + linkHeight);
         }
 
         /// called when box ends to move

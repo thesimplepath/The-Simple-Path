@@ -208,6 +208,7 @@ T.Control
                                                                            "y":                       y,
                                                                            "width":                   width,
                                                                            "height":                  height,
+                                                                           "m_ScaleFactor":           m_ScaleFactor,
                                                                            "leftConnector.x":        -((connectorWidth  / 2) + 2),
                                                                            "topConnector.y":         -((connectorHeight / 2) + 2),
                                                                            "rightConnector.x":        width  + 2 - (connectorWidth  / 2),
@@ -242,11 +243,12 @@ T.Control
                 }
 
                 // create and show new item object
-                let item = component.createObject(pvPageView.pageContent, {"id":         "mgMessage" + m_GenIndex,
-                                                                           "objectName": "mgMessage" + m_GenIndex,
-                                                                           "m_Title":    title,
-                                                                           "m_From":     from,
-                                                                           "m_To":       to});
+                let item = component.createObject(pvPageView.pageContent, {"id":            "mgMessage" + m_GenIndex,
+                                                                           "objectName":    "mgMessage" + m_GenIndex,
+                                                                           "m_Title":       title,
+                                                                           "m_From":        from,
+                                                                           "m_To":          to,
+                                                                           "m_ScaleFactor": m_ScaleFactor});
 
                 console.log("Add message - succeeded - new item - " + item.objectName);
 
