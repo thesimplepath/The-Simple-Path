@@ -202,7 +202,7 @@ Item
                 anchors.fill:        parent
                 anchors.margins:     2
                 font.family:         "Arial"
-                font.pointSize:      10
+                font.pointSize:      9
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 wrapMode:            Text.WordWrap

@@ -181,7 +181,7 @@ T.Control
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
             font.family: "Arial"
-            font.pointSize: 12
+            font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
             clip: true
@@ -202,7 +202,7 @@ T.Control
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
             font.family: "Arial"
-            font.pointSize: 10
+            font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
             clip: true
@@ -223,7 +223,7 @@ T.Control
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
             font.family: "Arial"
-            font.pointSize: 10
+            font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
             clip: true

@@ -1,4 +1,4 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
@@ -47,6 +47,25 @@ T.Control
             m_PageHeight: m_MainFormProxy.getPageHeight()
 
             /**
+            * Adds a start component to the document, with a default size
+            *@param title [string] - title
+            *@param description [string] - description
+            *@param comments [string] - comments
+            *@param x [number] - component x position, in pixels
+            *@param y [number] - component y position, in pixels
+            */
+            function addStartDefSize(title, description, comments, x, y)
+            {
+                return addStart(title,
+                                description,
+                                comments,
+                                x,
+                                y,
+                                m_PageWidth  * 0.18,
+                                m_PageHeight * 0.082);
+            }
+
+            /**
             * Adds a start component to the document
             *@param title [string] - title
             *@param description [string] - description
@@ -58,7 +77,37 @@ T.Control
             */
             function addStart(title, description, comments, x, y, width, height)
             {
-                return addSymbol("start", title, description, comments, x, y, width, height, false, false, false, true);
+                return addSymbol("start",
+                                 title,
+                                 description,
+                                 comments,
+                                 x,
+                                 y,
+                                 width,
+                                 height,
+                                 false,
+                                 false,
+                                 false,
+                                 true);
+            }
+
+            /**
+            * Adds an end component to the document, with a default size
+            *@param title [string] - title
+            *@param description [string] - description
+            *@param comments [string] - comments
+            *@param x [number] - component x position, in pixels
+            *@param y [number] - component y position, in pixels
+            */
+            function addEndDefSize(title, description, comments, x, y)
+            {
+                return addEnd(title,
+                              description,
+                              comments,
+                              x,
+                              y,
+                              m_PageWidth  * 0.18,
+                              m_PageHeight * 0.082);
             }
 
             /**
@@ -73,7 +122,37 @@ T.Control
             */
             function addEnd(title, description, comments, x, y, width, height)
             {
-                return addSymbol("end", title, description, comments, x, y, width, height, false, true, false, false);
+                return addSymbol("end",
+                                 title,
+                                 description,
+                                 comments,
+                                 x,
+                                 y,
+                                 width,
+                                 height,
+                                 false,
+                                 true,
+                                 false,
+                                 false);
+            }
+
+            /**
+            * Adds a process component to the document, with a default size
+            *@param title [string] - title
+            *@param description [string] - description
+            *@param comments [string] - comments
+            *@param x [number] - component x position, in pixels
+            *@param y [number] - component y position, in pixels
+            */
+            function addProcessDefSize(title, description, comments, x, y)
+            {
+                return addProcess(title,
+                                  description,
+                                  comments,
+                                  x,
+                                  y,
+                                  m_PageWidth  * 0.18,
+                                  m_PageHeight * 0.082);
             }
 
             /**
@@ -88,7 +167,37 @@ T.Control
             */
             function addProcess(title, description, comments, x, y, width, height)
             {
-                return addSymbol("process", title, description, comments, x, y, width, height, false, false, false, false);
+                return addSymbol("process",
+                                 title,
+                                 description,
+                                 comments,
+                                 x,
+                                 y,
+                                 width,
+                                 height,
+                                 false,
+                                 false,
+                                 false,
+                                 false);
+            }
+
+            /**
+            * Adds an activity component to the document, with a default size
+            *@param title [string] - title
+            *@param description [string] - description
+            *@param comments [string] - comments
+            *@param x [number] - component x position, in pixels
+            *@param y [number] - component y position, in pixels
+            */
+            function addActivityDefSize(title, description, comments, x, y)
+            {
+                return addActivity(title,
+                                   description,
+                                   comments,
+                                   x,
+                                   y,
+                                   m_PageWidth  * 0.18,
+                                   m_PageHeight * 0.082);
             }
 
             /**
@@ -103,7 +212,41 @@ T.Control
             */
             function addActivity(title, description, comments, x, y, width, height)
             {
-                return addSymbol("activity", title, description, comments, x, y, width, height, true, true, true, true);
+                return addSymbol("activity",
+                                 title,
+                                 description,
+                                 comments,
+                                 x,
+                                 y,
+                                 width,
+                                 height,
+                                 true,
+                                 true,
+                                 true,
+                                 true);
+            }
+
+            /**
+            * Adds a page break component to the document, with a default size
+            *@param title [string] - title
+            *@param description [string] - description
+            *@param comments [string] - comments
+            *@param x [number] - component x position, in pixels
+            *@param y [number] - component y position, in pixels
+            *@param isProcess - if true, the page break links to a process instead of a page
+            *@param isExit - if true, the page break is an exit instead of an input
+            */
+            function addPageBreakDefSize(title, description, comments, x, y, isProcess, isExit)
+            {
+                return addPageBreak(title,
+                                    description,
+                                    comments,
+                                    x,
+                                    y,
+                                    m_PageWidth  * 0.11,
+                                    m_PageHeight * 0.06,
+                                    isProcess,
+                                    isExit);
             }
 
             /**
@@ -248,7 +391,9 @@ T.Control
                                                                            "m_Title":       title,
                                                                            "m_From":        from,
                                                                            "m_To":          to,
-                                                                           "m_ScaleFactor": m_ScaleFactor});
+                                                                           "m_ScaleFactor": m_ScaleFactor,
+                                                                           "m_LabelSize.x": m_PageWidth  * 0.17,
+                                                                           "m_LabelSize.y": m_PageWidth  * 0.067});
 
                 console.log("Add message - succeeded - new item - " + item.objectName);
 
@@ -271,14 +416,14 @@ T.Control
             /// called when page is loaded
             Component.onCompleted:
             {
-                let start = addStart("<b>Start</b>", "ID: 1234", "Team: Alpha", 200,  50,  100, 80);
-                let activity = addActivity("<b>Activity</b>", "ID: 5678", "Team: Bravo", 200, 250, 100, 80);
-                let end = addEnd("<b>End</b>", "ID: 9012", "Team: Zulu", 200, 450, 100, 80);
-                let process = addProcess("<b>Process</b>", "", "", 400, 200, 100, 80);
-                let pageBreak = addPageBreak("<b>Page break</b>", "", "", 400, 400, 100, 80, false, false);
-                let pageBreak2 = addPageBreak("<b>Page break</b>", "", "", 550, 400, 100, 80, false, true);
-                let pageBreak3 = addPageBreak("<b>Process break</b>", "", "", 400, 500, 100, 80, true, false);
-                let pageBreak4 = addPageBreak("<b>Process break</b>", "", "", 550, 500, 100, 80, true, true);
+                let start = addStartDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200,  50);
+                let activity = addActivityDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 250);
+                let end = addEndDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 450);
+                let process = addProcessDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "", "", 400, 200);
+                let pageBreak = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 400, false, false);
+                let pageBreak2 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 400, false, true);
+                let pageBreak3 = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 500, true, false);
+                let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
                 addMessage("Message 1", start.bottomConnector, activity.topConnector);
                 addMessage("Message 2", activity.bottomConnector, end.topConnector);
             }
