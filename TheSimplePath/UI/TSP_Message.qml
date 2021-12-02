@@ -10,5 +10,6 @@ import "Component"
 */
 TSP_Link
 {
+    // overridden properties
     m_Color: "#cc0099"
 }

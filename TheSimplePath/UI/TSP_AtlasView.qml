@@ -370,10 +370,12 @@ T.Control
             /**
             * Adds a message component to the document
             *@param title [string] - message title
+            *@param description [string] - message description
+            *@param comments [string] - message comments
             *@param from [TSP_Connector] - connector belonging to symbol the message is attached from
             *@param to [TSP_Connector] - connector belonging to symbol the message is attached to, if null the message is dragging
             */
-            function addMessage(title, from, to)
+            function addMessage(title, description, comments, from, to)
             {
                 // load the item component
                 let component = Qt.createComponent('TSP_Message.qml');
@@ -389,6 +391,8 @@ T.Control
                 let item = component.createObject(pvPageView.pageContent, {"id":            "mgMessage" + m_GenIndex,
                                                                            "objectName":    "mgMessage" + m_GenIndex,
                                                                            "m_Title":       title,
+                                                                           "m_Description": description,
+                                                                           "m_Comments":    comments,
                                                                            "m_From":        from,
                                                                            "m_To":          to,
                                                                            "m_ScaleFactor": m_ScaleFactor,
@@ -410,7 +414,7 @@ T.Control
             */
             function doAddLink(from, to, linkType)
             {
-                return addMessage("", from, to);
+                return addMessage("", "", "", from, to);
             }
 
             /// called when page is loaded
@@ -424,8 +428,8 @@ T.Control
                 let pageBreak2 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 400, false, true);
                 let pageBreak3 = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 500, true, false);
                 let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
-                addMessage("Demande de tarification exceptionnelle à suivre rapidement", start.bottomConnector, activity.topConnector);
-                addMessage("Demande de tarification exceptionnelle à suivre rapidement", activity.bottomConnector, end.topConnector);
+                addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", start.bottomConnector, activity.topConnector);
+                addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", activity.bottomConnector, end.topConnector);
             }
         }
     }

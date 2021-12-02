@@ -356,11 +356,13 @@ T.Control
     /**
     * Adds a link component to the page
     *@param title [string] - link title
+    *@param description [string] - link description
+    *@param comments [string] - link comments
     *@param from [TSP_Connector] - connector belonging to box the link is attached from
     *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
     *@return [TSP_Link] added link, null on error
     */
-    function addLink(title, from, to)
+    function addLink(title, description, comments, from, to)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Link.qml');
@@ -381,6 +383,8 @@ T.Control
         let item = component.createObject(rcPageContent, {"id":            "lkLink" + m_GenIndex,
                                                           "objectName":    "lkLink" + m_GenIndex,
                                                           "m_Title":       title,
+                                                          "m_Description": description,
+                                                          "m_Comments":    comments,
                                                           "m_From":        from,
                                                           "m_To":          to,
                                                           "m_ScaleFactor": m_ScaleFactor});
@@ -407,6 +411,6 @@ T.Control
     */
     function doAddLink(from, to, linkType)
     {
-        return addLink("", from, to);
+        return addLink("", "", "", from, to);
     }
 }

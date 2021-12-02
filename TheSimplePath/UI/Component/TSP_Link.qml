@@ -26,7 +26,10 @@ Item
     property string m_BgColor:     "white"
     property string m_TextColor:   "#202020"
     property string m_Title:       ""
+    property string m_Description: ""
+    property string m_Comments:    ""
     property real   m_ScaleFactor: 1
+    property int    m_TextMargin:  2
 
     // common properties
     id: itLink
@@ -189,18 +192,23 @@ Item
             border.width: 1
             radius:       3
             z:            rcBackground.activeFocus ? -1 : 0
+            clip:         true
 
             /**
-            * Link label
+            * Title
             */
             Text
             {
                 // common properties
-                id:                  txLabel
-                objectName:          "txLabel"
+                id:                  txTitle
+                objectName:          "txTitle"
                 text:                m_Title
-                anchors.fill:        parent
-                anchors.margins:     2
+                anchors.left:        parent.left
+                anchors.leftMargin:  m_TextMargin
+                anchors.top:         parent.top
+                anchors.topMargin:   m_TextMargin
+                anchors.right:       parent.right
+                anchors.rightMargin: m_TextMargin
                 font.family:         "Arial"
                 font.pointSize:      9
                 horizontalAlignment: Text.AlignHCenter
@@ -208,6 +216,52 @@ Item
                 wrapMode:            Text.WordWrap
                 color:               m_TextColor
                 clip:                true
+            }
+
+            /**
+            * Description
+            */
+            Text
+            {
+                // common properties
+                id:                  txDescription
+                objectName:          "txDescription"
+                text:                m_Description
+                anchors.left:        parent.left
+                anchors.leftMargin:  m_TextMargin
+                anchors.top:         txTitle.bottom
+                anchors.right:       parent.right
+                anchors.rightMargin: m_TextMargin
+                font.family:         "Arial"
+                font.pointSize:      9
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment:   Text.AlignVCenter
+                wrapMode:            Text.WordWrap
+                color:               m_TextColor
+                clip:                true
+            }
+
+            /**
+            * Comments
+            */
+            Text
+            {
+                // common properties
+                id:                   txComments
+                objectName:           "txComments"
+                text:                 m_Comments
+                anchors.left:         parent.left
+                anchors.leftMargin:   m_TextMargin
+                anchors.top:          txDescription.bottom
+                anchors.right:        parent.right
+                anchors.rightMargin:  m_TextMargin
+                font.family:          "Arial"
+                font.pointSize:       9
+                horizontalAlignment:  Text.AlignHCenter
+                verticalAlignment:    Text.AlignVCenter
+                wrapMode:             Text.WordWrap
+                color:                m_TextColor
+                clip:                 true
             }
 
             /**
