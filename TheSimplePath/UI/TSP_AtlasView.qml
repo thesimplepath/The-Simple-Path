@@ -393,7 +393,7 @@ T.Control
                                                                            "m_To":          to,
                                                                            "m_ScaleFactor": m_ScaleFactor,
                                                                            "m_LabelSize.x": m_PageWidth  * 0.17,
-                                                                           "m_LabelSize.y": m_PageWidth  * 0.067});
+                                                                           "m_LabelSize.y": m_PageHeight * 0.067});
 
                 console.log("Add message - succeeded - new item - " + item.objectName);
 
@@ -424,8 +424,8 @@ T.Control
                 let pageBreak2 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 400, false, true);
                 let pageBreak3 = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 500, true, false);
                 let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
-                addMessage("Message 1", start.bottomConnector, activity.topConnector);
-                addMessage("Message 2", activity.bottomConnector, end.topConnector);
+                addMessage("Demande de tarification exceptionnelle à suivre rapidement", start.bottomConnector, activity.topConnector);
+                addMessage("Demande de tarification exceptionnelle à suivre rapidement", activity.bottomConnector, end.topConnector);
             }
         }
     }
