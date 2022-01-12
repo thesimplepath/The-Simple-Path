@@ -2,7 +2,6 @@
  * ==> TSP_GlobalSettings --------------------------------------------------*
  ****************************************************************************
  * Description:  The application global settings                            *
- * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *

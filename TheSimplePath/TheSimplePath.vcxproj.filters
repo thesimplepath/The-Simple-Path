@@ -78,6 +78,24 @@
     <Filter Include="Resource Files\Resources\Images">
       <UniqueIdentifier>{0908b82c-574f-49d0-8b9c-6ab2a694d056}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\UI\Component\js">
+      <UniqueIdentifier>{dc6270d3-b3e7-4a5a-a75f-039311f4967d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\stduuid">
+      <UniqueIdentifier>{2dd289ef-c52c-4cbb-a25c-e458ef218606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\stduuid\include">
+      <UniqueIdentifier>{ef59256d-a3ad-4a61-9f02-8efd7a5ba86b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third-Party\stduuid\gsl">
+      <UniqueIdentifier>{9bbe1303-4448-4be5-af36-dcec039df87a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Component">
+      <UniqueIdentifier>{6bb19837-8a14-48b5-b75e-ef5a32fef20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{5fce9042-8321-4f67-b050-0a44da606591}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -149,8 +167,29 @@
     <ClCompile Include="Classes\Core\TSP_Atlas.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_MainFormProxy.cpp">
+    <ClCompile Include="UI\Component\cpp\TSP_BoxProxy.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Component\cpp\TSP_ComponentProxy.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Component\cpp\TSP_LinkProxy.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Component\cpp\TSP_PageProxy.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Activity.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Component\cpp\TSP_ProxyDictionary.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TSP_MainFormModel.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Models\TSP_PageModel.cpp">
+      <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +380,15 @@
     <ClInclude Include="Classes\Core\TSP_Atlas.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Third-Party\stduuid\include\uuid.h">
+      <Filter>Third-Party\stduuid\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Activity.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Component\cpp\TSP_ProxyDictionary.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CodeConvention.txt">
@@ -367,9 +415,6 @@
       <Filter>Resource Files\UI\Component</Filter>
     </None>
     <None Include="UI\Component\TSP_HandleControl.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\Component\TSP_JSHelper.js">
       <Filter>Resource Files\UI\Component</Filter>
     </None>
     <None Include="UI\Component\TSP_PageView.qml">
@@ -402,6 +447,36 @@
     <None Include="Resources\Images\PageBreak_Logo_Process.svg">
       <Filter>Resource Files\Resources\Images</Filter>
     </None>
+    <None Include="UI\Component\js\TSP_JSHelper.js">
+      <Filter>Resource Files\UI\Component\js</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\gsl">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\gsl_algorithm">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\gsl_assert">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\gsl_byte">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\gsl_util">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\multi_span">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\pointers">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\span">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
+    <None Include="Third-Party\stduuid\gsl\string_span">
+      <Filter>Third-Party\stduuid\gsl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h">
@@ -410,8 +485,23 @@
     <QtMoc Include="Classes\Models\TSP_AtlasModel.h">
       <Filter>Header Files\Models</Filter>
     </QtMoc>
-    <QtMoc Include="TSP_MainFormProxy.h">
+    <QtMoc Include="UI\Component\cpp\TSP_BoxProxy.h">
+      <Filter>Header Files\Component</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Component\cpp\TSP_LinkProxy.h">
+      <Filter>Header Files\Component</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Component\cpp\TSP_ComponentProxy.h">
+      <Filter>Header Files\Component</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Component\cpp\TSP_PageProxy.h">
+      <Filter>Header Files\Component</Filter>
+    </QtMoc>
+    <QtMoc Include="TSP_MainFormModel.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Models\TSP_PageModel.h">
+      <Filter>Header Files\Models</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

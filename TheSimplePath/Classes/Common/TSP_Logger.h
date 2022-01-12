@@ -120,7 +120,7 @@ class TSP_Logger
         /**
         * Closes the log
         */
-        void TSP_Logger::Close();
+        void Close();
 
         /**
         * Gets the log

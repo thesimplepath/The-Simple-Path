@@ -7,7 +7,6 @@
         <file>UI/Component/TSP_Connector.qml</file>
         <file>UI/Component/TSP_Handle.qml</file>
         <file>UI/Component/TSP_HandleControl.qml</file>
-        <file>UI/Component/TSP_JSHelper.js</file>
         <file>UI/Component/TSP_PageView.qml</file>
         <file>UI/TSP_Activity.qml</file>
         <file>UI/TSP_Start.qml</file>
@@ -18,5 +17,6 @@
         <file>UI/TSP_Process.qml</file>
         <file>Resources/Images/PageBreak_Logo_Normal.svg</file>
         <file>Resources/Images/PageBreak_Logo_Process.svg</file>
+        <file>UI/Component/js/TSP_JSHelper.js</file>
     </qresource>
 </RCC>

@@ -1,9 +1,8 @@
 /****************************************************************************
  * ==> TSP_Application -----------------------------------------------------*
  ****************************************************************************
- * Description:  The main application class                                 *
- * Contained in: Core                                                       *
- * Developer:    Jean-Milost Reymond                                        *
+ * Description: The main application class                                  *
+ * Developer:   Jean-Milost Reymond                                         *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
  *                                                                          *
@@ -29,6 +28,10 @@
 
 #include "TSP_Application.h"
 
+// component classes
+#include "TSP_BoxProxy.h"
+#include "TSP_LinkProxy.h"
+
 // qt
 #include <QQmlContext>
 
@@ -51,11 +54,14 @@ TSP_Application::~TSP_Application()
     if (m_pEngine)
         delete m_pEngine;
 
+    if (m_pPageModel)
+        delete m_pPageModel;
+
     if (m_pDocumentModel)
         delete m_pDocumentModel;
 
-    if (m_pMainFormProxy)
-        delete m_pMainFormProxy;
+    if (m_pMainFormModel)
+        delete m_pMainFormModel;
 
     if (m_pApp)
         delete m_pApp;
@@ -107,27 +113,47 @@ int TSP_Application::Execute()
     return m_pApp->exec();
 }
 //---------------------------------------------------------------------------
+// Todo FIXME -cFeature -oJean: Check if uuid are required for this project and move this code at the correct location
+/*
+// uuid library
+#define UUID_SYSTEM_GENERATOR
+#include "uuid.h"
+*/
 void TSP_Application::InitializeQt(int argc, char* argv[])
 {
     // configure the Qt attributes
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     // redirect QT log messages to application logger
-    qInstallMessageHandler(RedirectQmlLogs);
+    //FIXME qInstallMessageHandler(RedirectQmlLogs);
 
     // initialize application instances
     m_pApp           = new QGuiApplication(argc, argv);
     m_pEngine        = new QQmlApplicationEngine();
-    m_pMainFormProxy = new TSP_MainFormProxy();
+    m_pMainFormModel = new TSP_MainFormModel();
     m_pDocumentModel = new TSP_DocumentModel();
+    m_pPageModel     = new TSP_PageModel();
+
+    // Todo FIXME -cFeature -oJean: Check if uuid are required for this project and move this code at the correct location
+    /*
+    const uuids::uuid id = uuids::uuid_system_generator{}();
+    std::string m_UID = uuids::to_string(id);
+    int test = 0;
+    */
 }
 //---------------------------------------------------------------------------
 void TSP_Application::DeclareContextProperties()
 {
     M_LogT("Execute - declaring context properties...");
 
-    m_pEngine->rootContext()->setContextProperty("tspMainFormProxy", m_pMainFormProxy);
+    // component proxies registration
+    qmlRegisterType<TSP_BoxProxy> ("thesimplepath.component", 1, 0, "BoxProxy");
+    qmlRegisterType<TSP_LinkProxy>("thesimplepath.component", 1, 0, "LinkProxy");
+    qmlRegisterType<TSP_LinkProxy>("thesimplepath.component", 1, 0, "PageProxy");
+
+    m_pEngine->rootContext()->setContextProperty("tspMainFormModel", m_pMainFormModel);
     m_pEngine->rootContext()->setContextProperty("tspDocumentModel", m_pDocumentModel);
+    m_pEngine->rootContext()->setContextProperty("tspPageModel",     m_pPageModel);
 
     M_LogT("Execute - context properties declared");
 }

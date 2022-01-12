@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_Activity --------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
+ * Description:  Activity symbol                                            *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,38 +27,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_Activity.h"
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Attribute.h"
-
-/**
-* Basic element, which is a base for any symbol
-*@author Jean-Milost Reymond
-*/
-class TSP_Element
-{
-    public:
-        TSP_Element();
-        virtual ~TSP_Element();
-
-        /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
-        */
-        std::string GetUID() const;
-
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
-};
+//---------------------------------------------------------------------------
+// TSP_Activity
+//---------------------------------------------------------------------------
+TSP_Activity::TSP_Activity() :
+    TSP_Symbol()
+{}
+//---------------------------------------------------------------------------
+TSP_Activity::~TSP_Activity()
+{}
+//---------------------------------------------------------------------------

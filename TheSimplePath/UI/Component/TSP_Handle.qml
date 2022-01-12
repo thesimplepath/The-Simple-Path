@@ -90,7 +90,7 @@ T.Control
 
     /**
     * Gets the cursor shape to show for this handle
-    *@param direction [IEDirection] - direction the handle is moving
+    *@param {IEDirection} direction - direction the handle is moving
     *@return cursor shape to show
     */
     function getCursorShape(direction)

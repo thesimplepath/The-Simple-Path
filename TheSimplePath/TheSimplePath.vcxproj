@@ -127,7 +127,7 @@
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Classes;Third-Party\dirent;Third-Party\RapidJSON\include;.\qtbuild\$(ConfigurationName);.\qtbuild;.;release;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Classes;UI\Component\cpp;Third-Party\dirent;Third-Party\RapidJSON\include;Third-Party\stduuid\include;Third-Party\stduuid\gsl;.\qtbuild\$(ConfigurationName);.\qtbuild;.;release;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4100 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -179,7 +179,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Classes;Third-Party\dirent;Third-Party\RapidJSON\include;.\qtbuild\$(ConfigurationName);.\qtbuild;.;release;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Classes;UI\Component\cpp;Third-Party\dirent;Third-Party\RapidJSON\include;Third-Party\stduuid\include;Third-Party\stduuid\gsl;.\qtbuild\$(ConfigurationName);.\qtbuild;.;release;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4100 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -231,7 +231,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Classes;Third-Party\dirent;Third-Party\RapidJSON\include;.\qtbuild\$(ConfigurationName);.\qtbuild;.;debug;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Classes;UI\Component\cpp;Third-Party\dirent;Third-Party\RapidJSON\include;Third-Party\stduuid\include;Third-Party\stduuid\gsl;.\qtbuild\$(ConfigurationName);.\qtbuild;.;debug;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4100 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -279,7 +279,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Classes;Third-Party\dirent;Third-Party\RapidJSON\include;.\qtbuild\$(ConfigurationName);.\qtbuild;.;debug;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Classes;UI\Component\cpp;Third-Party\dirent;Third-Party\RapidJSON\include;Third-Party\stduuid\include;Third-Party\stduuid\gsl;.\qtbuild\$(ConfigurationName);.\qtbuild;.;debug;C:\Program Files (x86)\VulkanSDK\1.2.182.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4100 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -337,6 +337,7 @@
     <ClCompile Include="Classes\Common\TSP_StringHelper.cpp" />
     <ClCompile Include="Classes\Common\TSP_TimeHelper.cpp" />
     <ClCompile Include="Classes\Common\TSP_Version.cpp" />
+    <ClCompile Include="Classes\Core\TSP_Activity.cpp" />
     <ClCompile Include="Classes\Core\TSP_Atlas.cpp" />
     <ClCompile Include="Classes\Core\TSP_Attribute.cpp" />
     <ClCompile Include="Classes\Core\TSP_Document.cpp" />
@@ -346,10 +347,16 @@
     <ClCompile Include="Classes\Core\TSP_Symbol.cpp" />
     <ClCompile Include="Classes\Models\TSP_AtlasModel.cpp" />
     <ClCompile Include="Classes\Models\TSP_DocumentModel.cpp" />
+    <ClCompile Include="Classes\Models\TSP_PageModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TSP_Application.cpp" />
     <ClCompile Include="TSP_GlobalSettings.cpp" />
-    <ClCompile Include="TSP_MainFormProxy.cpp" />
+    <ClCompile Include="TSP_MainFormModel.cpp" />
+    <ClCompile Include="UI\Component\cpp\TSP_BoxProxy.cpp" />
+    <ClCompile Include="UI\Component\cpp\TSP_ComponentProxy.cpp" />
+    <ClCompile Include="UI\Component\cpp\TSP_LinkProxy.cpp" />
+    <ClCompile Include="UI\Component\cpp\TSP_PageProxy.cpp" />
+    <ClCompile Include="UI\Component\cpp\TSP_ProxyDictionary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -395,6 +402,7 @@
     <ClInclude Include="Classes\Common\TSP_StringHelper.h" />
     <ClInclude Include="Classes\Common\TSP_TimeHelper.h" />
     <ClInclude Include="Classes\Common\TSP_Version.h" />
+    <ClInclude Include="Classes\Core\TSP_Activity.h" />
     <ClInclude Include="Classes\Core\TSP_Atlas.h" />
     <ClInclude Include="Classes\Core\TSP_Attribute.h" />
     <ClInclude Include="Classes\Core\TSP_Document.h" />
@@ -402,7 +410,13 @@
     <ClInclude Include="Classes\Core\TSP_Page.h" />
     <ClInclude Include="Classes\Core\TSP_ProcedureSymbol.h" />
     <ClInclude Include="Classes\Core\TSP_Symbol.h" />
-    <QtMoc Include="TSP_MainFormProxy.h" />
+    <QtMoc Include="TSP_MainFormModel.h" />
+    <QtMoc Include="Classes\Models\TSP_PageModel.h" />
+    <ClInclude Include="UI\Component\cpp\TSP_ProxyDictionary.h" />
+    <QtMoc Include="UI\Component\cpp\TSP_PageProxy.h" />
+    <QtMoc Include="UI\Component\cpp\TSP_ComponentProxy.h" />
+    <QtMoc Include="UI\Component\cpp\TSP_LinkProxy.h" />
+    <QtMoc Include="UI\Component\cpp\TSP_BoxProxy.h" />
     <QtMoc Include="Classes\Models\TSP_DocumentModel.h" />
     <QtMoc Include="Classes\Models\TSP_AtlasModel.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h" />
@@ -443,6 +457,7 @@
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\stringbuffer.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\uri.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\writer.h" />
+    <ClInclude Include="Third-Party\stduuid\include\uuid.h" />
     <ClInclude Include="TSP_Application.h" />
     <ClInclude Include="TSP_GlobalSettings.h" />
   </ItemGroup>
@@ -452,11 +467,20 @@
   <ItemGroup>
     <None Include="Resources\Images\PageBreak_Logo_Normal.svg" />
     <None Include="Resources\Images\PageBreak_Logo_Process.svg" />
+    <None Include="Third-Party\stduuid\gsl\gsl" />
+    <None Include="Third-Party\stduuid\gsl\gsl_algorithm" />
+    <None Include="Third-Party\stduuid\gsl\gsl_assert" />
+    <None Include="Third-Party\stduuid\gsl\gsl_byte" />
+    <None Include="Third-Party\stduuid\gsl\gsl_util" />
+    <None Include="Third-Party\stduuid\gsl\multi_span" />
+    <None Include="Third-Party\stduuid\gsl\pointers" />
+    <None Include="Third-Party\stduuid\gsl\span" />
+    <None Include="Third-Party\stduuid\gsl\string_span" />
+    <None Include="UI\Component\js\TSP_JSHelper.js" />
     <None Include="UI\Component\TSP_Box.qml" />
     <None Include="UI\Component\TSP_Connector.qml" />
     <None Include="UI\Component\TSP_Handle.qml" />
     <None Include="UI\Component\TSP_HandleControl.qml" />
-    <None Include="UI\Component\TSP_JSHelper.js" />
     <None Include="UI\Component\TSP_Link.qml" />
     <None Include="UI\Component\TSP_PageView.qml" />
     <None Include="UI\TSP_Activity.qml" />

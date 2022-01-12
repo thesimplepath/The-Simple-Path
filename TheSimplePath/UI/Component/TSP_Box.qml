@@ -3,7 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
 // javascript
-import "TSP_JSHelper.js" as JSHelper
+import "js/TSP_JSHelper.js" as JSHelper
+
+// c++
+import thesimplepath.component 1.0
 
 /**
 * Box, it's a basic component which can be moved and resized, and contain connectors
@@ -29,9 +32,7 @@ T.Control
     property string m_TextColor:         "#202020"
     property string m_HandleColor:       "#c0c0c0"
     property string m_HandleBorderColor: "black"
-    property string m_Title:             ""
-    property string m_Description:       ""
-    property string m_Comments:          ""
+    property string m_UID:               ""
     property real   m_ScaleFactor:       1
     property int    m_MouseStartX:       0
     property int    m_MouseStartY:       0
@@ -48,6 +49,16 @@ T.Control
     signal move(int deltaX, int deltaY)
     signal moveEnd()
     signal resize(int direction, int deltaX, int deltaY)
+
+    /**
+    * Box proxy
+    *@note This component will auto-create a new c++ TSP_BoxProxy instance
+    */
+    BoxProxy
+    {
+        id: bpBoxProxy
+        objectName: "bpBoxProxy"
+    }
 
     /**
     * Connectors
@@ -174,7 +185,7 @@ T.Control
             // common properties
             id: txTitle
             objectName: "txTitle"
-            text: m_Title
+            text: bpBoxProxy.title
             anchors.left: parent.left
             anchors.leftMargin: m_TextMargin
             anchors.top: parent.top
@@ -195,7 +206,7 @@ T.Control
             // common properties
             id: txDescription
             objectName: "txDescription"
-            text: m_Description
+            text: bpBoxProxy.description
             anchors.left: parent.left
             anchors.leftMargin: m_TextMargin
             anchors.top: txTitle.bottom
@@ -216,7 +227,7 @@ T.Control
             // common properties
             id: txComments
             objectName: "txComments"
-            text: m_Comments
+            text: bpBoxProxy.comments
             anchors.left: parent.left
             anchors.leftMargin: m_TextMargin
             anchors.top: txDescription.bottom
@@ -349,10 +360,11 @@ T.Control
     }
 
     /**
-    * Signal connectors
+    * Page content signal connections
     */
     Connections
     {
+        // common properties
         target: pageContent
 
         /**
@@ -363,5 +375,57 @@ T.Control
         {
             m_ScaleFactor = factor;
         }
+    }
+
+    /**
+    * Box proxy signal connections
+    */
+    Connections
+    {
+        // common properties
+        target: bpBoxProxy
+
+        /**
+        * Called when the title changed
+        *@param title - new title
+        */
+        function onTitleChanged(title)
+        {
+            if (!txTitle.visible)
+                return;
+
+            txTitle.text = title;
+        }
+
+        /**
+        * Called when the description changed
+        *@param description - new description
+        */
+        function onDescriptionChanged(description)
+        {
+            if (!txDescription.visible)
+                return;
+
+            txDescription.text = description;
+        }
+
+        /**
+        * Called when the comments changed
+        *@param comments - new comments
+        */
+        function onCommentsChanged(comments)
+        {
+            if (!txComments.visible)
+                return;
+
+            txComments.text = comments;
+        }
+    }
+
+    /// called when component was fully created
+    Component.onCompleted:
+    {
+        // get and link the unique identifier created in the c++ proxy class
+        m_UID = bpBoxProxy.uid;
     }
 }

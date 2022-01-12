@@ -3,7 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
 // javascript
-import "TSP_JSHelper.js" as JSHelper
+import "js/TSP_JSHelper.js" as JSHelper
+
+// c++
+import thesimplepath.component 1.0
 
 /**
 * Link (between 2 boxes)
@@ -22,12 +25,10 @@ Item
                                                m_StartPoint.y + (((m_EndPoint.y - m_StartPoint.y) / 2.0) - (m_LabelSize.y / 2.0)))
     property var    m_LabelSize:   Qt.vector2d(100, 50)
     property var    m_ArrowSize:   Qt.vector2d(3,   10)
+    property string m_UID:         ""
     property string m_Color:       "#202020"
     property string m_BgColor:     "white"
     property string m_TextColor:   "#202020"
-    property string m_Title:       ""
-    property string m_Description: ""
-    property string m_Comments:    ""
     property real   m_ScaleFactor: 1
     property int    m_TextMargin:  2
 
@@ -35,6 +36,19 @@ Item
     id: itLink
     objectName: "itLink"
     anchors.fill: parent
+
+    // signals
+    signal bindTo(var connector)
+
+    /**
+    * Link proxy
+    *@note This component will auto-create a new c++ TSP_LinkProxy instance
+    */
+    LinkProxy
+    {
+        id: lpLinkProxy
+        objectName: "lpLinkProxy"
+    }
 
     /**
     * First connection line
@@ -202,7 +216,7 @@ Item
                 // common properties
                 id:                  txTitle
                 objectName:          "txTitle"
-                text:                m_Title
+                text:                lpLinkProxy.title
                 anchors.left:        parent.left
                 anchors.leftMargin:  m_TextMargin
                 anchors.top:         parent.top
@@ -226,7 +240,7 @@ Item
                 // common properties
                 id:                  txDescription
                 objectName:          "txDescription"
-                text:                m_Description
+                text:                lpLinkProxy.description
                 anchors.left:        parent.left
                 anchors.leftMargin:  m_TextMargin
                 anchors.top:         txTitle.bottom
@@ -249,7 +263,7 @@ Item
                 // common properties
                 id:                   txComments
                 objectName:           "txComments"
-                text:                 m_Comments
+                text:                 lpLinkProxy.comments
                 anchors.left:         parent.left
                 anchors.leftMargin:   m_TextMargin
                 anchors.top:          txDescription.bottom
@@ -402,6 +416,51 @@ Item
     }
 
     /**
+    * Box proxy signal connections
+    */
+    Connections
+    {
+        // common properties
+        target: lpLinkProxy
+
+        /**
+        * Called when the title changed
+        *@param title - new title
+        */
+        function onTitleChanged(title)
+        {
+            if (!txTitle.visible)
+                return;
+
+            txTitle.text = title;
+        }
+
+        /**
+        * Called when the description changed
+        *@param description - new description
+        */
+        function onDescriptionChanged(description)
+        {
+            if (!txDescription.visible)
+                return;
+
+            txDescription.text = description;
+        }
+
+        /**
+        * Called when the comments changed
+        *@param comments - new comments
+        */
+        function onCommentsChanged(comments)
+        {
+            if (!txComments.visible)
+                return;
+
+            txComments.text = comments;
+        }
+    }
+
+    /**
     * Called when the from connector changed
     */
     onM_FromChanged:
@@ -417,6 +476,28 @@ Item
     {
         //console.log("onM_ToChanged");
         bindMsgToDstBox();
+    }
+
+    /**
+    * Called when a connector should be binded to this link
+    *@param {TSP_Connector} connector - connector to which this message should be binded
+    */
+    onBindTo: function(connector)
+    {
+        //console.log("onBindTo - " + connector.objectName + " - " + connector.m_UID);
+
+        if (!connector)
+            return;
+
+        // set the new connector
+        m_To = connector;
+    }
+
+    /// called when component was fully created
+    Component.onCompleted:
+    {
+        // get and link the unique identifier created in the c++ proxy class
+        m_UID = lpLinkProxy.uid;
     }
 
     /**

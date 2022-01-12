@@ -1,8 +1,7 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_MainFormModel ---------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Main form model                                            *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -30,35 +29,74 @@
 #pragma once
 
 // std
-#include <vector>
+#include <string>
 
-// core classes
-#include "TSP_Attribute.h"
+// qt
+#include <QObject>
+#include <QPageSize>
 
 /**
-* Basic element, which is a base for any symbol
+* Main form model
 *@author Jean-Milost Reymond
 */
-class TSP_Element
+class TSP_MainFormModel : public QObject
 {
+    Q_OBJECT
+
     public:
-        TSP_Element();
-        virtual ~TSP_Element();
+        /**
+        * Document status
+        */
+        enum class IEDocStatus
+        {
+            IE_DS_Closed = 0,
+            IE_DS_Opened,
+            IE_DS_Error
+        };
+        Q_ENUM(IEDocStatus);
+
+        Q_PROPERTY(int docStatus READ getDocStatus WRITE setDocStatus NOTIFY docStatusChanged);
+
+    Q_SIGNALS:
+        void newDocument(const QString& name);
+        void docStatusChanged(int status);
+
+    public slots:
+        int getDocStatus() const;
+        void setDocStatus(int status);
+
+    public:
+        /**
+        * Constructor
+        *@param pParent - parent object owning this object
+        */
+        TSP_MainFormModel(QObject* pParent = nullptr);
+
+        virtual ~TSP_MainFormModel();
 
         /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
+        * Gets page width, in pixels
+        *@return page width, in pixels
         */
-        std::string GetUID() const;
+        virtual Q_INVOKABLE int getPageWidth() const;
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
+        /**
+        * Gets page height, in pixels
+        *@return page height, in pixels
         */
+        virtual Q_INVOKABLE int getPageHeight() const;
+
+        /**
+        * Called when the new document button was clicked on the user interface
+        */
+        virtual Q_INVOKABLE void onNewDocumentClicked();
+
+        /**
+        * Called when the test button was clicked on the user interface
+        */
+        virtual Q_INVOKABLE void onTestClicked();
+
+    private:
+        IEDocStatus m_DocStatus = IEDocStatus::IE_DS_Closed;
+        QPageSize   m_PageSize;
 };

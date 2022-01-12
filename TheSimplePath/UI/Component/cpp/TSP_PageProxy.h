@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_PageProxy -------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between a page on the UI and its c++ representation  *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,36 +29,45 @@
 
 #pragma once
 
-// std
-#include <vector>
+// component classes
+#include "TSP_ComponentProxy.h"
 
-// core classes
-#include "TSP_Attribute.h"
+// qt
+#include <QObject>
 
 /**
-* Basic element, which is a base for any symbol
+* Page proxy
 *@author Jean-Milost Reymond
 */
-class TSP_Element
+class TSP_PageProxy : public TSP_ComponentProxy
 {
+    Q_OBJECT
+
+    /*REM
+    public slots:
+        void setParentPage(const QVariant& pPage);
+    */
+
     public:
-        TSP_Element();
-        virtual ~TSP_Element();
+        /**
+        * Constructor
+        *@param pParent - object which will be the parent of this object
+        */
+        explicit TSP_PageProxy(QObject* pParent = nullptr);
+
+        virtual ~TSP_PageProxy();
 
         /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
+        * Called when a symbol was added on a page
+        *@param pageUID - page unique identifier
+        *@param symbolUID - symbol unique identifier
         */
-        std::string GetUID() const;
+        virtual Q_INVOKABLE void symbolAdded(const QString& pageUID, const QString& symbolUID);
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
+        /**
+        * Called when a symbol was added on a page
+        *@param pageUID - page unique identifier
+        *@param messageUID - message unique identifier
         */
+        virtual Q_INVOKABLE void messageAdded(const QString& pageUID, const QString& messageUID);
 };

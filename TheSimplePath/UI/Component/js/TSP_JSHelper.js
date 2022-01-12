@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_JSHelper --------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Javascript helper functions                                *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,38 +27,55 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
-
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Attribute.h"
+/**
+* Clamps a value in a range
+*@param {number} value - value to clamp
+*@param {number} min - min range value
+*@param {number} max - max range value
+*/
+function clamp(value, min, max)
+{
+    return Math.min(Math.max(value, min), max);
+}
 
 /**
-* Basic element, which is a base for any symbol
-*@author Jean-Milost Reymond
+* Clamps a value in a range between 0.0 and 1.0
+*@param {number} value - value to clamp
 */
-class TSP_Element
+function clamp01(value, min, max)
 {
-    public:
-        TSP_Element();
-        virtual ~TSP_Element();
+    return clamp(value, 0.0, 1.0);
+}
 
-        /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
-        */
-        std::string GetUID() const;
+/**
+* Logs all the children contained in an item
+*@param {item} item - start item from which the children should be logged
+*@note Start item will also be logged
+*/
+function logAllChildren(item)
+{
+    // iterate through children
+    for (let i = 0; i < item.children.length; ++i)
+        logAllChildren(item.children[i]);
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
+    // log child name
+    console.log("Child - name - " + item.objectName);
+}
 
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
-};
+/**
+* Finds the items below a point
+*@param {item} item - start item from which the children should be logged
+*@param {point} point - point above which the items should be found
+*@param {array} result - found items
+*@note Start item will also be checked
+*/
+function getItemsAbovePoint(item, point, result)
+{
+    // iterate through children
+    for (let i = 0; i < item.children.length; ++i)
+        getItemsAbovePoint(item.children[i], point, result);
+
+    // item contains point?
+    if (item.contains(item.mapFromGlobal(point.x, point.y)))
+        result.push(item);
+}

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
 // javascript
-import "TSP_JSHelper.js" as JSHelper
+import "js/TSP_JSHelper.js" as JSHelper
 
 /**
 * Connector, used to connect two boxes with a link
@@ -112,7 +112,7 @@ T.Control
                 let result = [];
 
                 // get all controls located above the mouse onto the document
-                JSHelper.getItemsAbovePoint(m_Document, this.mapToGlobal(mouseEvent.x, mouseEvent.y), result);
+                JSHelper.getItemsAbovePoint(pageContent, this.mapToGlobal(mouseEvent.x, mouseEvent.y), result);
 
                 // search for target connector
                 for (let i = 0; i < result.length; ++i)
@@ -127,12 +127,12 @@ T.Control
                     }
 
                 // found a valid target connector?
-                if (targetConn && targetConn.visible && targetConn.m_Box != m_Box)
+                if (targetConn && targetConn.visible && targetConn.m_Box.m_UID !== m_Box.m_UID)
                 {
                     console.log("Connector - link added successfully - name - " + m_AddingLinkItem.objectName);
 
                     // yes, attach the new link to it
-                    m_AddingLinkItem.m_To = targetConn;
+                    m_AddingLinkItem.bindTo(targetConn);
                 }
                 else
                 {

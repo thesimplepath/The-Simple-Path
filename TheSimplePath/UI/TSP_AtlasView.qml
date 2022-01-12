@@ -43,23 +43,17 @@ T.Control
             id: pvPageView
 
             // advanced properties
-            m_PageWidth:  m_MainFormProxy.getPageWidth()
-            m_PageHeight: m_MainFormProxy.getPageHeight()
+            m_PageWidth:  m_MainFormModel.getPageWidth()
+            m_PageHeight: m_MainFormModel.getPageHeight()
 
             /**
             * Adds a start component to the document, with a default size
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
             */
-            function addStartDefSize(title, description, comments, x, y)
+            function addStartDefSize(x, y)
             {
-                return addStart(title,
-                                description,
-                                comments,
-                                x,
+                return addStart(x,
                                 y,
                                 m_PageWidth  * 0.18,
                                 m_PageHeight * 0.082);
@@ -67,20 +61,14 @@ T.Control
 
             /**
             * Adds a start component to the document
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
             */
-            function addStart(title, description, comments, x, y, width, height)
+            function addStart(x, y, width, height)
             {
                 return addSymbol("start",
-                                 title,
-                                 description,
-                                 comments,
                                  x,
                                  y,
                                  width,
@@ -93,18 +81,12 @@ T.Control
 
             /**
             * Adds an end component to the document, with a default size
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
             */
-            function addEndDefSize(title, description, comments, x, y)
+            function addEndDefSize(x, y)
             {
-                return addEnd(title,
-                              description,
-                              comments,
-                              x,
+                return addEnd(x,
                               y,
                               m_PageWidth  * 0.18,
                               m_PageHeight * 0.082);
@@ -112,20 +94,14 @@ T.Control
 
             /**
             * Adds an end component to the document
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
             */
-            function addEnd(title, description, comments, x, y, width, height)
+            function addEnd(x, y, width, height)
             {
                 return addSymbol("end",
-                                 title,
-                                 description,
-                                 comments,
                                  x,
                                  y,
                                  width,
@@ -138,18 +114,12 @@ T.Control
 
             /**
             * Adds a process component to the document, with a default size
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
             */
-            function addProcessDefSize(title, description, comments, x, y)
+            function addProcessDefSize(x, y)
             {
-                return addProcess(title,
-                                  description,
-                                  comments,
-                                  x,
+                return addProcess(x,
                                   y,
                                   m_PageWidth  * 0.18,
                                   m_PageHeight * 0.082);
@@ -157,20 +127,14 @@ T.Control
 
             /**
             * Adds a process component to the document
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
             */
-            function addProcess(title, description, comments, x, y, width, height)
+            function addProcess(x, y, width, height)
             {
                 return addSymbol("process",
-                                 title,
-                                 description,
-                                 comments,
                                  x,
                                  y,
                                  width,
@@ -183,18 +147,12 @@ T.Control
 
             /**
             * Adds an activity component to the document, with a default size
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
             */
-            function addActivityDefSize(title, description, comments, x, y)
+            function addActivityDefSize(x, y)
             {
-                return addActivity(title,
-                                   description,
-                                   comments,
-                                   x,
+                return addActivity(x,
                                    y,
                                    m_PageWidth  * 0.18,
                                    m_PageHeight * 0.082);
@@ -202,20 +160,14 @@ T.Control
 
             /**
             * Adds an activity component to the document
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
             */
-            function addActivity(title, description, comments, x, y, width, height)
+            function addActivity(x, y, width, height)
             {
                 return addSymbol("activity",
-                                 title,
-                                 description,
-                                 comments,
                                  x,
                                  y,
                                  width,
@@ -228,20 +180,14 @@ T.Control
 
             /**
             * Adds a page break component to the document, with a default size
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param isProcess - if true, the page break links to a process instead of a page
-            *@param isExit - if true, the page break is an exit instead of an input
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {bool} isProcess - if true, the page break links to a process instead of a page
+            *@param {bool} isExit - if true, the page break is an exit instead of an input
             */
-            function addPageBreakDefSize(title, description, comments, x, y, isProcess, isExit)
+            function addPageBreakDefSize(x, y, isProcess, isExit)
             {
-                return addPageBreak(title,
-                                    description,
-                                    comments,
-                                    x,
+                return addPageBreak(x,
                                     y,
                                     m_PageWidth  * 0.11,
                                     m_PageHeight * 0.06,
@@ -251,22 +197,16 @@ T.Control
 
             /**
             * Adds a page break component to the document
-            *@param title [string] - title
-            *@param description [string] - description
-            *@param comments [string] - comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
-            *@param isProcess - if true, the page break links to a process instead of a page
-            *@param isExit - if true, the page break is an exit instead of an input
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
+            *@param {bool} isProcess - if true, the page break links to a process instead of a page
+            *@param {bool} isExit - if true, the page break is an exit instead of an input
             */
-            function addPageBreak(title, description, comments, x, y, width, height, isProcess, isExit)
+            function addPageBreak(x, y, width, height, isProcess, isExit)
             {
                 let symbol = addSymbol("pageBreak",
-                                       title,
-                                       description,
-                                       comments,
                                        x,
                                        y,
                                        width,
@@ -287,18 +227,12 @@ T.Control
 
             /**
             * Adds a symbol component to the document
-            *@param title [string] - symbol title
-            *@param description [string] - symbol description
-            *@param comments [string] - symbol comments
-            *@param x [number] - component x position, in pixels
-            *@param y [number] - component y position, in pixels
-            *@param width [number] - component width, in pixels
-            *@param height [number] - component height, in pixels
+            *@param {number} x - component x position, in pixels
+            *@param {number} y - component y position, in pixels
+            *@param {number} width - component width, in pixels
+            *@param {number} height - component height, in pixels
             */
             function addSymbol(name,
-                               title,
-                               description,
-                               comments,
                                x,
                                y,
                                width,
@@ -342,11 +276,8 @@ T.Control
                 const connectorHeight = 14;
 
                 // create and show new item object
-                let item = component.createObject(pvPageView.pageContent, {"id":                      "acStart" + m_GenIndex,
-                                                                           "objectName":              "acStart" + m_GenIndex,
-                                                                           "m_Title":                 title,
-                                                                           "m_Description":           description,
-                                                                           "m_Comments":              comments,
+                let item = component.createObject(pvPageView.pageContent, {"id":                      "bxSymbol" + m_GenIndex,
+                                                                           "objectName":              "bxSymbol" + m_GenIndex,
                                                                            "x":                       x,
                                                                            "y":                       y,
                                                                            "width":                   width,
@@ -364,18 +295,20 @@ T.Control
                 console.log("Add symbol - succeeded - name - " + name + " - id - " + item.objectName);
 
                 ++m_GenIndex;
+
+                // notify page model that a symbol was added
+                if (pvPageView.m_Model)
+                    pvPageView.m_Model.onSymbolAdded(pvPageView.m_UID, item.m_UID);
+
                 return item;
             }
 
             /**
             * Adds a message component to the document
-            *@param title [string] - message title
-            *@param description [string] - message description
-            *@param comments [string] - message comments
-            *@param from [TSP_Connector] - connector belonging to symbol the message is attached from
-            *@param to [TSP_Connector] - connector belonging to symbol the message is attached to, if null the message is dragging
+            *@param {TSP_Connector} from - connector belonging to symbol the message is attached from
+            *@param {TSP_Connector} to - connector belonging to symbol the message is attached to, if null the message is dragging
             */
-            function addMessage(title, description, comments, from, to)
+            function addMessage(from, to)
             {
                 // load the item component
                 let component = Qt.createComponent('TSP_Message.qml');
@@ -390,9 +323,6 @@ T.Control
                 // create and show new item object
                 let item = component.createObject(pvPageView.pageContent, {"id":            "mgMessage" + m_GenIndex,
                                                                            "objectName":    "mgMessage" + m_GenIndex,
-                                                                           "m_Title":       title,
-                                                                           "m_Description": description,
-                                                                           "m_Comments":    comments,
                                                                            "m_From":        from,
                                                                            "m_To":          to,
                                                                            "m_ScaleFactor": m_ScaleFactor,
@@ -402,24 +332,31 @@ T.Control
                 console.log("Add message - succeeded - new item - " + item.objectName);
 
                 ++m_GenIndex;
+
+                // notify page model that a message was added
+                if (pvPageView.m_Model)
+                    pvPageView.m_Model.onMessageAdded(pvPageView.m_UID, item.m_UID);
+
                 return item;
             }
 
             /**
             * Called when a link should be added
-            *@param from [TSP_Connector] - connector belonging to box the link is attached from
-            *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
-            *@param linkType [string] - optional link type
-            *@return [TSP_Link] added link, null on error
+            *@param {TSP_Connector} from - connector belonging to box the link is attached from
+            *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
+            *@param {string} linkType - optional link type
+            *@return {TSP_Link} added link, null on error
             */
             function doAddLink(from, to, linkType)
             {
-                return addMessage("", "", "", from, to);
+                return addMessage(from, to);
             }
 
+            //REM FIXME
             /// called when page is loaded
             Component.onCompleted:
             {
+            /*REM
                 let start = addStartDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200,  50);
                 let activity = addActivityDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 250);
                 let end = addEndDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 450);
@@ -430,6 +367,17 @@ T.Control
                 let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
                 addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", start.bottomConnector, activity.topConnector);
                 addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", activity.bottomConnector, end.topConnector);
+                */
+                let start = addStartDefSize(200,  50);
+                let activity = addActivityDefSize(200, 250);
+                let end = addEndDefSize(200, 450);
+                let process = addProcessDefSize(400, 200);
+                let pageBreak = addPageBreakDefSize(400, 400, false, false);
+                let pageBreak2 = addPageBreakDefSize(550, 400, false, true);
+                let pageBreak3 = addPageBreakDefSize(400, 500, true, false);
+                let pageBreak4 = addPageBreakDefSize(550, 500, true, true);
+                addMessage(start.bottomConnector, activity.topConnector);
+                addMessage(activity.bottomConnector, end.topConnector);
             }
         }
     }

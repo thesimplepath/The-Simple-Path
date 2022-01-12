@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_LinkProxy -------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between a link on the UI and its c++ representation  *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,38 +27,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_LinkProxy.h"
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Attribute.h"
-
-/**
-* Basic element, which is a base for any symbol
-*@author Jean-Milost Reymond
-*/
-class TSP_Element
+//---------------------------------------------------------------------------
+// TSP_LinkProxy
+//---------------------------------------------------------------------------
+TSP_LinkProxy::TSP_LinkProxy(QObject* pParent) :
+    TSP_ComponentProxy(pParent)
+{}
+//---------------------------------------------------------------------------
+TSP_LinkProxy::~TSP_LinkProxy()
+{}
+//---------------------------------------------------------------------------
+QString TSP_LinkProxy::getTitle() const
 {
-    public:
-        TSP_Element();
-        virtual ~TSP_Element();
+    return m_Title;
+}
+//---------------------------------------------------------------------------
+QString TSP_LinkProxy::getDescription() const
+{
+    return m_Description;
+}
+//---------------------------------------------------------------------------
+QString TSP_LinkProxy::getComments() const
+{
+    return m_Comments;
+}
+//---------------------------------------------------------------------------
+void TSP_LinkProxy::setTitle(const QString& title)
+{
+    m_Title = title;
 
-        /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
-        */
-        std::string GetUID() const;
+    emit titleChanged(m_Title);
+}
+//---------------------------------------------------------------------------
+void TSP_LinkProxy::setDescription(const QString& description)
+{
+    m_Description = description;
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
+    emit descriptionChanged(m_Description);
+}
+//---------------------------------------------------------------------------
+void TSP_LinkProxy::setComments(const QString& comments)
+{
+    m_Comments = comments;
 
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
-};
+    emit commentsChanged(m_Comments);
+}
+//---------------------------------------------------------------------------

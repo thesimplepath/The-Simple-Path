@@ -3,7 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
 // javascript
-import "TSP_JSHelper.js" as JSHelper
+import "js/TSP_JSHelper.js" as JSHelper
+
+// c++
+import thesimplepath.component 1.0
 
 /**
 * Page view
@@ -19,15 +22,16 @@ T.Control
     property alias vertScrollBar: sbVert
 
     // advanced properties
-    property var  m_Page:            this
-    property var  m_Model:           null
-    property real m_ScaleFactor:     1
-    property real m_ZoomMin:         0.5
-    property real m_ZoomMax:         5.0
-    property real m_AutoScrollSpeed: 0.0025
-    property int  m_PageWidth:       794  // default A4 width in pixels, under 96 dpi
-    property int  m_PageHeight:      1123 // default A4 height in pixels, under 96 dpi
-    property int  m_GenIndex:        0
+    property var    m_Page:            this
+    property var    m_Model:           tspPageModel
+    property string m_UID:             ""
+    property real   m_ScaleFactor:     1
+    property real   m_ZoomMin:         0.5
+    property real   m_ZoomMax:         5.0
+    property real   m_AutoScrollSpeed: 0.0025
+    property int    m_PageWidth:       794  // default A4 width in pixels, under 96 dpi
+    property int    m_PageHeight:      1123 // default A4 height in pixels, under 96 dpi
+    property int    m_GenIndex:        0
 
     // signals
     signal linkAdded(var link)
@@ -37,6 +41,16 @@ T.Control
     id:           ctPageView
     objectName:   "ctPageView"
     anchors.fill: parent
+
+    /**
+    * Page proxy
+    *@note This component will auto-create a new c++ TSP_PageProxy instance
+    */
+    PageProxy
+    {
+        id: ppPageProxy
+        objectName: "ppPageProxy"
+    }
 
     /**
     * Page viewport
@@ -165,7 +179,7 @@ T.Control
                 // common properties
                 id: rcPageContent
                 objectName: "rcPageContent"
-                color: "white"
+                color: "transparent"
                 x: 0
                 y: 0
                 width: m_PageWidth
@@ -312,18 +326,50 @@ T.Control
         target: m_Model
     }
 
+    /// called when component was fully created
+    Component.onCompleted:
+    {
+        // get and link the unique identifier created in the c++ proxy class
+        m_UID = ppPageProxy.uid;
+    }
+
+    /**
+    * Gets a box or a link by its unique identifier
+    *@param {string} uid - unique identifier to search
+    *@return box or link, null if not found or on error
+    */
+    function getBoxOrLink(uid)
+    {
+        if (uid === undefined)
+        {
+            console.error("getComponent - FAILED - uid is undefined");
+            return null;
+        }
+
+        // iterate through page children
+        for (var i = 0; i < rcPageContent.children.length; ++i)
+        {
+            // is component a box or link?
+            if (!(rcPageContent.children[i] instanceof TSP_Box) && !(rcPageContent.children[i] instanceof TSP_Link))
+                continue;
+
+            // found the matching component?
+            if (rcPageContent.children[i].m_UID === uid)
+                return rcPageContent.children[i];
+        }
+
+        return null;
+    }
+
     /**
     * Adds a box component to the page
-    *@param title [string] - box title
-    *@param description [string] - box description
-    *@param comments [string] - box comments
-    *@param x [number] - component x position, in pixels
-    *@param y [number] - component y position, in pixels
-    *@param width [number] - component width, in pixels
-    *@param height [number] - component height, in pixels
-    *@return [TSP_Box] added box, null on error
+    *@param {number} x - component x position, in pixels
+    *@param {number} y - component y position, in pixels
+    *@param {number} width - component width, in pixels
+    *@param {number} height - component height, in pixels
+    *@return {TSP_Box} added box, null on error
     */
-    function addBox(title, description, comments, x, y, width, height)
+    function addBox(x, y, width, height)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Box.qml');
@@ -338,9 +384,6 @@ T.Control
         // create and show new item object
         let item = component.createObject(rcPageContent, {"id":            "bxBox" + m_GenIndex,
                                                           "objectName":    "bxBox" + m_GenIndex,
-                                                          "m_Title":       title,
-                                                          "m_Description": description,
-                                                          "m_Comments":    comments,
                                                           "x":             x,
                                                           "y":             y,
                                                           "width":         width,
@@ -355,14 +398,11 @@ T.Control
 
     /**
     * Adds a link component to the page
-    *@param title [string] - link title
-    *@param description [string] - link description
-    *@param comments [string] - link comments
-    *@param from [TSP_Connector] - connector belonging to box the link is attached from
-    *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
-    *@return [TSP_Link] added link, null on error
+    *@param {TSP_Connector} from - connector belonging to box the link is attached from
+    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
+    *@return {TSP_Link} added link, null on error
     */
-    function addLink(title, description, comments, from, to)
+    function addLink(from, to)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Link.qml');
@@ -382,9 +422,6 @@ T.Control
         // create and show new item object
         let item = component.createObject(rcPageContent, {"id":            "lkLink" + m_GenIndex,
                                                           "objectName":    "lkLink" + m_GenIndex,
-                                                          "m_Title":       title,
-                                                          "m_Description": description,
-                                                          "m_Comments":    comments,
                                                           "m_From":        from,
                                                           "m_To":          to,
                                                           "m_ScaleFactor": m_ScaleFactor});
@@ -404,13 +441,13 @@ T.Control
 
     /**
     * Called when a link should be added
-    *@param from [TSP_Connector] - connector belonging to box the link is attached from
-    *@param to [TSP_Connector] - connector belonging to box the link is attached to, if null the link is dragging
-    *@param linkType [string] - optional link type
-    *@return [TSP_Link] added link, null on error
+    *@param {TSP_Connector} from - connector belonging to box the link is attached from
+    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
+    *@param {string} linkType - optional link type
+    *@return {TSP_Link} added link, null on error
     */
     function doAddLink(from, to, linkType)
     {
-        return addLink("", "", "", from, to);
+        return addLink(from, to);
     }
 }

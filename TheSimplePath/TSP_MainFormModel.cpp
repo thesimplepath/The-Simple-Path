@@ -1,9 +1,7 @@
 /****************************************************************************
- * ==> TSP_MainFormProxy ---------------------------------------------------*
+ * ==> TSP_MainFormModel ---------------------------------------------------*
  ****************************************************************************
- * Description:  The main form proxy between c++ application and qml        *
- *               interface                                                  *
- * Contained in: Core                                                       *
+ * Description:  Main form model                                            *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -28,7 +26,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_MainFormProxy.h"
+#include "TSP_MainFormModel.h"
+
+// component classes
+#include "UI\Component\cpp\TSP_ProxyDictionary.h"
 
 // qt
 #include <QSize>
@@ -37,16 +38,26 @@
 #include <windows.h>
 
 //---------------------------------------------------------------------------
-// TSP_MainFormProxy
+// TSP_MainFormModel
 //---------------------------------------------------------------------------
-TSP_MainFormProxy::TSP_MainFormProxy(QObject* pParent) :
+TSP_MainFormModel::TSP_MainFormModel(QObject* pParent) :
     QObject(pParent)
 {}
 //---------------------------------------------------------------------------
-TSP_MainFormProxy::~TSP_MainFormProxy()
+TSP_MainFormModel::~TSP_MainFormModel()
 {}
 //---------------------------------------------------------------------------
-int TSP_MainFormProxy::getPageWidth() const
+int TSP_MainFormModel::getDocStatus() const
+{
+    return (int)m_DocStatus;
+}
+//---------------------------------------------------------------------------
+void TSP_MainFormModel::setDocStatus(int docStatus)
+{
+    m_DocStatus = (IEDocStatus)docStatus;
+}
+//---------------------------------------------------------------------------
+int TSP_MainFormModel::getPageWidth() const
 {
     int width = 0;
     HDC hDC   = ::GetDC(nullptr);
@@ -65,7 +76,7 @@ int TSP_MainFormProxy::getPageWidth() const
     return width;
 }
 //---------------------------------------------------------------------------
-int TSP_MainFormProxy::getPageHeight() const
+int TSP_MainFormModel::getPageHeight() const
 {
     int height = 0;
     HDC hDC    = ::GetDC(nullptr);
@@ -84,7 +95,18 @@ int TSP_MainFormProxy::getPageHeight() const
     return height;
 }
 //---------------------------------------------------------------------------
-void TSP_MainFormProxy::onAddActivityClicked()
+void TSP_MainFormModel::onNewDocumentClicked()
 {
+    emit newDocument("MyDoc");
+
+    if (m_DocStatus != IEDocStatus::IE_DS_Opened)
+    {}
+
+    int test2 = 0;
+}
+//---------------------------------------------------------------------------
+void TSP_MainFormModel::onTestClicked()
+{
+    //REM TSP_ProxyDictionary::Instance()->test();
 }
 //---------------------------------------------------------------------------

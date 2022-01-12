@@ -2,7 +2,6 @@
  * ==> TSP_Application -----------------------------------------------------*
  ****************************************************************************
  * Description:  The main application class                                 *
- * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -38,9 +37,10 @@
 
 // core classes
 #include "Models\TSP_DocumentModel.h"
+#include "Models\TSP_PageModel.h"
 
 // application
-#include "TSP_MainFormProxy.h"
+#include "TSP_MainFormModel.h"
 
 /**
 * Main application
@@ -87,8 +87,9 @@ class TSP_Application
         std::wstring           m_URL;
         QGuiApplication*       m_pApp           = nullptr;
         QQmlApplicationEngine* m_pEngine        = nullptr;
-        TSP_MainFormProxy*     m_pMainFormProxy = nullptr;
+        TSP_MainFormModel*     m_pMainFormModel = nullptr;
         TSP_DocumentModel*     m_pDocumentModel = nullptr;
+        TSP_PageModel*         m_pPageModel     = nullptr;
 
         /**
         * Initializes the qt application

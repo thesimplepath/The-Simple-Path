@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_PageProxy -------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between a page on the UI and its c++ representation  *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,38 +27,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_PageProxy.h"
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Attribute.h"
-
-/**
-* Basic element, which is a base for any symbol
-*@author Jean-Milost Reymond
-*/
-class TSP_Element
+//---------------------------------------------------------------------------
+// TSP_PageProxy
+//---------------------------------------------------------------------------
+TSP_PageProxy::TSP_PageProxy(QObject* pParent) :
+    TSP_ComponentProxy(pParent)
+{}
+//---------------------------------------------------------------------------
+TSP_PageProxy::~TSP_PageProxy()
+{}
+//---------------------------------------------------------------------------
+void TSP_PageProxy::symbolAdded(const QString& pageUID, const QString& symbolUID)
 {
-    public:
-        TSP_Element();
-        virtual ~TSP_Element();
-
-        /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
-        */
-        std::string GetUID() const;
-
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
-};
+    int ii = 0;
+}
+//---------------------------------------------------------------------------
+void TSP_PageProxy::messageAdded(const QString& pageUID, const QString& messageUID)
+{
+    int ii = 0;
+}
+//---------------------------------------------------------------------------

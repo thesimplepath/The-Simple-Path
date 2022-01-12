@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_ComponentProxy --------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between an UI component and its c++ representation   *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,36 +29,30 @@
 
 #pragma once
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Attribute.h"
+// qt
+#include <QObject>
 
 /**
-* Basic element, which is a base for any symbol
+* Component proxy
 *@author Jean-Milost Reymond
 */
-class TSP_Element
+class TSP_ComponentProxy : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString uid READ getUID)
+
+    public slots:
+        QString getUID() const;
+
     public:
-        TSP_Element();
-        virtual ~TSP_Element();
-
         /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
+        * Constructor
+        *@param pParent - object which will be the parent of this object
         */
-        std::string GetUID() const;
+        explicit TSP_ComponentProxy(QObject* pParent = nullptr);
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
+        virtual ~TSP_ComponentProxy();
 
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
+    private:
+        std::string m_UID;
 };

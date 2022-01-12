@@ -33,11 +33,19 @@
 // TSP_Element
 //---------------------------------------------------------------------------
 TSP_Element::TSP_Element()
-{}
+{
+    // use the pointer itself as unique identifier
+    m_UID = std::to_string(std::uintptr_t(this));
+}
 //---------------------------------------------------------------------------
 TSP_Element::~TSP_Element()
 {
     for each (auto pAttribute in m_Attributes)
         delete pAttribute;
+}
+//---------------------------------------------------------------------------
+std::string TSP_Element::GetUID() const
+{
+    return m_UID;
 }
 //---------------------------------------------------------------------------

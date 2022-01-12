@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_ComponentProxy --------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between an UI component and its c++ representation   *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,38 +27,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_ComponentProxy.h"
 
-// std
-#include <vector>
+// component classes
+#include "TSP_ProxyDictionary.h"
 
-// core classes
-#include "TSP_Attribute.h"
-
-/**
-* Basic element, which is a base for any symbol
-*@author Jean-Milost Reymond
-*/
-class TSP_Element
+//---------------------------------------------------------------------------
+// TSP_ComponentProxy
+//---------------------------------------------------------------------------
+TSP_ComponentProxy::TSP_ComponentProxy(QObject* pParent) :
+    QObject(pParent)
 {
-    public:
-        TSP_Element();
-        virtual ~TSP_Element();
+    // use the pointer itself as unique identifier
+    m_UID = std::to_string(std::uintptr_t(this));
 
-        /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
-        */
-        std::string GetUID() const;
-
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
-};
+    // register the instance in the document item dictionary
+    TSP_ProxyDictionary::Instance()->Register(m_UID, this);
+}
+//---------------------------------------------------------------------------
+TSP_ComponentProxy::~TSP_ComponentProxy()
+{
+    TSP_ProxyDictionary::Instance()->Unregister(m_UID);
+}
+//---------------------------------------------------------------------------
+QString TSP_ComponentProxy::getUID() const
+{
+    return QString::fromStdString(m_UID);
+}
+//---------------------------------------------------------------------------

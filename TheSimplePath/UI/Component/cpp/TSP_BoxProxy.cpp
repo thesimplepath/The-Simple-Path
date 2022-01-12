@@ -1,9 +1,8 @@
 /****************************************************************************
- * ==> TSP_MainFormProxy ---------------------------------------------------*
+ * ==> TSP_BoxProxy --------------------------------------------------------*
  ****************************************************************************
- * Description:  The main form proxy between c++ application and qml        *
- *               interface                                                  *
- * Contained in: Core                                                       *
+ * Description:  Proxy between a box on the UI and its c++ representation   *
+ * Contained in: Component                                                  *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -28,49 +27,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_BoxProxy.h"
 
-// std
-#include <string>
-
-// qt
-#include <QObject>
-#include <QPageSize>
-
-/**
-* Main form proxy
-*@author Jean-Milost Reymond
-*/
-class TSP_MainFormProxy : public QObject
+//---------------------------------------------------------------------------
+// TSP_BoxProxy
+//---------------------------------------------------------------------------
+TSP_BoxProxy::TSP_BoxProxy(QObject* pParent) :
+    TSP_ComponentProxy(pParent)
+{}
+//---------------------------------------------------------------------------
+TSP_BoxProxy::~TSP_BoxProxy()
+{}
+//---------------------------------------------------------------------------
+QString TSP_BoxProxy::getTitle() const
 {
-    Q_OBJECT
+    return m_Title;
+}
+//---------------------------------------------------------------------------
+QString TSP_BoxProxy::getDescription() const
+{
+    return m_Description;
+}
+//---------------------------------------------------------------------------
+QString TSP_BoxProxy::getComments() const
+{
+    return m_Comments;
+}
+//---------------------------------------------------------------------------
+void TSP_BoxProxy::setTitle(const QString& title)
+{
+    m_Title = title;
 
-    public:
-        /**
-        * Constructor
-        *@param pParent - parent object owning this object
-        */
-        TSP_MainFormProxy(QObject* pParent = nullptr);
+    emit titleChanged(m_Title);
+}
+//---------------------------------------------------------------------------
+void TSP_BoxProxy::setDescription(const QString& description)
+{
+    m_Description = description;
 
-        virtual ~TSP_MainFormProxy();
+    emit descriptionChanged(m_Description);
+}
+//---------------------------------------------------------------------------
+void TSP_BoxProxy::setComments(const QString& comments)
+{
+    m_Comments = comments;
 
-        /**
-        * Gets page width, in pixels
-        *@return page width, in pixels
-        */
-        virtual Q_INVOKABLE int getPageWidth() const;
-
-        /**
-        * Gets page height, in pixels
-        *@return page height, in pixels
-        */
-        virtual Q_INVOKABLE int getPageHeight() const;
-
-        /**
-        * Called when the add activity button was clicked on the user interface
-        */
-        virtual Q_INVOKABLE void onAddActivityClicked();
-
-    private:
-        QPageSize m_PageSize;
-};
+    emit commentsChanged(m_Comments);
+}
+//---------------------------------------------------------------------------
