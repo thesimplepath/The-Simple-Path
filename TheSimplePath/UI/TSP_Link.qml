@@ -6,7 +6,7 @@ import QtQuick.Shapes 1.15
 import "js/TSP_JSHelper.js" as JSHelper
 
 // c++
-import thesimplepath.component 1.0
+import thesimplepath.proxys 1.0
 
 /**
 * Link (between 2 boxes)

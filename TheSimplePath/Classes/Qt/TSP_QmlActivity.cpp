@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_QmlActivity -----------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
- * Contained in: Core                                                       *
+ * Description:  Qt activity component                                      *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#include "TSP_QmlActivity.h"
 
 //---------------------------------------------------------------------------
-// TSP_Activity
+// TSP_QmlActivity
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
+TSP_QmlActivity::TSP_QmlActivity(TSP_QmlPage* pOwner) :
+    TSP_Activity(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
+TSP_QmlActivity::TSP_QmlActivity(const std::wstring& title,
+                                 const std::wstring& description,
+                                 const std::wstring& comments,
+                                       TSP_QmlPage*  pOwner) :
+    TSP_Activity(title, description, comments, pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
+TSP_QmlActivity::~TSP_QmlActivity()
 {}
 //---------------------------------------------------------------------------

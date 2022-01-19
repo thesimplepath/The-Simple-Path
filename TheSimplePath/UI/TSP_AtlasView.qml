@@ -2,9 +2,6 @@
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
 
-// custom qt component
-import "Component"
-
 /**
 * Atlas view
 *@author Jean-Milost Reymond

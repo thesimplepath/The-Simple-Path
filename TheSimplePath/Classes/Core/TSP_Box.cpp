@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_Box -------------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
+ * Description:  Box component                                              *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,22 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#include "TSP_Box.h"
 
 //---------------------------------------------------------------------------
-// TSP_Activity
+// TSP_Box
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
+TSP_Box::TSP_Box(TSP_Page* pOwner) :
+    TSP_Component(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
+TSP_Box::TSP_Box(const std::wstring& title,
+                 const std::wstring& description,
+                 const std::wstring& comments,
+                       TSP_Page*     pOwner) :
+    TSP_Component(title, description, comments, pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
+TSP_Box::~TSP_Box()
 {}
 //---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Symbol ----------------------------------------------------------*
+ * ==> TSP_Link ------------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic symbol                                               *
+ * Description:  Link component                                             *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,65 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_Link.h"
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Element.h"
-
-/**
-* Basic symbol
-*@author Jean-Milost Reymond
-*/
-class TSP_Symbol : public TSP_Element
-{
-    public:
-        TSP_Symbol();
-        virtual ~TSP_Symbol();
-
-        /**
-        * Gets the symbol name
-        *@return the symbol name
-        */
-        virtual std::wstring GetSymbolName() const = 0;
-
-        /**
-        * Sets the symbol name
-        *@param value - the symbol name
-        *@return true on success, otherwise false
-        */
-        virtual bool SetSymbolName(const std::wstring& value) = 0;
-
-        /**
-        * Gets the symbol comments
-        *@return the symbol comments
-        */
-        virtual std::wstring GetSymbolComments() const = 0;
-
-        /**
-        * Sets the symbol comments
-        *@param value - the symbol comments
-        *@return true on success, otherwise false
-        */
-        virtual bool SetSymbolComments(const std::wstring& value) = 0;
-
-        /**
-        * Gets the symbol reference number
-        *@return the symbol reference number
-        */
-        virtual std::int32_t GetSymbolReferenceNumber() const = 0;
-
-        /**
-        * Sets the symbol reference number
-        *@param value - the symbol reference number
-        *@return true on success, otherwise false
-        */
-        virtual bool SetSymbolReferenceNumber(std::int32_t value) = 0;
-
-    private:
-        std::wstring m_Name;
-        std::wstring m_Comments;
-        std::int32_t m_RefNb = 0;
-};
+//---------------------------------------------------------------------------
+// TSP_Link
+//---------------------------------------------------------------------------
+TSP_Link::TSP_Link(TSP_Page* pOwner) :
+    TSP_Component(pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_Link::TSP_Link(const std::wstring& title,
+                   const std::wstring& description,
+                   const std::wstring& comments,
+                         TSP_Page*     pOwner) :
+    TSP_Component(title, description, comments, pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_Link::~TSP_Link()
+{}
+//---------------------------------------------------------------------------

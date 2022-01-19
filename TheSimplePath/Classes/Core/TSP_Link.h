@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_LinkProxy -------------------------------------------------------*
+ * ==> TSP_Link ------------------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between a link on the UI and its c++ representation  *
- * Contained in: Component                                                  *
+ * Description:  Link component                                             *
+ * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,51 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_LinkProxy.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_LinkProxy
-//---------------------------------------------------------------------------
-TSP_LinkProxy::TSP_LinkProxy(QObject* pParent) :
-    TSP_ComponentProxy(pParent)
-{}
-//---------------------------------------------------------------------------
-TSP_LinkProxy::~TSP_LinkProxy()
-{}
-//---------------------------------------------------------------------------
-QString TSP_LinkProxy::getTitle() const
-{
-    return m_Title;
-}
-//---------------------------------------------------------------------------
-QString TSP_LinkProxy::getDescription() const
-{
-    return m_Description;
-}
-//---------------------------------------------------------------------------
-QString TSP_LinkProxy::getComments() const
-{
-    return m_Comments;
-}
-//---------------------------------------------------------------------------
-void TSP_LinkProxy::setTitle(const QString& title)
-{
-    m_Title = title;
+// std
+#include <vector>
 
-    emit titleChanged(m_Title);
-}
-//---------------------------------------------------------------------------
-void TSP_LinkProxy::setDescription(const QString& description)
-{
-    m_Description = description;
+// core classes
+#include "TSP_Component.h"
 
-    emit descriptionChanged(m_Description);
-}
-//---------------------------------------------------------------------------
-void TSP_LinkProxy::setComments(const QString& comments)
+/**
+* Link component
+*@author Jean-Milost Reymond
+*/
+class TSP_Link : public TSP_Component
 {
-    m_Comments = comments;
+    public:
+        /**
+        * Constructor
+        *@param pOwner - component owner
+        */
+        TSP_Link(TSP_Page* pOwner);
 
-    emit commentsChanged(m_Comments);
-}
-//---------------------------------------------------------------------------
+        /**
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
+        */
+        TSP_Link(const std::wstring& title,
+                 const std::wstring& description,
+                 const std::wstring& comments,
+                       TSP_Page*     pOwner);
+
+        virtual ~TSP_Link();
+};

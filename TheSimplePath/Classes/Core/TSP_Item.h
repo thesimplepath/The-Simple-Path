@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_BoxProxy --------------------------------------------------------*
+ * ==> TSP_Item ------------------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between a box on the UI and its c++ representation   *
- * Contained in: Component                                                  *
+ * Description:  Basic document item                                        *
+ * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,51 +27,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_BoxProxy.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_BoxProxy
-//---------------------------------------------------------------------------
-TSP_BoxProxy::TSP_BoxProxy(QObject* pParent) :
-    TSP_ComponentProxy(pParent)
-{}
-//---------------------------------------------------------------------------
-TSP_BoxProxy::~TSP_BoxProxy()
-{}
-//---------------------------------------------------------------------------
-QString TSP_BoxProxy::getTitle() const
-{
-    return m_Title;
-}
-//---------------------------------------------------------------------------
-QString TSP_BoxProxy::getDescription() const
-{
-    return m_Description;
-}
-//---------------------------------------------------------------------------
-QString TSP_BoxProxy::getComments() const
-{
-    return m_Comments;
-}
-//---------------------------------------------------------------------------
-void TSP_BoxProxy::setTitle(const QString& title)
-{
-    m_Title = title;
+// std
+#include <string>
 
-    emit titleChanged(m_Title);
-}
-//---------------------------------------------------------------------------
-void TSP_BoxProxy::setDescription(const QString& description)
+/**
+* Basic document item
+*@author Jean-Milost Reymond
+*/
+class TSP_Item
 {
-    m_Description = description;
+    public:
+        TSP_Item();
+        virtual ~TSP_Item();
 
-    emit descriptionChanged(m_Description);
-}
-//---------------------------------------------------------------------------
-void TSP_BoxProxy::setComments(const QString& comments)
-{
-    m_Comments = comments;
+        /**
+        * Gets the element unique identifier
+        *@return the element unique identifier
+        */
+        virtual std::string GetUID() const;
 
-    emit commentsChanged(m_Comments);
-}
-//---------------------------------------------------------------------------
+    protected:
+        std::string m_UID;
+};

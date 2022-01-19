@@ -42,13 +42,13 @@ T.Control
             initialItem: null//cpAtlasItem//null
         }
 
-        /**/
+        /*
         //REM FIXME
         Component.onCompleted:
         {
             addAtlas();
         }
-        /**/
+        */
         /*REM
         Component
         {
@@ -80,7 +80,7 @@ T.Control
         {
             console.log("Atlas(es) inserted in document - first - " + first + " - last - " + last + " - parent index - " + parentIndex);
 
-            //addAtlas();
+            addAtlas();
         }
 
         /**

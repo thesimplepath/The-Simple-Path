@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_QmlPageProxy ----------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
- * Contained in: Core                                                       *
+ * Description:  Page proxy between qml view and application engine         *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,47 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_Activity
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
-{}
-//---------------------------------------------------------------------------
+// qt classes
+#include "TSP_QmlProxy.h"
+
+// qt
+#include <QObject>
+
+/**
+* Page proxy
+*@author Jean-Milost Reymond
+*/
+class TSP_QmlPageProxy : public TSP_QmlProxy
+{
+    Q_OBJECT
+
+    /*REM
+    public slots:
+        void setParentPage(const QVariant& pPage);
+    */
+
+    public:
+        /**
+        * Constructor
+        *@param pParent - object which will be the parent of this object
+        */
+        explicit TSP_QmlPageProxy(QObject* pParent = nullptr);
+
+        virtual ~TSP_QmlPageProxy();
+
+        /**
+        * Called when a symbol was added on a page
+        *@param pageUID - page unique identifier
+        *@param symbolUID - symbol unique identifier
+        */
+        virtual Q_INVOKABLE void symbolAdded(const QString& pageUID, const QString& symbolUID);
+
+        /**
+        * Called when a symbol was added on a page
+        *@param pageUID - page unique identifier
+        *@param messageUID - message unique identifier
+        */
+        virtual Q_INVOKABLE void messageAdded(const QString& pageUID, const QString& messageUID);
+};

@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_PageProxy -------------------------------------------------------*
+ * ==> TSP_QmlLinkProxy ----------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between a page on the UI and its c++ representation  *
- * Contained in: Component                                                  *
+ * Description:  Link proxy between qml view and application engine         *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,45 +29,78 @@
 
 #pragma once
 
-// component classes
-#include "TSP_ComponentProxy.h"
+ // component classes
+#include "TSP_QmlProxy.h"
 
 // qt
 #include <QObject>
 
 /**
-* Page proxy
+* Link proxy
 *@author Jean-Milost Reymond
 */
-class TSP_PageProxy : public TSP_ComponentProxy
+class TSP_QmlLinkProxy : public TSP_QmlProxy
 {
     Q_OBJECT
 
-    /*REM
+    // properties
+    Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
+    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
+
     public slots:
-        void setParentPage(const QVariant& pPage);
-    */
+        /**
+        * Gets the box title
+        *@return the box title
+        */
+        virtual QString getTitle() const;
+
+        /**
+        * Gets the box description
+        *@return the box description
+        */
+        virtual QString getDescription() const;
+
+        /**
+        * Gets the box comments
+        *@return the box comments
+        */
+        virtual QString getComments() const;
+
+        /**
+        * Sets the box title
+        *@param title - the box title
+        */
+        virtual void setTitle(const QString& title);
+
+        /**
+        * Sets the box description
+        *@return the box description
+        */
+        virtual void setDescription(const QString& description);
+
+        /**
+        * Sets the box comments
+        *@return the box comments
+        */
+        virtual void setComments(const QString& comments);
+
+    signals:
+        void titleChanged(const QString& title);
+        void descriptionChanged(const QString& description);
+        void commentsChanged(const QString& comments);
 
     public:
         /**
         * Constructor
         *@param pParent - object which will be the parent of this object
         */
-        explicit TSP_PageProxy(QObject* pParent = nullptr);
+        explicit TSP_QmlLinkProxy(QObject* pParent = nullptr);
 
-        virtual ~TSP_PageProxy();
+        virtual ~TSP_QmlLinkProxy();
 
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param symbolUID - symbol unique identifier
-        */
-        virtual Q_INVOKABLE void symbolAdded(const QString& pageUID, const QString& symbolUID);
-
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param messageUID - message unique identifier
-        */
-        virtual Q_INVOKABLE void messageAdded(const QString& pageUID, const QString& messageUID);
+    private:
+        QString m_Title;
+        QString m_Description;
+        QString m_Comments;
 };

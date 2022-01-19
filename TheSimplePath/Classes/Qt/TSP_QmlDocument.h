@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_BoxProxy --------------------------------------------------------*
+ * ==> TSP_QmlDocument -----------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between a box on the UI and its c++ representation   *
- * Contained in: Component                                                  *
+ * Description:  Qt document                                                *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,78 +29,80 @@
 
 #pragma once
 
-// component classes
-#include "TSP_ComponentProxy.h"
+// std
+#include <vector>
+
+// core classes
+#include "Core\TSP_Document.h"
+
+// qt classes
+#include "TSP_QmlDocumentModel.h"
 
 // qt
-#include <QObject>
+#include <QQmlApplicationEngine>
+
+// class prototype
+class TSP_Application;
 
 /**
-* Box proxy
+* Qt document
 *@author Jean-Milost Reymond
 */
-class TSP_BoxProxy : public TSP_ComponentProxy
+class TSP_QmlDocument : public TSP_Document
 {
-    Q_OBJECT
-
-    // properties
-    Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
-    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
-
-    public slots:
-        /**
-        * Gets the box title
-        *@return the box title
-        */
-        virtual QString getTitle() const;
-
-        /**
-        * Gets the box description
-        *@return the box description
-        */
-        virtual QString getDescription() const;
-
-        /**
-        * Gets the box comments
-        *@return the box comments
-        */
-        virtual QString getComments() const;
-
-        /**
-        * Sets the box title
-        *@param title - the box title
-        */
-        virtual void setTitle(const QString& title);
-
-        /**
-        * Sets the box description
-        *@return the box description
-        */
-        virtual void setDescription(const QString& description);
-
-        /**
-        * Sets the box comments
-        *@return the box comments
-        */
-        virtual void setComments(const QString& comments);
-
-    signals:
-        void titleChanged(const QString& title);
-        void descriptionChanged(const QString& description);
-        void commentsChanged(const QString& comments);
-
     public:
         /**
         * Constructor
-        *@param pParent - object which will be the parent of this object
+        *@param pApp - main application
         */
-        explicit TSP_BoxProxy(QObject* pParent = nullptr);
+        TSP_QmlDocument(TSP_Application* pApp);
 
-        virtual ~TSP_BoxProxy();
+        /**
+        * Constructor
+        *@param pApp - main application
+        *@param title - the document title
+        */
+        TSP_QmlDocument(TSP_Application* pApp, const std::wstring& title);
+
+        virtual ~TSP_QmlDocument();
+
+        /**
+        * Declares the context properties (i.e models linked with qml, ...)
+        *@param pEngine - application engine
+        */
+        void DeclareContextProperties(QQmlApplicationEngine* pEngine);
+
+        /**
+        * Adds a new atlas in document
+        *@return newly added atlas
+        */
+        virtual TSP_Atlas* AddAtlas();
+
+        /**
+        * Adds a new atlas in document
+        *@param name - atlas name
+        *@return newly added atlas
+        */
+        virtual TSP_Atlas* AddAtlas(const std::wstring& name);
+
+        /**
+        * Removes an atlas
+        *@param index - atlas index to remove
+        */
+        virtual void RemoveAtlas(std::size_t index);
+
+        /**
+        * Removes an atlas
+        *@param pAtlas - atlas to remove
+        */
+        virtual void RemoveAtlas(TSP_Atlas* pAtlas);
 
     private:
-        QString m_Title;
-        QString m_Description;
-        QString m_Comments;
+        TSP_Application*      m_pApp           = nullptr;
+        TSP_QmlDocumentModel* m_pDocumentModel = nullptr;
+
+        /**
+        * Initializes the qt application
+        */
+        void Initialize();
 };

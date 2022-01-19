@@ -42,6 +42,10 @@
 TSP_Document::TSP_Document()
 {}
 //---------------------------------------------------------------------------
+TSP_Document::TSP_Document(const std::wstring& title) :
+    m_Title(title)
+{}
+//---------------------------------------------------------------------------
 TSP_Document::~TSP_Document()
 {
     for each (auto pAtlas in m_Atlases)
@@ -50,14 +54,14 @@ TSP_Document::~TSP_Document()
 //---------------------------------------------------------------------------
 TSP_Atlas* TSP_Document::AddAtlas()
 {
-    auto pAtlas = std::make_unique<TSP_Atlas>();
+    auto pAtlas = std::make_unique<TSP_Atlas>(this);
     m_Atlases.push_back(pAtlas.get());
     return pAtlas.release();
 }
 //---------------------------------------------------------------------------
 TSP_Atlas* TSP_Document::AddAtlas(const std::wstring& name)
 {
-    auto pAtlas = std::make_unique<TSP_Atlas>(name);
+    auto pAtlas = std::make_unique<TSP_Atlas>(name, this);
     m_Atlases.push_back(pAtlas.get());
     return pAtlas.release();
 }

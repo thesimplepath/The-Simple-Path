@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_QmlPage ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
- * Contained in: Core                                                       *
+ * Description:  Qt document page                                           *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#include "TSP_QmlPage.h"
 
 //---------------------------------------------------------------------------
-// TSP_Activity
+// TSP_QmlPage
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
+TSP_QmlPage::TSP_QmlPage(TSP_QmlAtlas* pOwner) :
+    TSP_Page(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
+TSP_QmlPage::TSP_QmlPage(const std::wstring& name, TSP_QmlAtlas* pOwner) :
+    TSP_Page(name, pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
+TSP_QmlPage::~TSP_QmlPage()
 {}
 //---------------------------------------------------------------------------

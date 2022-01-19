@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Symbol ----------------------------------------------------------*
+ * ==> TSP_QmlAtlas --------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic symbol                                               *
- * Contained in: Core                                                       *
+ * Description:  Qt document atlas                                          *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,15 +27,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Symbol.h"
+#include "TSP_QmlAtlas.h"
 
 //---------------------------------------------------------------------------
-// TSP_Symbol
+// TSP_QmlAtlas
 //---------------------------------------------------------------------------
-TSP_Symbol::TSP_Symbol() :
-    TSP_Element()
+TSP_QmlAtlas::TSP_QmlAtlas(TSP_QmlDocument* pOwner) :
+    TSP_Atlas(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Symbol::~TSP_Symbol()
+TSP_QmlAtlas::TSP_QmlAtlas(const std::wstring& name, TSP_QmlDocument* pOwner) :
+    TSP_Atlas(name, pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_QmlAtlas::~TSP_QmlAtlas()
 {}
 //---------------------------------------------------------------------------

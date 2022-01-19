@@ -28,8 +28,11 @@
 
 #include "TSP_MainFormModel.h"
 
-// component classes
-#include "UI\Component\cpp\TSP_ProxyDictionary.h"
+// qt classes
+#include "QT\TSP_ProxyDictionary.h"
+
+// application
+#include "TSP_Application.h"
 
 // qt
 #include <QSize>
@@ -40,8 +43,9 @@
 //---------------------------------------------------------------------------
 // TSP_MainFormModel
 //---------------------------------------------------------------------------
-TSP_MainFormModel::TSP_MainFormModel(QObject* pParent) :
-    QObject(pParent)
+TSP_MainFormModel::TSP_MainFormModel(TSP_Application* pApp, QObject* pParent) :
+    QObject(pParent),
+    m_pApp(pApp)
 {}
 //---------------------------------------------------------------------------
 TSP_MainFormModel::~TSP_MainFormModel()
@@ -97,12 +101,15 @@ int TSP_MainFormModel::getPageHeight() const
 //---------------------------------------------------------------------------
 void TSP_MainFormModel::onNewDocumentClicked()
 {
+    if (!m_pApp)
+        return;
+
     emit newDocument("MyDoc");
 
     if (m_DocStatus != IEDocStatus::IE_DS_Opened)
     {}
 
-    int test2 = 0;
+    m_pApp->GetDocument()->AddAtlas();
 }
 //---------------------------------------------------------------------------
 void TSP_MainFormModel::onTestClicked()

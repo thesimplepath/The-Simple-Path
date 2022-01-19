@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Page ------------------------------------------------------------*
+ * ==> TSP_Component -------------------------------------------------------*
  ****************************************************************************
- * Description:  Document page                                              *
+ * Description:  Component (which may be inserted on a page)                *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,100 +27,63 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Page.h"
-
-// core classes
-#include "TSP_Atlas.h"
+#include "TSP_Component.h"
 
 //---------------------------------------------------------------------------
-// TSP_Page
+// TSP_Component
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(TSP_Atlas* pOwner) :
+TSP_Component::TSP_Component(TSP_Page* pOwner) :
     TSP_Item(),
     m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(const std::wstring& name, TSP_Atlas* pOwner) :
+TSP_Component::TSP_Component(const std::wstring& title,
+                             const std::wstring& description,
+                             const std::wstring& comments,
+                                   TSP_Page*     pOwner) :
     TSP_Item(),
-    m_Name(name),
-    m_pOwner(pOwner)
+    m_pOwner(pOwner),
+    m_Title(title),
+    m_Description(description),
+    m_Comments(comments)
 {}
 //---------------------------------------------------------------------------
-TSP_Page::~TSP_Page()
+TSP_Component::~TSP_Component()
 {
-    for each (auto pComponent in m_Components)
-        delete pComponent;
+    for each (auto pAttribute in m_Attributes)
+        delete pAttribute;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity()
+std::wstring TSP_Component::GetTitle() const
 {
-    // FIXME config parameters
-    return AddActivity(L"", L"", L"", 0, 0);
+    return m_Title;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity(const std::wstring& name,
-                                    const std::wstring& description,
-                                    const std::wstring& comments,
-                                          int           x,
-                                          int           y)
+bool TSP_Component::SetTitle(const std::wstring& value)
 {
-    // FIXME handle x and y params
-    std::unique_ptr<TSP_Activity> pActivity =
-            std::make_unique<TSP_Activity>(name, description, comments, this);
-    m_Components.push_back(pActivity.get());
-    return pActivity.release();
+    m_Title = value;
+    return true;
 }
 //---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(const std::string& uid)
+std::wstring TSP_Component::GetDescription() const
 {
-    RemoveActivity(GetActivity(uid));
+    return m_Description;
 }
 //---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(TSP_Activity* pActivity)
+bool TSP_Component::SetDescription(const std::wstring& value)
 {
-    if (!pActivity)
-        return;
-
-    for (std::size_t i = 0; i < m_Components.size(); ++i)
-        if (m_Components[i] == pActivity)
-        {
-            delete m_Components[i];
-            m_Components.erase(m_Components.begin() + i);
-            return;
-        }
+    m_Description = value;
+    return true;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::GetActivity(const std::string& uid) const
+std::wstring TSP_Component::GetComments() const
 {
-    for each (auto pComponent in m_Components)
-        if (pComponent->GetUID() == uid)
-        {
-            TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
-
-            if (pActivity)
-                return pActivity;
-        }
-
-    return nullptr;
+    return m_Comments;
 }
 //---------------------------------------------------------------------------
-std::size_t TSP_Page::GetActivityCount() const
+bool TSP_Component::SetComments(const std::wstring& value)
 {
-    std::size_t count = 0;
-
-    for each (auto pComponent in m_Components)
-    {
-        TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
-
-        if (pActivity)
-            return ++count;
-    }
-
-    return count;
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Page::GetComponentCount() const
-{
-    return m_Components.size();
+    m_Comments = value;
+    return true;
 }
 //---------------------------------------------------------------------------

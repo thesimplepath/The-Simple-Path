@@ -48,12 +48,6 @@
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{c039c5a5-cd38-4900-9cb2-5fc7c8583be9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Models">
-      <UniqueIdentifier>{48e110b9-b4dc-4e62-bd52-5e4a9c16b2ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Models">
-      <UniqueIdentifier>{c7f9cdfd-c756-4969-a797-29391122ed27}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Third-Party">
       <UniqueIdentifier>{62258bc8-275a-4d4b-a828-ba9a86e6fb7a}</UniqueIdentifier>
     </Filter>
@@ -69,17 +63,11 @@
     <Filter Include="Third-Party\RapidJSON\msinttypes">
       <UniqueIdentifier>{ada65912-bfb9-4b2c-abdb-1ff916b75b87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\UI\Component">
-      <UniqueIdentifier>{c03914ee-3992-4fcb-80d7-5667f80a2077}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Resources">
       <UniqueIdentifier>{e04e9f4e-7be3-418d-90c1-07ce98e2262e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Resources\Images">
       <UniqueIdentifier>{0908b82c-574f-49d0-8b9c-6ab2a694d056}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\UI\Component\js">
-      <UniqueIdentifier>{dc6270d3-b3e7-4a5a-a75f-039311f4967d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Third-Party\stduuid">
       <UniqueIdentifier>{2dd289ef-c52c-4cbb-a25c-e458ef218606}</UniqueIdentifier>
@@ -90,11 +78,14 @@
     <Filter Include="Third-Party\stduuid\gsl">
       <UniqueIdentifier>{9bbe1303-4448-4be5-af36-dcec039df87a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Component">
-      <UniqueIdentifier>{6bb19837-8a14-48b5-b75e-ef5a32fef20b}</UniqueIdentifier>
+    <Filter Include="Resource Files\UI\js">
+      <UniqueIdentifier>{dc6270d3-b3e7-4a5a-a75f-039311f4967d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Component">
-      <UniqueIdentifier>{5fce9042-8321-4f67-b050-0a44da606591}</UniqueIdentifier>
+    <Filter Include="Header Files\Qt">
+      <UniqueIdentifier>{7fb88fd2-d7b1-4d05-ae7f-bf7cae159d79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Qt">
+      <UniqueIdentifier>{9ec4a115-c428-4b63-aa1f-b6c1c7f8a015}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -143,53 +134,71 @@
     <ClCompile Include="Classes\Core\TSP_Document.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Core\TSP_Element.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Page.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Core\TSP_ProcedureSymbol.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Core\TSP_Symbol.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\Models\TSP_DocumentModel.cpp">
-      <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Common\TSP_JsonHelper.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Models\TSP_AtlasModel.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Atlas.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Component\cpp\TSP_BoxProxy.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Component\cpp\TSP_ComponentProxy.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Component\cpp\TSP_LinkProxy.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Component\cpp\TSP_PageProxy.cpp">
-      <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Activity.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Component\cpp\TSP_ProxyDictionary.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="TSP_MainFormModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Models\TSP_PageModel.cpp">
-      <Filter>Source Files\Models</Filter>
+    <ClCompile Include="Classes\QT\TSP_ProxyDictionary.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Box.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Message.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Component.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Item.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_AtlasModel.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_PageModel.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_QmlActivity.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_QmlAtlas.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_QmlDocument.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\QT\TSP_QmlPage.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlDocumentModel.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlBoxProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlLinkProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlPageProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Link.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,16 +371,7 @@
     <ClInclude Include="Classes\Core\TSP_Document.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Core\TSP_Element.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Page.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Core\TSP_ProcedureSymbol.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Core\TSP_Symbol.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Common\TSP_JsonHelper.h">
@@ -386,8 +386,35 @@
     <ClInclude Include="Classes\Core\TSP_Activity.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Component\cpp\TSP_ProxyDictionary.h">
-      <Filter>Header Files\Component</Filter>
+    <ClInclude Include="Classes\QT\TSP_ProxyDictionary.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Box.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Message.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Component.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Item.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\QT\TSP_QmlActivity.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\QT\TSP_QmlPage.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\QT\TSP_QmlAtlas.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\QT\TSP_QmlDocument.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Link.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -396,59 +423,11 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="UI\TSP_DocumentView.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Main.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_AtlasView.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\Component\TSP_Box.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\Component\TSP_Connector.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\Component\TSP_Handle.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\Component\TSP_HandleControl.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\Component\TSP_PageView.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\TSP_Activity.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Start.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\Component\TSP_Link.qml">
-      <Filter>Resource Files\UI\Component</Filter>
-    </None>
-    <None Include="UI\TSP_Message.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_PageBreak.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_Process.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_End.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="Resources\Images\PageBreak_Logo_Normal.svg">
       <Filter>Resource Files\Resources\Images</Filter>
     </None>
     <None Include="Resources\Images\PageBreak_Logo_Process.svg">
       <Filter>Resource Files\Resources\Images</Filter>
-    </None>
-    <None Include="UI\Component\js\TSP_JSHelper.js">
-      <Filter>Resource Files\UI\Component\js</Filter>
     </None>
     <None Include="Third-Party\stduuid\gsl\gsl">
       <Filter>Third-Party\stduuid\gsl</Filter>
@@ -477,31 +456,79 @@
     <None Include="Third-Party\stduuid\gsl\string_span">
       <Filter>Third-Party\stduuid\gsl</Filter>
     </None>
+    <None Include="UI\TSP_Activity.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_AtlasView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Box.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Connector.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_DocumentView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_End.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Handle.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_HandleControl.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Link.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Main.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Message.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_PageBreak.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_PageView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Process.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Start.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\js\TSP_JSHelper.js">
+      <Filter>Resource Files\UI\js</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Classes\Models\TSP_DocumentModel.h">
-      <Filter>Header Files\Models</Filter>
-    </QtMoc>
-    <QtMoc Include="Classes\Models\TSP_AtlasModel.h">
-      <Filter>Header Files\Models</Filter>
-    </QtMoc>
-    <QtMoc Include="UI\Component\cpp\TSP_BoxProxy.h">
-      <Filter>Header Files\Component</Filter>
-    </QtMoc>
-    <QtMoc Include="UI\Component\cpp\TSP_LinkProxy.h">
-      <Filter>Header Files\Component</Filter>
-    </QtMoc>
-    <QtMoc Include="UI\Component\cpp\TSP_ComponentProxy.h">
-      <Filter>Header Files\Component</Filter>
-    </QtMoc>
-    <QtMoc Include="UI\Component\cpp\TSP_PageProxy.h">
-      <Filter>Header Files\Component</Filter>
-    </QtMoc>
     <QtMoc Include="TSP_MainFormModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Classes\Models\TSP_PageModel.h">
-      <Filter>Header Files\Models</Filter>
+    <QtMoc Include="Classes\QT\TSP_AtlasModel.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\QT\TSP_PageModel.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlDocumentModel.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlBoxProxy.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlLinkProxy.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlPageProxy.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlProxy.h">
+      <Filter>Header Files\Qt</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

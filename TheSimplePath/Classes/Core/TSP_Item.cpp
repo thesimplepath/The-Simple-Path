@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_Item ------------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
+ * Description:  Basic document item                                        *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,22 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#include "TSP_Item.h"
 
 //---------------------------------------------------------------------------
-// TSP_Activity
+// TSP_Item
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
+TSP_Item::TSP_Item()
+{
+    // use the pointer itself as unique identifier
+    m_UID = std::to_string(std::uintptr_t(this));
+}
+//---------------------------------------------------------------------------
+TSP_Item::~TSP_Item()
 {}
 //---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
-{}
+std::string TSP_Item::GetUID() const
+{
+    return m_UID;
+}
 //---------------------------------------------------------------------------

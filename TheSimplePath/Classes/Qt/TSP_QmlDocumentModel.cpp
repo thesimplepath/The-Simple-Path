@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_DocumentModel ---------------------------------------------------*
+ * ==> TSP_QmlDocumentModel ------------------------------------------------*
  ****************************************************************************
- * Description:  A model for the document                                   *
- * Contained in: Models                                                     *
+ * Description:  Qt document qml model                                      *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,64 +27,55 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_DocumentModel.h"
+#include "TSP_QmlDocumentModel.h"
+
+ // qt classes
+#include "Qt\TSP_QmlDocument.h"
 
 //---------------------------------------------------------------------------
-// TSP_DocumentModel
+// TSP_QmlDocumentModel
 //---------------------------------------------------------------------------
-TSP_DocumentModel::TSP_DocumentModel(QObject* pParent) :
+TSP_QmlDocumentModel::TSP_QmlDocumentModel(TSP_QmlDocument* pDocument, QObject* pParent) :
     QAbstractListModel(pParent),
-    m_pDocument(new TSP_Document()),
-    m_pAtlasModel(new TSP_AtlasModel(pParent))
+    m_pDocument(pDocument)
 {}
 //---------------------------------------------------------------------------
-TSP_DocumentModel::~TSP_DocumentModel()
-{
-    if (m_pAtlasModel)
-        delete m_pAtlasModel;
-
-    if (m_pDocument)
-        delete m_pDocument;
-}
+TSP_QmlDocumentModel::~TSP_QmlDocumentModel()
+{}
 //---------------------------------------------------------------------------
-TSP_Document* TSP_DocumentModel::GetDocument() const
+TSP_QmlDocument* TSP_QmlDocumentModel::GetDocument() const
 {
     return m_pDocument;
 }
 //---------------------------------------------------------------------------
-TSP_AtlasModel* TSP_DocumentModel::GetAtlasModel() const
+void TSP_QmlDocumentModel::beginAddAtlas()
 {
-    return m_pAtlasModel;
-}
-//---------------------------------------------------------------------------
-void TSP_DocumentModel::addAtlas(const QString& name)
-{
-    if (!m_pDocument)
-        return;
-
     const int count = rowCount();
 
     beginInsertRows(QModelIndex(), count, count);
-    m_pDocument->AddAtlas(name.toStdWString());
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocumentModel::endAddAtlas()
+{
     endInsertRows();
 }
 //---------------------------------------------------------------------------
-void TSP_DocumentModel::removeAtlas(std::size_t index)
+void TSP_QmlDocumentModel::beginRemoveAtlas()
 {
-    if (!m_pDocument)
-        return;
-
     const int count = rowCount();
 
     if (!count)
         return;
 
     beginRemoveRows(QModelIndex(), count - 1, count - 1);
-    m_pDocument->RemoveAtlas(index);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocumentModel::endRemoveAtlas()
+{
     endRemoveRows();
 }
 //---------------------------------------------------------------------------
-int TSP_DocumentModel::rowCount(const QModelIndex& pParent) const
+int TSP_QmlDocumentModel::rowCount(const QModelIndex& pParent) const
 {
     if (!m_pDocument)
         return 0;
@@ -92,51 +83,26 @@ int TSP_DocumentModel::rowCount(const QModelIndex& pParent) const
     return m_pDocument->GetAtlasCount();
 }
 //---------------------------------------------------------------------------
-QVariant TSP_DocumentModel::data(const QModelIndex& index, int role) const
+QVariant TSP_QmlDocumentModel::data(const QModelIndex& index, int role) const
 {
     if (!m_pDocument)
         return QVariant();
 
     // search for document data role to get (i.e not dependent from index)
-    switch ((TSP_DocumentModel::IEDataRole)role)
+    switch ((TSP_QmlDocumentModel::IEDataRole)role)
     {
-        case TSP_DocumentModel::IEDataRole::IE_DR_Title:
+        case TSP_QmlDocumentModel::IEDataRole::IE_DR_Title:
             // get the title
             return QString::fromStdWString(m_pDocument->GetTitle());
-    }
-
-    // get current index
-    const int currentIndex = index.row();
-
-    // is index out of bounds?
-    if (currentIndex < 0 || (std::size_t)currentIndex > m_pDocument->GetAtlasCount())
-        return QVariant();
-
-    // search for model data role to get
-    switch ((TSP_DocumentModel::IEDataRole)role)
-    {
-        case TSP_DocumentModel::IEDataRole::IE_DR_ModelName:
-        {
-            // get the atlas matching with row index
-            TSP_Atlas* pAtlas = m_pDocument->GetAtlas(currentIndex);
-
-            // found it?
-            if (!pAtlas)
-                return QVariant();
-
-            // get the atlas name
-            return QString::fromStdWString(pAtlas->GetName());
-        }
     }
 
     return QVariant();
 }
 //---------------------------------------------------------------------------
-QHash<int, QByteArray> TSP_DocumentModel::roleNames() const
+QHash<int, QByteArray> TSP_QmlDocumentModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[(int)TSP_DocumentModel::IEDataRole::IE_DR_Title]     = "title";
-    roles[(int)TSP_DocumentModel::IEDataRole::IE_DR_ModelName] = "modelName";
+    roles[(int)TSP_QmlDocumentModel::IEDataRole::IE_DR_Title] = "title";
 
     return roles;
 }

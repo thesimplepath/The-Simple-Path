@@ -1,7 +1,7 @@
 /****************************************************************************
  * ==> TSP_Atlas -----------------------------------------------------------*
  ****************************************************************************
- * Description:  Document atlas, it's a kind of folder containing pages     *
+ * Description:  Document atlas                                             *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -33,50 +33,83 @@
 #include <vector>
 
 // core classes
+#include "TSP_Item.h"
 #include "TSP_Page.h"
 
+// class prototypes
+class TSP_Document;
+
 /**
-* Document atlas, it's a kind of folder containing pages
+* Document atlas
 *@author Jean-Milost Reymond
 */
-class TSP_Atlas
+class TSP_Atlas : public TSP_Item
 {
     public:
-        TSP_Atlas();
+        /**
+        * Constructor
+        *@param pOwner - the atlas owner
+        */
+        TSP_Atlas(TSP_Document* pOwner);
 
         /**
         * Constructor
-        *@param name - model name
+        *@param name - the atlas name
+        *@param pOwner - the atlas owner
         */
-        TSP_Atlas(const std::wstring& name);
+        TSP_Atlas(const std::wstring& name, TSP_Document* pOwner);
 
         virtual ~TSP_Atlas();
 
         /**
-        * Gets the model name
-        *@return the model name
+        * Gets the atlas name
+        *@return the atlas name
         */
         virtual inline std::wstring GetName() const;
 
         /**
-        * Sets the model name
-        *@param name - the model name
+        * Sets the atlas name
+        *@param name - the atlas name
         */
         virtual inline void SetName(const std::wstring& name);
 
         /**
-        * Gets the next available identifier
-        *@return next available identifier
-        *@note The identifier is unique in the model
-        *@note BE CAREFUL calling this function, the internal identifier generator will be incremented by 1
+        * Adds a new page in atlas
+        *@return newly added page
         */
-        virtual inline std::size_t GetNextID();
+        virtual TSP_Page* AddPage();
 
         /**
-        * Gets the last (i.e the higher) identifier in the model
-        *@return the last (i.e the higher) identifier in the model
+        * Adds a new page in atlas
+        *@param name - page name
+        *@return newly added page
         */
-        virtual inline std::size_t GetLastID() const;
+        virtual TSP_Page* AddPage(const std::wstring& name);
+
+        /**
+        * Removes a page
+        *@param index - page index to remove
+        */
+        virtual void RemovePage(std::size_t index);
+
+        /**
+        * Removes a page
+        *@param pPage - page to remove
+        */
+        virtual void RemovePage(TSP_Page* pPage);
+
+        /**
+        * Gets page at index
+        *@param index - page index to get
+        *@return page, nullptr if not found or on error
+        */
+        virtual TSP_Page* GetPage(std::size_t index) const;
+
+        /**
+        * Gets page count
+        *@return page count
+        */
+        virtual std::size_t GetPageCount() const;
 
         /**
         * Loads a model from a file
@@ -93,9 +126,9 @@ class TSP_Atlas
     private:
         typedef std::vector<TSP_Page*> IPages;
 
-        IPages       m_Pages;
-        std::wstring m_Name;
-        std::size_t  m_NbrGen = 0;
+        TSP_Document* m_pOwner;
+        IPages        m_Pages;
+        std::wstring  m_Name;
 };
 
 //---------------------------------------------------------------------------
@@ -109,15 +142,5 @@ std::wstring TSP_Atlas::GetName() const
 void TSP_Atlas::SetName(const std::wstring& name)
 {
     m_Name = name;
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Atlas::GetNextID()
-{
-    return ++m_NbrGen;
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Atlas::GetLastID() const
-{
-    return m_NbrGen;
 }
 //---------------------------------------------------------------------------

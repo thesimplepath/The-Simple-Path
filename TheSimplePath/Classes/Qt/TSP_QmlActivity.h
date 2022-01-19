@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_QmlActivity -----------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
- * Contained in: Core                                                       *
+ * Description:  Qt activity component                                      *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_Activity
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
-{}
-//---------------------------------------------------------------------------
+// std
+#include <map>
+
+// core classes
+#include "Core\TSP_Activity.h"
+
+// qt classes
+#include "TSP_QmlPage.h"
+
+/**
+* Qt activity component
+*@author Jean-Milost Reymond
+*/
+class TSP_QmlActivity : public TSP_Activity
+{
+    public:
+        /**
+        * Constructor
+        *@param pOwner - the page owner
+        */
+        TSP_QmlActivity(TSP_QmlPage* pOwner);
+
+        /**
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
+        */
+        TSP_QmlActivity(const std::wstring& title,
+                        const std::wstring& description,
+                        const std::wstring& comments,
+                              TSP_QmlPage*  pOwner);
+
+        virtual ~TSP_QmlActivity();
+
+    private:
+};

@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Page ------------------------------------------------------------*
+ * ==> TSP_QmlLinkProxy ----------------------------------------------------*
  ****************************************************************************
- * Description:  Document page                                              *
- * Contained in: Core                                                       *
+ * Description:  Link proxy between qml view and application engine         *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,100 +27,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Page.h"
-
-// core classes
-#include "TSP_Atlas.h"
+#include "TSP_QmlLinkProxy.h"
 
 //---------------------------------------------------------------------------
-// TSP_Page
+// TSP_QmlLinkProxy
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(TSP_Atlas* pOwner) :
-    TSP_Item(),
-    m_pOwner(pOwner)
+TSP_QmlLinkProxy::TSP_QmlLinkProxy(QObject* pParent) :
+    TSP_QmlProxy(pParent)
 {}
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(const std::wstring& name, TSP_Atlas* pOwner) :
-    TSP_Item(),
-    m_Name(name),
-    m_pOwner(pOwner)
+TSP_QmlLinkProxy::~TSP_QmlLinkProxy()
 {}
 //---------------------------------------------------------------------------
-TSP_Page::~TSP_Page()
+QString TSP_QmlLinkProxy::getTitle() const
 {
-    for each (auto pComponent in m_Components)
-        delete pComponent;
+    return m_Title;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity()
+QString TSP_QmlLinkProxy::getDescription() const
 {
-    // FIXME config parameters
-    return AddActivity(L"", L"", L"", 0, 0);
+    return m_Description;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity(const std::wstring& name,
-                                    const std::wstring& description,
-                                    const std::wstring& comments,
-                                          int           x,
-                                          int           y)
+QString TSP_QmlLinkProxy::getComments() const
 {
-    // FIXME handle x and y params
-    std::unique_ptr<TSP_Activity> pActivity =
-            std::make_unique<TSP_Activity>(name, description, comments, this);
-    m_Components.push_back(pActivity.get());
-    return pActivity.release();
+    return m_Comments;
 }
 //---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(const std::string& uid)
+void TSP_QmlLinkProxy::setTitle(const QString& title)
 {
-    RemoveActivity(GetActivity(uid));
-}
-//---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(TSP_Activity* pActivity)
-{
-    if (!pActivity)
-        return;
+    m_Title = title;
 
-    for (std::size_t i = 0; i < m_Components.size(); ++i)
-        if (m_Components[i] == pActivity)
-        {
-            delete m_Components[i];
-            m_Components.erase(m_Components.begin() + i);
-            return;
-        }
+    emit titleChanged(m_Title);
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::GetActivity(const std::string& uid) const
+void TSP_QmlLinkProxy::setDescription(const QString& description)
 {
-    for each (auto pComponent in m_Components)
-        if (pComponent->GetUID() == uid)
-        {
-            TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
+    m_Description = description;
 
-            if (pActivity)
-                return pActivity;
-        }
-
-    return nullptr;
+    emit descriptionChanged(m_Description);
 }
 //---------------------------------------------------------------------------
-std::size_t TSP_Page::GetActivityCount() const
+void TSP_QmlLinkProxy::setComments(const QString& comments)
 {
-    std::size_t count = 0;
+    m_Comments = comments;
 
-    for each (auto pComponent in m_Components)
-    {
-        TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
-
-        if (pActivity)
-            return ++count;
-    }
-
-    return count;
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Page::GetComponentCount() const
-{
-    return m_Components.size();
+    emit commentsChanged(m_Comments);
 }
 //---------------------------------------------------------------------------

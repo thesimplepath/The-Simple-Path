@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_QmlPage ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
- * Contained in: Core                                                       *
+ * Description:  Qt document page                                           *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_Activity
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
-{}
-//---------------------------------------------------------------------------
+// std
+#include <vector>
+
+// core classes
+#include "Core\TSP_Page.h"
+
+// qt classes
+#include "TSP_QmlAtlas.h"
+
+/**
+* Qt document page
+*@author Jean-Milost Reymond
+*/
+class TSP_QmlPage : public TSP_Page
+{
+    public:
+        /**
+        * Constructor
+        *@param pOwner - the page owner
+        */
+        TSP_QmlPage(TSP_QmlAtlas* pOwner);
+
+        /**
+        * Constructor
+        *@param name - the page name
+        *@param pOwner - the page owner
+        */
+        TSP_QmlPage(const std::wstring& name, TSP_QmlAtlas* pOwner);
+
+        virtual ~TSP_QmlPage();
+};

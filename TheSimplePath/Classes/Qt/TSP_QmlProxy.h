@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_QmlProxy --------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
- * Contained in: Core                                                       *
+ * Description:  Proxy between qml view and application engine              *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,25 +27,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Element.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_Element
-//---------------------------------------------------------------------------
-TSP_Element::TSP_Element()
+// qt
+#include <QObject>
+
+/**
+* Proxy between qml view and application engine
+*@author Jean-Milost Reymond
+*/
+class TSP_QmlProxy : public QObject
 {
-    // use the pointer itself as unique identifier
-    m_UID = std::to_string(std::uintptr_t(this));
-}
-//---------------------------------------------------------------------------
-TSP_Element::~TSP_Element()
-{
-    for each (auto pAttribute in m_Attributes)
-        delete pAttribute;
-}
-//---------------------------------------------------------------------------
-std::string TSP_Element::GetUID() const
-{
-    return m_UID;
-}
-//---------------------------------------------------------------------------
+    Q_OBJECT
+    Q_PROPERTY(QString uid READ getUID)
+
+    public slots:
+        QString getUID() const;
+
+    public:
+        /**
+        * Constructor
+        *@param pParent - object which will be the parent of this object
+        */
+        explicit TSP_QmlProxy(QObject* pParent = nullptr);
+
+        virtual ~TSP_QmlProxy();
+
+    private:
+        std::string m_UID;
+};

@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_PageProxy -------------------------------------------------------*
+ * ==> TSP_QmlDocument -----------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between a page on the UI and its c++ representation  *
- * Contained in: Component                                                  *
+ * Description:  Qt document                                                *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,25 +27,86 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_PageProxy.h"
+#include "TSP_QmlDocument.h"
+
+ // application
+#include "TSP_Application.h"
+
+ // qt
+#include <QQmlContext>
 
 //---------------------------------------------------------------------------
-// TSP_PageProxy
+// TSP_QmlDocument
 //---------------------------------------------------------------------------
-TSP_PageProxy::TSP_PageProxy(QObject* pParent) :
-    TSP_ComponentProxy(pParent)
-{}
-//---------------------------------------------------------------------------
-TSP_PageProxy::~TSP_PageProxy()
-{}
-//---------------------------------------------------------------------------
-void TSP_PageProxy::symbolAdded(const QString& pageUID, const QString& symbolUID)
+TSP_QmlDocument::TSP_QmlDocument(TSP_Application* pApp) :
+    TSP_Document(),
+    m_pApp(pApp)
 {
-    int ii = 0;
+    Initialize();
 }
 //---------------------------------------------------------------------------
-void TSP_PageProxy::messageAdded(const QString& pageUID, const QString& messageUID)
+TSP_QmlDocument::TSP_QmlDocument(TSP_Application* pApp, const std::wstring& title) :
+    TSP_Document(title),
+    m_pApp(pApp)
 {
-    int ii = 0;
+    Initialize();
+}
+//---------------------------------------------------------------------------
+TSP_QmlDocument::~TSP_QmlDocument()
+{}
+//---------------------------------------------------------------------------
+void TSP_QmlDocument::DeclareContextProperties(QQmlApplicationEngine* pEngine)
+{
+    if (!pEngine)
+        return;
+
+    pEngine->rootContext()->setContextProperty("tspDocumentModel", m_pDocumentModel);
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_QmlDocument::AddAtlas()
+{
+    if (!m_pDocumentModel)
+        // FIXME LOG
+        return nullptr;
+
+    m_pDocumentModel->beginAddAtlas();
+    TSP_Document::AddAtlas();
+    m_pDocumentModel->endAddAtlas();
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_QmlDocument::AddAtlas(const std::wstring& name)
+{
+    if (!m_pDocumentModel)
+        return nullptr;
+
+    m_pDocumentModel->beginAddAtlas();
+    TSP_Document::AddAtlas(name);
+    m_pDocumentModel->endAddAtlas();
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocument::RemoveAtlas(std::size_t index)
+{
+    if (!m_pDocumentModel)
+        return;
+
+    m_pDocumentModel->beginRemoveAtlas();
+    TSP_Document::RemoveAtlas(index);
+    m_pDocumentModel->endRemoveAtlas();
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocument::RemoveAtlas(TSP_Atlas* pAtlas)
+{
+    if (!m_pDocumentModel)
+        return;
+
+    m_pDocumentModel->beginRemoveAtlas();
+    TSP_Document::RemoveAtlas(pAtlas);
+    m_pDocumentModel->endRemoveAtlas();
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocument::Initialize()
+{
+    // initialize document instances
+    m_pDocumentModel = new TSP_QmlDocumentModel(this);
 }
 //---------------------------------------------------------------------------

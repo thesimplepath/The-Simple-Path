@@ -1,7 +1,7 @@
 /****************************************************************************
  * ==> TSP_Atlas -----------------------------------------------------------*
  ****************************************************************************
- * Description:  Document atlas, it's a kind of folder containing pages     *
+ * Description:  Document atlas                                             *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -29,20 +29,81 @@
 
 #include "TSP_Atlas.h"
 
+// std
+#include <memory>
+
+// core classes
+#include "TSP_Document.h"
+
 //---------------------------------------------------------------------------
 // TSP_Atlas
 //---------------------------------------------------------------------------
-TSP_Atlas::TSP_Atlas()
+TSP_Atlas::TSP_Atlas(TSP_Document* pOwner) :
+    TSP_Item(),
+    m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Atlas::TSP_Atlas(const std::wstring& name) :
-    m_Name(name)
+TSP_Atlas::TSP_Atlas(const std::wstring& name, TSP_Document* pOwner) :
+    TSP_Item(),
+    m_Name(name),
+    m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
 TSP_Atlas::~TSP_Atlas()
 {
     for each (auto pPage in m_Pages)
         delete pPage;
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Atlas::AddPage()
+{
+    auto pPage = std::make_unique<TSP_Page>(this);
+    m_Pages.push_back(pPage.get());
+    return pPage.release();
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Atlas::AddPage(const std::wstring& name)
+{
+    auto pPage = std::make_unique<TSP_Page>(name, this);
+    m_Pages.push_back(pPage.get());
+    return pPage.release();
+}
+//---------------------------------------------------------------------------
+void TSP_Atlas::RemovePage(std::size_t index)
+{
+    // is index out of bounds?
+    if (index >= m_Pages.size())
+        return;
+
+    // delete the page
+    delete m_Pages[index];
+    m_Pages.erase(m_Pages.begin() + index);
+}
+//---------------------------------------------------------------------------
+void TSP_Atlas::RemovePage(TSP_Page* pPage)
+{
+    // search for page to remove
+    for (std::size_t i = 0; i < m_Pages.size(); ++i)
+        // found it?
+        if (m_Pages[i] == pPage)
+        {
+            // remove the page and exit
+            RemovePage(i);
+            return;
+        }
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Atlas::GetPage(std::size_t index) const
+{
+    if (index >= m_Pages.size())
+        return nullptr;
+
+    return m_Pages[index];
+}
+//---------------------------------------------------------------------------
+std::size_t TSP_Atlas::GetPageCount() const
+{
+    return m_Pages.size();
 }
 //---------------------------------------------------------------------------
 bool TSP_Atlas::Load()

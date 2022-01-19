@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Element ---------------------------------------------------------*
+ * ==> TSP_Box -------------------------------------------------------------*
  ****************************************************************************
- * Description:  Basic element, which is a base for any symbol              *
+ * Description:  Box component                                              *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -33,32 +33,32 @@
 #include <vector>
 
 // core classes
-#include "TSP_Attribute.h"
+#include "TSP_Component.h"
 
 /**
-* Basic element, which is a base for any symbol
+* Box component
 *@author Jean-Milost Reymond
 */
-class TSP_Element
+class TSP_Box : public TSP_Component
 {
     public:
-        TSP_Element();
-        virtual ~TSP_Element();
+        /**
+        * Constructor
+        *@param pOwner - component owner
+        */
+        TSP_Box(TSP_Page* pOwner);
 
         /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
         */
-        std::string GetUID() const;
+        TSP_Box(const std::wstring& title,
+                const std::wstring& description,
+                const std::wstring& comments,
+                      TSP_Page*     pOwner);
 
-    protected:
-        TSP_Attributes m_Attributes;
-        std::string    m_UID;
-
-        /*
-        TSP_Elements m_Entering;
-        TSP_Elements m_Exiting;
-        TSP_Elements m_EnteringSide;
-        TSP_Elements m_ExitingSide;
-        */
+        virtual ~TSP_Box();
 };

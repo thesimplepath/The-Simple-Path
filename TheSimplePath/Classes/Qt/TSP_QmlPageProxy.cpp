@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_ProcedureSymbol -------------------------------------------------*
+ * ==> TSP_QmlPageProxy ----------------------------------------------------*
  ****************************************************************************
- * Description:  A symbol representing a procedure                          *
- * Contained in: Core                                                       *
+ * Description:  Page proxy between qml view and application engine         *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,23 +27,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_QmlPageProxy.h"
 
-// std
-#include <vector>
-
-// core classes
-#include "TSP_Symbol.h"
-
-/**
-* A symbol representing a procedure
-*@author Jean-Milost Reymond
-*/
-class TSP_ProcedureSymbol : public TSP_Symbol
+//---------------------------------------------------------------------------
+// TSP_QmlPageProxy
+//---------------------------------------------------------------------------
+TSP_QmlPageProxy::TSP_QmlPageProxy(QObject* pParent) :
+    TSP_QmlProxy(pParent)
+{}
+//---------------------------------------------------------------------------
+TSP_QmlPageProxy::~TSP_QmlPageProxy()
+{}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::symbolAdded(const QString& pageUID, const QString& symbolUID)
 {
-    public:
-        TSP_ProcedureSymbol();
-        virtual ~TSP_ProcedureSymbol();
-
-    private:
-};
+    int ii = 0;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::messageAdded(const QString& pageUID, const QString& messageUID)
+{
+    int ii = 0;
+}
+//---------------------------------------------------------------------------

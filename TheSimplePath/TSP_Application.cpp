@@ -28,9 +28,13 @@
 
 #include "TSP_Application.h"
 
-// component classes
-#include "TSP_BoxProxy.h"
-#include "TSP_LinkProxy.h"
+// common classes
+#include "Common\TSP_Logger.h"
+
+// qt classes
+#include "QT\TSP_QmlBoxProxy.h"
+#include "QT\TSP_QmlLinkProxy.h"
+#include "QT\TSP_QmlPageProxy.h"
 
 // qt
 #include <QQmlContext>
@@ -54,17 +58,40 @@ TSP_Application::~TSP_Application()
     if (m_pEngine)
         delete m_pEngine;
 
+    if (m_pDocument)
+        delete m_pDocument;
+
+    /*REM
     if (m_pPageModel)
         delete m_pPageModel;
 
     if (m_pDocumentModel)
         delete m_pDocumentModel;
+    */
 
     if (m_pMainFormModel)
         delete m_pMainFormModel;
 
     if (m_pApp)
         delete m_pApp;
+}
+//---------------------------------------------------------------------------
+void TSP_Application::DeclareContextProperties()
+{
+    M_LogT("Execute - declaring context properties...");
+
+    // component proxies registration
+    qmlRegisterType<TSP_QmlBoxProxy> ("thesimplepath.proxys", 1, 0, "BoxProxy");
+    qmlRegisterType<TSP_QmlLinkProxy>("thesimplepath.proxys", 1, 0, "LinkProxy");
+    qmlRegisterType<TSP_QmlPageProxy>("thesimplepath.proxys", 1, 0, "PageProxy");
+
+    // models registration
+    m_pEngine->rootContext()->setContextProperty("tspMainFormModel", m_pMainFormModel);
+
+    // declare document context properties
+    m_pDocument->DeclareContextProperties(m_pEngine);
+
+    M_LogT("Execute - context properties declared");
 }
 //---------------------------------------------------------------------------
 QGuiApplication* TSP_Application::GetQtApp() const
@@ -77,9 +104,9 @@ QQmlApplicationEngine* TSP_Application::GetQtEngine() const
     return m_pEngine;
 }
 //---------------------------------------------------------------------------
-TSP_DocumentModel* TSP_Application::GetDocumentModel() const
+TSP_QmlDocument* TSP_Application::GetDocument() const
 {
-    return m_pDocumentModel;
+    return m_pDocument;
 }
 //---------------------------------------------------------------------------
 int TSP_Application::Execute()
@@ -106,7 +133,7 @@ int TSP_Application::Execute()
     M_LogT("Execute - initialization terminated successfully - now application starts");
 
     //REM
-    m_pDocumentModel->addAtlas(QString("Test atlas"));
+    //m_pDocumentModel->addAtlas(QString("Test atlas"));
     //m_pDocumentModel->GetDocument()->Save(L"__TEST.json");
     //REM END
 
@@ -130,9 +157,8 @@ void TSP_Application::InitializeQt(int argc, char* argv[])
     // initialize application instances
     m_pApp           = new QGuiApplication(argc, argv);
     m_pEngine        = new QQmlApplicationEngine();
-    m_pMainFormModel = new TSP_MainFormModel();
-    m_pDocumentModel = new TSP_DocumentModel();
-    m_pPageModel     = new TSP_PageModel();
+    m_pMainFormModel = new TSP_MainFormModel(this);
+    m_pDocument      = new TSP_QmlDocument(this);
 
     // Todo FIXME -cFeature -oJean: Check if uuid are required for this project and move this code at the correct location
     /*
@@ -140,22 +166,6 @@ void TSP_Application::InitializeQt(int argc, char* argv[])
     std::string m_UID = uuids::to_string(id);
     int test = 0;
     */
-}
-//---------------------------------------------------------------------------
-void TSP_Application::DeclareContextProperties()
-{
-    M_LogT("Execute - declaring context properties...");
-
-    // component proxies registration
-    qmlRegisterType<TSP_BoxProxy> ("thesimplepath.component", 1, 0, "BoxProxy");
-    qmlRegisterType<TSP_LinkProxy>("thesimplepath.component", 1, 0, "LinkProxy");
-    qmlRegisterType<TSP_LinkProxy>("thesimplepath.component", 1, 0, "PageProxy");
-
-    m_pEngine->rootContext()->setContextProperty("tspMainFormModel", m_pMainFormModel);
-    m_pEngine->rootContext()->setContextProperty("tspDocumentModel", m_pDocumentModel);
-    m_pEngine->rootContext()->setContextProperty("tspPageModel",     m_pPageModel);
-
-    M_LogT("Execute - context properties declared");
 }
 //---------------------------------------------------------------------------
 void TSP_Application::RedirectQmlLogs(QtMsgType type, const QMessageLogContext& context, const QString& msg)

@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_DocumentModel ---------------------------------------------------*
+ * ==> TSP_QmlDocumentModel ------------------------------------------------*
  ****************************************************************************
- * Description:  A model for the document                                   *
- * Contained in: Models                                                     *
+ * Description:  Qt document qml model                                      *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -32,21 +32,18 @@
 // std
 #include <vector>
 
-// core classes
-#include "Core\TSP_Document.h"
-
-// model classes
-#include "Models\TSP_AtlasModel.h"
-
 // qt
 #include <QObject>
 #include <QAbstractListModel>
 
+// class prototype
+class TSP_QmlDocument;
+
 /**
-* A model for the document
+* Qt document qml model
 *@author Jean-Milost Reymond
 */
-class TSP_DocumentModel : public QAbstractListModel
+class TSP_QmlDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
     //Q_PROPERTY(float x READ userName WRITE setUserName NOTIFY userNameChanged)
@@ -57,41 +54,43 @@ class TSP_DocumentModel : public QAbstractListModel
         */
         enum class IEDataRole
         {
-            IE_DR_Title = 0,
-            IE_DR_ModelName
+            IE_DR_Title = 0
         };
 
         /**
         * Constructor
+        *@param pDocument - document which owns this model
         *@param pParent - object which will be the parent of this object
         */
-        explicit TSP_DocumentModel(QObject* pParent = nullptr);
+        explicit TSP_QmlDocumentModel(TSP_QmlDocument* pDocument, QObject* pParent = nullptr);
 
-        virtual ~TSP_DocumentModel();
+        virtual ~TSP_QmlDocumentModel();
 
         /**
         * Gets the main document
         *@return the main document, nullptr if not found or on error
         */
-        virtual TSP_Document* GetDocument() const;
+        virtual TSP_QmlDocument* GetDocument() const;
 
         /**
-        * Gets the atlas model
-        *@return the atlas model, nullptr if not found or on error
+        * Notify that an atlas will be added
         */
-        virtual TSP_AtlasModel* GetAtlasModel() const;
+        virtual Q_INVOKABLE void beginAddAtlas();
 
         /**
-        * Adds an atlas
-        *@param name - atlas name
+        * Notify that an atlas was added
         */
-        virtual Q_INVOKABLE void addAtlas(const QString& name);
+        virtual Q_INVOKABLE void endAddAtlas();
 
         /**
-        * Removes an atlas
-        *@param index - atlas index to remove
+        * Notify that an atlas will be removed
         */
-        virtual Q_INVOKABLE void removeAtlas(std::size_t index);
+        virtual Q_INVOKABLE void beginRemoveAtlas();
+
+        /**
+        * Notify that an atlas was removed
+        */
+        virtual Q_INVOKABLE void endRemoveAtlas();
 
         /**
         * Get row count
@@ -115,6 +114,5 @@ class TSP_DocumentModel : public QAbstractListModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     private:
-        TSP_Document*   m_pDocument   = nullptr;
-        TSP_AtlasModel* m_pAtlasModel = nullptr;
+        TSP_QmlDocument* m_pDocument = nullptr;
 };

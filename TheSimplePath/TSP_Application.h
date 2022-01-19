@@ -35,9 +35,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-// core classes
-#include "Models\TSP_DocumentModel.h"
-#include "Models\TSP_PageModel.h"
+// qt classes
+#include "Qt\TSP_QmlDocument.h"
 
 // application
 #include "TSP_MainFormModel.h"
@@ -60,6 +59,11 @@ class TSP_Application
         virtual ~TSP_Application();
 
         /**
+        * Declares the context properties (i.e models linked with qml, ...)
+        */
+        void DeclareContextProperties();
+
+        /**
         * Gets the Qt application
         *@return the Qt application, nullptr if not found or on error
         */
@@ -71,11 +75,8 @@ class TSP_Application
         */
         virtual QQmlApplicationEngine* GetQtEngine() const;
 
-        /**
-        * Gets the main document model
-        *@return the main document model, nullptr if not found or on error
-        */
-        virtual TSP_DocumentModel* GetDocumentModel() const;
+        // FIXME comment
+        virtual TSP_QmlDocument* GetDocument() const;
 
         /**
         * Executes the main application
@@ -87,9 +88,8 @@ class TSP_Application
         std::wstring           m_URL;
         QGuiApplication*       m_pApp           = nullptr;
         QQmlApplicationEngine* m_pEngine        = nullptr;
+        TSP_QmlDocument*       m_pDocument      = nullptr;
         TSP_MainFormModel*     m_pMainFormModel = nullptr;
-        TSP_DocumentModel*     m_pDocumentModel = nullptr;
-        TSP_PageModel*         m_pPageModel     = nullptr;
 
         /**
         * Initializes the qt application
@@ -97,11 +97,6 @@ class TSP_Application
         *@param argv - argument vector passed by the user
         */
         void InitializeQt(int argc, char* argv[]);
-
-        /**
-        * Declares the context properties (i.e models linked with qml, ...)
-        */
-        void DeclareContextProperties();
 
         /**
         * Redirects qml logs to application logger

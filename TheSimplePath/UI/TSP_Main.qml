@@ -90,6 +90,9 @@ ApplicationWindow
         anchors.bottom: parent.bottom
     }
 
+    /**
+    * Document model connections
+    */
     Connections
     {
         // common properties
@@ -111,6 +114,34 @@ ApplicationWindow
 
             m_MainFormModel.docStatus = TSP_Main.IEDocStatus.IE_DS_Opened;
         }
+
+        /**
+        * Called when a row is inserted
+        *@param parentIndex - item index which will own the added item(s), if null, item(s) is added to root
+        *@param first - first item index to remove
+        *@param last - last item index to remove
+        */
+        /*REM
+        function onRowsInserted(parentIndex, first, last)
+        {
+            //REM showProperDeviceConnectPage();
+            return true;
+        }
+        */
+
+        /**
+        * Called when a row is inserted
+        *@param parentIndex - item index which will own the added item(s), if null, item(s) is added to root
+        *@param first - first item index to remove
+        *@param last - last item index to remove
+        */
+        /*REM
+        function onRowsRemoved(parentIndex, first, last)
+        {
+            //REM showProperDeviceConnectPage();
+            return true;
+        }
+        */
     }
 
     /**

@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_ComponentProxy --------------------------------------------------*
+ * ==> TSP_QmlBoxProxy -----------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between an UI component and its c++ representation   *
- * Contained in: Component                                                  *
+ * Description:  Box proxy between qml view and application engine          *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,30 +29,78 @@
 
 #pragma once
 
+// component classes
+#include "TSP_QmlProxy.h"
+
 // qt
 #include <QObject>
 
 /**
-* Component proxy
+* Box proxy
 *@author Jean-Milost Reymond
 */
-class TSP_ComponentProxy : public QObject
+class TSP_QmlBoxProxy : public TSP_QmlProxy
 {
     Q_OBJECT
-    Q_PROPERTY(QString uid READ getUID)
+
+    // properties
+    Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
+    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
 
     public slots:
-        QString getUID() const;
+        /**
+        * Gets the box title
+        *@return the box title
+        */
+        virtual QString getTitle() const;
+
+        /**
+        * Gets the box description
+        *@return the box description
+        */
+        virtual QString getDescription() const;
+
+        /**
+        * Gets the box comments
+        *@return the box comments
+        */
+        virtual QString getComments() const;
+
+        /**
+        * Sets the box title
+        *@param title - the box title
+        */
+        virtual void setTitle(const QString& title);
+
+        /**
+        * Sets the box description
+        *@return the box description
+        */
+        virtual void setDescription(const QString& description);
+
+        /**
+        * Sets the box comments
+        *@return the box comments
+        */
+        virtual void setComments(const QString& comments);
+
+    signals:
+        void titleChanged(const QString& title);
+        void descriptionChanged(const QString& description);
+        void commentsChanged(const QString& comments);
 
     public:
         /**
         * Constructor
         *@param pParent - object which will be the parent of this object
         */
-        explicit TSP_ComponentProxy(QObject* pParent = nullptr);
+        explicit TSP_QmlBoxProxy(QObject* pParent = nullptr);
 
-        virtual ~TSP_ComponentProxy();
+        virtual ~TSP_QmlBoxProxy();
 
     private:
-        std::string m_UID;
+        QString m_Title;
+        QString m_Description;
+        QString m_Comments;
 };

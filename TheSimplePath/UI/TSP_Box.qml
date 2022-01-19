@@ -6,7 +6,7 @@ import QtQuick.Templates 2.15 as T
 import "js/TSP_JSHelper.js" as JSHelper
 
 // c++
-import thesimplepath.component 1.0
+import thesimplepath.proxys 1.0
 
 /**
 * Box, it's a basic component which can be moved and resized, and contain connectors

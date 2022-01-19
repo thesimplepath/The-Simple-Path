@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_ProcedureSymbol -------------------------------------------------*
+ * ==> TSP_Message ---------------------------------------------------------*
  ****************************************************************************
- * Description:  A symbol representing a procedure                          *
+ * Description:  Message component                                          *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,15 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_ProcedureSymbol.h"
+#include "TSP_Message.h"
 
 //---------------------------------------------------------------------------
-// TSP_ProcedureSymbol
+// TSP_Message
 //---------------------------------------------------------------------------
-TSP_ProcedureSymbol::TSP_ProcedureSymbol()
+TSP_Message::TSP_Message(TSP_Page* pOwner) :
+    TSP_Link(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_ProcedureSymbol::~TSP_ProcedureSymbol()
-{
-}
+TSP_Message::TSP_Message(const std::wstring& title,
+                         const std::wstring& description,
+                         const std::wstring& comments,
+                               TSP_Page*     pOwner) :
+    TSP_Link(title, description, comments, pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_Message::~TSP_Message()
+{}
 //---------------------------------------------------------------------------

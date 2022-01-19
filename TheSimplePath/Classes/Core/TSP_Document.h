@@ -35,7 +35,6 @@
 // core classes
 #include "TSP_Atlas.h"
 #include "TSP_Page.h"
-#include "TSP_Element.h"
 
 /**
 * The main resource and process manager document
@@ -45,6 +44,13 @@ class TSP_Document
 {
     public:
         TSP_Document();
+
+        /**
+        * Constructor
+        *@param title - the document title
+        */
+        TSP_Document(const std::wstring& title);
+
         virtual ~TSP_Document();
 
         /**

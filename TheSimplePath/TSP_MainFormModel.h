@@ -35,6 +35,9 @@
 #include <QObject>
 #include <QPageSize>
 
+// class prototype
+class TSP_Application;
+
 /**
 * Main form model
 *@author Jean-Milost Reymond
@@ -68,9 +71,10 @@ class TSP_MainFormModel : public QObject
     public:
         /**
         * Constructor
+        *@param pApp - main application
         *@param pParent - parent object owning this object
         */
-        TSP_MainFormModel(QObject* pParent = nullptr);
+        TSP_MainFormModel(TSP_Application* pApp, QObject* pParent = nullptr);
 
         virtual ~TSP_MainFormModel();
 
@@ -97,6 +101,7 @@ class TSP_MainFormModel : public QObject
         virtual Q_INVOKABLE void onTestClicked();
 
     private:
-        IEDocStatus m_DocStatus = IEDocStatus::IE_DS_Closed;
-        QPageSize   m_PageSize;
+        TSP_Application* m_pApp      = nullptr;
+        IEDocStatus      m_DocStatus = IEDocStatus::IE_DS_Closed;
+        QPageSize        m_PageSize;
 };

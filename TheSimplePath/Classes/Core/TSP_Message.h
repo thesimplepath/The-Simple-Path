@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_Message ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
+ * Description:  Message component                                          *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,22 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Activity.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_Activity
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::TSP_Activity(const std::wstring& title,
-                           const std::wstring& description,
-                           const std::wstring& comments,
-                                 TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Activity::~TSP_Activity()
-{}
-//---------------------------------------------------------------------------
+// std
+#include <vector>
+
+// core classes
+#include "TSP_Link.h"
+
+/**
+* Message component
+*@author Jean-Milost Reymond
+*/
+class TSP_Message : public TSP_Link
+{
+    public:
+        /**
+        * Constructor
+        *@param pOwner - component owner
+        */
+        TSP_Message(TSP_Page* pOwner);
+
+        /**
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
+        */
+        TSP_Message(const std::wstring& title,
+                    const std::wstring& description,
+                    const std::wstring& comments,
+                          TSP_Page*     pOwner);
+
+        virtual ~TSP_Message();
+};

@@ -1,5 +1,5 @@
 /****************************************************************************
- * ==> TSP_ComponentProxy --------------------------------------------------*
+ * ==> TSP_QmlProxy --------------------------------------------------------*
  ****************************************************************************
  * Description:  Proxy between an UI component and its c++ representation   *
  * Contained in: Component                                                  *
@@ -27,15 +27,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_ComponentProxy.h"
+#include "TSP_QmlProxy.h"
 
 // component classes
 #include "TSP_ProxyDictionary.h"
 
 //---------------------------------------------------------------------------
-// TSP_ComponentProxy
+// TSP_QmlProxy
 //---------------------------------------------------------------------------
-TSP_ComponentProxy::TSP_ComponentProxy(QObject* pParent) :
+TSP_QmlProxy::TSP_QmlProxy(QObject* pParent) :
     QObject(pParent)
 {
     // use the pointer itself as unique identifier
@@ -45,12 +45,12 @@ TSP_ComponentProxy::TSP_ComponentProxy(QObject* pParent) :
     TSP_ProxyDictionary::Instance()->Register(m_UID, this);
 }
 //---------------------------------------------------------------------------
-TSP_ComponentProxy::~TSP_ComponentProxy()
+TSP_QmlProxy::~TSP_QmlProxy()
 {
     TSP_ProxyDictionary::Instance()->Unregister(m_UID);
 }
 //---------------------------------------------------------------------------
-QString TSP_ComponentProxy::getUID() const
+QString TSP_QmlProxy::getUID() const
 {
     return QString::fromStdString(m_UID);
 }

@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_Activity --------------------------------------------------------*
+ * ==> TSP_Component -------------------------------------------------------*
  ****************************************************************************
- * Description:  Activity component                                         *
+ * Description:  Component (which may be inserted on a page)                *
  * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -29,25 +29,25 @@
 
 #pragma once
 
-// std
-#include <map>
-
 // core classes
-#include "TSP_Box.h"
+#include "TSP_Item.h"
 #include "TSP_Attribute.h"
 
+// class prototypes
+class TSP_Page;
+
 /**
-* Activity component
+* Component (which may be inserted on a page)
 *@author Jean-Milost Reymond
 */
-class TSP_Activity : public TSP_Box
+class TSP_Component : public TSP_Item
 {
     public:
         /**
         * Constructor
-        *@param pOwner - the page owner
+        *@param pOwner - component owner
         */
-        TSP_Activity(TSP_Page* pOwner);
+        TSP_Component(TSP_Page* pOwner);
 
         /**
         * Constructor
@@ -56,12 +56,65 @@ class TSP_Activity : public TSP_Box
         *@param comments - component comments
         *@param pOwner - component owner
         */
-        TSP_Activity(const std::wstring& title,
-                     const std::wstring& description,
-                     const std::wstring& comments,
-                           TSP_Page*     pOwner);
+        TSP_Component(const std::wstring& title,
+                      const std::wstring& description,
+                      const std::wstring& comments,
+                            TSP_Page*     pOwner);
 
-        virtual ~TSP_Activity();
+        virtual ~TSP_Component();
+
+        /**
+        * Gets the title
+        *@return the title
+        */
+        virtual std::wstring GetTitle() const;
+
+        /**
+        * Sets the title
+        *@param value - the title
+        *@return true on success, otherwise false
+        */
+        virtual bool SetTitle(const std::wstring& value);
+
+        /**
+        * Gets the description
+        *@return the description
+        */
+        virtual std::wstring GetDescription() const;
+
+        /**
+        * Sets the description
+        *@param value - the description
+        *@return true on success, otherwise false
+        */
+        virtual bool SetDescription(const std::wstring& value);
+
+        /**
+        * Gets the comments
+        *@return the comments
+        */
+        virtual std::wstring GetComments() const;
+
+        /**
+        * Sets the comments
+        *@param value - the comments
+        *@return true on success, otherwise false
+        */
+        virtual bool SetComments(const std::wstring& value);
 
     private:
+        TSP_Page*      m_pOwner;
+        TSP_Attributes m_Attributes;
+        std::wstring   m_Title; // FIXME attribute?
+        std::wstring   m_Description; // FIXME attribute?
+        std::wstring   m_Comments; // FIXME attribute?
+
+        // FIXME
+        /*
+        typedef std::vector<TSP_Component*> IComponents;
+        IComponents m_Entering;
+        TSP_Components m_Exiting;
+        TSP_Components m_EnteringSide;
+        TSP_Components m_ExitingSide;
+        */
 };
