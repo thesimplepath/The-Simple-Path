@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_PageModel -------------------------------------------------------*
- ****************************************************************************
- * Description:  A model for the page                                       *
- * Contained in: Component                                                  *
+ * ==> TSP_GlobalMacros ----------------------------------------------------*
+ * **************************************************************************
+ * Description : Macros collection which may be used globally               *
+ * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,42 +27,4 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
-
-// std
-#include <vector>
-
-// qt
-#include <QObject>
-
-/**
-* A model for the pages
-*@author Jean-Milost Reymond
-*/
-class TSP_PageModel : public QObject
-{
-    Q_OBJECT
-
-    public:
-        /**
-        * Constructor
-        *@param pParent - object which will be the parent of this object
-        */
-        explicit TSP_PageModel(QObject* pParent = nullptr);
-
-        virtual ~TSP_PageModel();
-
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param symbolUID - symbol unique identifier
-        */
-        virtual Q_INVOKABLE void onSymbolAdded(const QString& pageUID, const QString& symbolUID);
-
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param msgUID - message unique identifier
-        */
-        virtual Q_INVOKABLE void onMessageAdded(const QString& pageUID, const QString& msgUID);
-};
+#include "TSP_GlobalMacros.h"

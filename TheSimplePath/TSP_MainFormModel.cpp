@@ -29,7 +29,7 @@
 #include "TSP_MainFormModel.h"
 
 // qt classes
-#include "QT\TSP_ProxyDictionary.h"
+#include "Qt\TSP_QmlProxyDictionary.h" // REM?
 
 // application
 #include "TSP_Application.h"
@@ -50,16 +50,6 @@ TSP_MainFormModel::TSP_MainFormModel(TSP_Application* pApp, QObject* pParent) :
 //---------------------------------------------------------------------------
 TSP_MainFormModel::~TSP_MainFormModel()
 {}
-//---------------------------------------------------------------------------
-int TSP_MainFormModel::getDocStatus() const
-{
-    return (int)m_DocStatus;
-}
-//---------------------------------------------------------------------------
-void TSP_MainFormModel::setDocStatus(int docStatus)
-{
-    m_DocStatus = (IEDocStatus)docStatus;
-}
 //---------------------------------------------------------------------------
 int TSP_MainFormModel::getPageWidth() const
 {
@@ -102,18 +92,36 @@ int TSP_MainFormModel::getPageHeight() const
 void TSP_MainFormModel::onNewDocumentClicked()
 {
     if (!m_pApp)
+    {
+        M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
         return;
+    }
 
-    emit newDocument("MyDoc");
+    if (!m_pApp->GetDocument())
+    {
+        M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
+        return;
+    }
 
-    if (m_DocStatus != IEDocStatus::IE_DS_Opened)
-    {}
-
-    m_pApp->GetDocument()->AddAtlas();
+    // create the document
+    m_pApp->GetDocument()->Create();
 }
 //---------------------------------------------------------------------------
-void TSP_MainFormModel::onTestClicked()
+void TSP_MainFormModel::onCloseDocumentClicked()
 {
-    //REM TSP_ProxyDictionary::Instance()->test();
+    if (!m_pApp)
+    {
+        M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
+        return;
+    }
+
+    if (!m_pApp->GetDocument())
+    {
+        M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
+        return;
+    }
+
+    // close the document
+    m_pApp->GetDocument()->Close();
 }
 //---------------------------------------------------------------------------

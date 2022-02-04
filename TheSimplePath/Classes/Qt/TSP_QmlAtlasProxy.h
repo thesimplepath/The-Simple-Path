@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_JSHelper --------------------------------------------------------*
+ * ==> TSP_QmlAtlasProxy ---------------------------------------------------*
  ****************************************************************************
- * Description:  Javascript helper functions                                *
- * Contained in: Component                                                  *
+ * Description:  Atlas proxy between qml view and application engine        *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,70 +27,66 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
+#pragma once
+
+// qt classes
+#include "TSP_QmlProxy.h"
+
+// qt
+#include <QObject>
+#include <QVariant>
+
+// class prototypes
+class TSP_QmlAtlas;
+
 /**
-* Clamps a value in a range
-*@param {number} value - value to clamp
-*@param {number} min - min range value
-*@param {number} max - max range value
+* Atlas proxy
+*@author Jean-Milost Reymond
 */
-function clamp(value, min, max)
+class TSP_QmlAtlasProxy : public TSP_QmlProxy
 {
-    return Math.min(Math.max(value, min), max);
-}
+    Q_OBJECT
 
-/**
-* Clamps a value in a range between 0.0 and 1.0
-*@param {number} value - value to clamp
-*/
-function clamp01(value)
-{
-    return clamp(value, 0.0, 1.0);
-}
+    public:
+        Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
 
-/**
-* Sleeps during a time
-*@param {number} milliseconds - sleep time in milliseconds
-*/
-function sleep(milliseconds) {
-    const date    = new Date();
-    var   curDate = null;
+    public slots:
+        /**
+        * Gets the atlas name
+        *@return the atlas name
+        */
+        virtual QString getName() const;
 
-    do
-    {
-        curDate = new Date();
-    }
-    while (curDate - date < milliseconds);
-}
+        /**
+        * Sets the atlas name
+        *@param name - the atlas name
+        */
+        virtual void setName(const QString& name);
 
-/**
-* Logs all the children contained in an item
-*@param {item} item - start item from which the children should be logged
-*@note Start item will also be logged
-*/
-function logAllChildren(item)
-{
-    // iterate through children
-    for (let i = 0; i < item.children.length; ++i)
-        logAllChildren(item.children[i]);
+    signals:
+        void nameChanged(const QString& name);
 
-    // log child name
-    console.log("Child - name - " + item.objectName);
-}
+    public:
+        /**
+        * Constructor
+        *@param pParent - object which will be the parent of this object
+        */
+        explicit TSP_QmlAtlasProxy(QObject* pParent = nullptr);
 
-/**
-* Finds the items below a point
-*@param {item} item - start item from which the children should be logged
-*@param {point} point - point above which the items should be found
-*@param {array} result - found items
-*@note Start item will also be checked
-*/
-function getItemsAbovePoint(item, point, result)
-{
-    // iterate through children
-    for (let i = 0; i < item.children.length; ++i)
-        getItemsAbovePoint(item.children[i], point, result);
+        virtual ~TSP_QmlAtlasProxy();
 
-    // item contains point?
-    if (item.contains(item.mapFromGlobal(point.x, point.y)))
-        result.push(item);
-}
+        /**
+        * Gets the linked atlas
+        *@return the linked atlas, nullptr if no atlas
+        */
+        TSP_QmlAtlas* GetAtlas() const;
+
+        /**
+        * Sets the linked atlas
+        *@param pAtlas - the linked atlas
+        */
+        void SetAtlas(TSP_QmlAtlas* pAtlas);
+
+    private:
+        TSP_QmlAtlas* m_pAtlas = nullptr;
+};

@@ -37,6 +37,7 @@
 
 // qt classes
 #include "TSP_QmlDocument.h"
+#include "TSP_QmlAtlasProxy.h"
 
 /**
 * Qt document atlas
@@ -59,4 +60,63 @@ class TSP_QmlAtlas : public TSP_Atlas
         TSP_QmlAtlas(const std::wstring& name, TSP_QmlDocument* pOwner);
 
         virtual ~TSP_QmlAtlas();
+
+        /**
+        * Gets the atlas proxy
+        *@return the atlas proxy, nullptr if no proxy
+        */
+        TSP_QmlAtlasProxy* GetProxy() const;
+
+        /**
+        * Sets the atlas proxy
+        *@param pProxy - the atlas proxy
+        */
+        void SetProxy(TSP_QmlAtlasProxy* pProxy);
+
+        /**
+        * Creates a page
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage();
+
+        /**
+        * Creates a page
+        *@param name - page name
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage(const std::wstring& name);
+
+        /**
+        * Adds a new page in atlas
+        *@return newly added page
+        */
+        virtual TSP_Page* AddPage();
+
+        /**
+        * Adds a new page in atlas
+        *@param name - page name
+        *@return newly added page
+        */
+        virtual TSP_Page* AddPage(const std::wstring& name);
+
+        /**
+        * Removes a page
+        *@param index - page index to remove
+        */
+        virtual void RemovePage(std::size_t index);
+
+        /**
+        * Removes a page
+        *@param pPage - page to remove
+        */
+        virtual void RemovePage(TSP_Page* pPage);
+
+        /**
+        * Gets the currently selected page
+        *@return the currently selected page, nullptr if no page selected or on error
+        */
+        virtual TSP_Page* GetSelectedPage() const;
+
+    private:
+        TSP_QmlAtlasProxy* m_pProxy = nullptr;
 };

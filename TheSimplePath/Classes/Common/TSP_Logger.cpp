@@ -42,8 +42,21 @@
 //---------------------------------------------------------------------------
 // Static members
 //---------------------------------------------------------------------------
-TSP_Logger* TSP_Logger::m_pLogger = nullptr;
-std::mutex  TSP_Logger::m_Mutex;
+std::unique_ptr<TSP_Logger::IInstance> TSP_Logger::m_pLogger;
+std::mutex                             TSP_Logger::m_Mutex;
+//---------------------------------------------------------------------------
+// TSP_Logger::IInstance
+//---------------------------------------------------------------------------
+TSP_Logger::IInstance::IInstance()
+{
+    m_pInstance = new TSP_Logger();
+}
+//---------------------------------------------------------------------------
+TSP_Logger::IInstance::~IInstance()
+{
+    if (m_pInstance)
+        delete m_pInstance;
+}
 //---------------------------------------------------------------------------
 // TSP_Logger
 //---------------------------------------------------------------------------
@@ -176,14 +189,14 @@ TSP_Logger* TSP_Logger::Instance()
 
         // create the instance
         if (!m_pLogger)
-            m_pLogger = new (std::nothrow)TSP_Logger();
+            m_pLogger.reset(new (std::nothrow)IInstance());
     }
 
     // still not created?
     if (!m_pLogger)
         M_THROW_EXCEPTION("Could not create the Logger unique instance");
 
-    return m_pLogger;
+    return m_pLogger->m_pInstance;
 }
 //---------------------------------------------------------------------------
 void TSP_Logger::Release()
@@ -195,8 +208,7 @@ void TSP_Logger::Release()
         return;
 
     // delete the instance
-    delete m_pLogger;
-    m_pLogger = nullptr;
+    m_pLogger.reset(nullptr);
 }
 //---------------------------------------------------------------------------
 void TSP_Logger::Clear()

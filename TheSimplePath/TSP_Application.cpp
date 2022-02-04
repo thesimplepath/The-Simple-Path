@@ -35,9 +35,14 @@
 #include "QT\TSP_QmlBoxProxy.h"
 #include "QT\TSP_QmlLinkProxy.h"
 #include "QT\TSP_QmlPageProxy.h"
+#include "QT\TSP_QmlAtlasProxy.h"
 
 // qt
 #include <QQmlContext>
+
+#ifndef _DEBUG
+    #define REDIRECT_QML_LOGS_TO_LOGGER
+#endif
 
 //---------------------------------------------------------------------------
 // TSP_Application
@@ -61,13 +66,8 @@ TSP_Application::~TSP_Application()
     if (m_pDocument)
         delete m_pDocument;
 
-    /*REM
-    if (m_pPageModel)
-        delete m_pPageModel;
-
-    if (m_pDocumentModel)
-        delete m_pDocumentModel;
-    */
+    if (m_pPageListModel)
+        delete m_pPageListModel;
 
     if (m_pMainFormModel)
         delete m_pMainFormModel;
@@ -81,12 +81,14 @@ void TSP_Application::DeclareContextProperties()
     M_LogT("Execute - declaring context properties...");
 
     // component proxies registration
-    qmlRegisterType<TSP_QmlBoxProxy> ("thesimplepath.proxys", 1, 0, "BoxProxy");
-    qmlRegisterType<TSP_QmlLinkProxy>("thesimplepath.proxys", 1, 0, "LinkProxy");
-    qmlRegisterType<TSP_QmlPageProxy>("thesimplepath.proxys", 1, 0, "PageProxy");
+    qmlRegisterType<TSP_QmlBoxProxy>  ("thesimplepath.proxys", 1, 0, "BoxProxy");
+    qmlRegisterType<TSP_QmlLinkProxy> ("thesimplepath.proxys", 1, 0, "LinkProxy");
+    qmlRegisterType<TSP_QmlPageProxy> ("thesimplepath.proxys", 1, 0, "PageProxy");
+    qmlRegisterType<TSP_QmlAtlasProxy>("thesimplepath.proxys", 1, 0, "AtlasProxy");
 
     // models registration
     m_pEngine->rootContext()->setContextProperty("tspMainFormModel", m_pMainFormModel);
+    m_pEngine->rootContext()->setContextProperty("tspPageListModel", m_pPageListModel);
 
     // declare document context properties
     m_pDocument->DeclareContextProperties(m_pEngine);
@@ -107,6 +109,16 @@ QQmlApplicationEngine* TSP_Application::GetQtEngine() const
 TSP_QmlDocument* TSP_Application::GetDocument() const
 {
     return m_pDocument;
+}
+//---------------------------------------------------------------------------
+TSP_MainFormModel* TSP_Application::GetMainFormModel() const
+{
+    return m_pMainFormModel;
+}
+//---------------------------------------------------------------------------
+TSP_PageListModel* TSP_Application::GetPageListModel() const
+{
+    return m_pPageListModel;
 }
 //---------------------------------------------------------------------------
 int TSP_Application::Execute()
@@ -132,40 +144,25 @@ int TSP_Application::Execute()
 
     M_LogT("Execute - initialization terminated successfully - now application starts");
 
-    //REM
-    //m_pDocumentModel->addAtlas(QString("Test atlas"));
-    //m_pDocumentModel->GetDocument()->Save(L"__TEST.json");
-    //REM END
-
     return m_pApp->exec();
 }
 //---------------------------------------------------------------------------
-// Todo FIXME -cFeature -oJean: Check if uuid are required for this project and move this code at the correct location
-/*
-// uuid library
-#define UUID_SYSTEM_GENERATOR
-#include "uuid.h"
-*/
 void TSP_Application::InitializeQt(int argc, char* argv[])
 {
     // configure the Qt attributes
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     // redirect QT log messages to application logger
-    //FIXME qInstallMessageHandler(RedirectQmlLogs);
+    #ifdef REDIRECT_QML_LOGS_TO_LOGGER
+        qInstallMessageHandler(RedirectQmlLogs);
+    #endif
 
     // initialize application instances
     m_pApp           = new QGuiApplication(argc, argv);
     m_pEngine        = new QQmlApplicationEngine();
     m_pMainFormModel = new TSP_MainFormModel(this);
+    m_pPageListModel = new TSP_PageListModel(this);
     m_pDocument      = new TSP_QmlDocument(this);
-
-    // Todo FIXME -cFeature -oJean: Check if uuid are required for this project and move this code at the correct location
-    /*
-    const uuids::uuid id = uuids::uuid_system_generator{}();
-    std::string m_UID = uuids::to_string(id);
-    int test = 0;
-    */
 }
 //---------------------------------------------------------------------------
 void TSP_Application::RedirectQmlLogs(QtMsgType type, const QMessageLogContext& context, const QString& msg)

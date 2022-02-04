@@ -39,10 +39,25 @@
 class TSP_QmlProxy : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString uid READ getUID)
+
+    public:
+        Q_PROPERTY(QString uid READ getUID WRITE setUID NOTIFY uidChanged)
 
     public slots:
+        /**
+        * Gets the unique identifier
+        *@return the unique identifier
+        */
         QString getUID() const;
+
+        /**
+        * Sets the unique identifier
+        *@param uid - the unique identifier
+        */
+        void setUID(const QString& uid);
+
+    signals:
+        void uidChanged(const QString& uid);
 
     public:
         /**

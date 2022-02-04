@@ -46,7 +46,44 @@ class TSP_QmlDocument;
 class TSP_QmlDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
-    //Q_PROPERTY(float x READ userName WRITE setUserName NOTIFY userNameChanged)
+
+    public:
+        Q_PROPERTY(int     docStatus        READ getDocStatus        WRITE setDocStatus        NOTIFY docStatusChanged);
+        Q_PROPERTY(QString selectedAtlasUID READ getSelectedAtlasUID WRITE setSelectedAtlasUID NOTIFY selectedAtlasUIDChanged);
+
+    public slots:
+        /**
+        * Gets the document status
+        *@return the document status
+        */
+        int getDocStatus() const;
+
+        /**
+        * Sets the document status
+        *@param status - the document status
+        */
+        void setDocStatus(int status);
+
+        /**
+        * Gets the selected atlas unique identifier
+        *@return the selected atlas unique identifier
+        */
+        QString getSelectedAtlasUID() const;
+
+        /**
+        * Sets the selected atlas unique identifier
+        *@param uid - the selected atlas unique identifier
+        */
+        void setSelectedAtlasUID(QString uid);
+
+    signals:
+        void createDocumentView(const QString& name, int openedCount);
+        void deleteDocumentView();
+        void addAtlasToView(const QString& uid);
+        void removeAtlasFromView(const QString& uid);
+        void queryAtlasUID();
+        void docStatusChanged(int status);
+        void selectedAtlasUIDChanged(const QString& uid);
 
     public:
         /**
@@ -73,6 +110,18 @@ class TSP_QmlDocumentModel : public QAbstractListModel
         virtual TSP_QmlDocument* GetDocument() const;
 
         /**
+        * Creates a new document view on the user interface
+        *@return true on success, otherwise false
+        */
+        virtual bool CreateView();
+
+        /**
+        * Deletes the document view on the user interface
+        *@return true on success, otherwise false
+        */
+        virtual bool DeleteView();
+
+        /**
         * Notify that an atlas will be added
         */
         virtual Q_INVOKABLE void beginAddAtlas();
@@ -83,6 +132,12 @@ class TSP_QmlDocumentModel : public QAbstractListModel
         virtual Q_INVOKABLE void endAddAtlas();
 
         /**
+        * Adds an atlas to the view
+        *@param uid - atlas unique identifier to add
+        */
+        virtual Q_INVOKABLE void addAtlas(const QString& uid);
+
+        /**
         * Notify that an atlas will be removed
         */
         virtual Q_INVOKABLE void beginRemoveAtlas();
@@ -91,6 +146,18 @@ class TSP_QmlDocumentModel : public QAbstractListModel
         * Notify that an atlas was removed
         */
         virtual Q_INVOKABLE void endRemoveAtlas();
+
+        /**
+        * Removes an atlas from the view
+        *@param uid - atlas unique identifier to remove
+        */
+        virtual Q_INVOKABLE void removeAtlas(const QString& uid);
+
+        /**
+        * Queries the currently selected atlas unique identifier
+        *@return the currently selected atlas unique identifier, empty string if no selection
+        */
+        virtual QString QuerySelectedAtlasUID();
 
         /**
         * Get row count
@@ -114,5 +181,6 @@ class TSP_QmlDocumentModel : public QAbstractListModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     private:
-        TSP_QmlDocument* m_pDocument = nullptr;
+        TSP_QmlDocument* m_pDocument        = nullptr;
+        QString          m_SelectedAtlasUID;
 };

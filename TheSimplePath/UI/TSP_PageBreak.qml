@@ -15,8 +15,8 @@ TSP_Box
 
     // common properties
     m_Color:       "#202020"
-    m_BgColor:     m_IsProcess ? "#009ed6" : "white"
-    m_TextColor:   m_IsProcess ? "white"   : "#202020"
+    m_BgColor:     m_IsProcess ? "#009ed6"               : "white"
+    m_TextColor:   m_IsProcess ? Styles.m_LightTextColor : Styles.m_DarkTextColor
     m_Radius:      0
     m_BorderWidth: 2
 

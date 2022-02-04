@@ -29,6 +29,17 @@
 
 #include "TSP_QmlDocument.h"
 
+// std
+#include <sstream>
+
+// common classes
+#include "Common/TSP_Exception.h"
+#include "Common/TSP_GlobalMacros.h"
+
+// qt classes
+#include "TSP_QmlAtlas.h"
+#include "TSP_QmlProxyDictionary.h"
+
  // application
 #include "TSP_Application.h"
 
@@ -53,7 +64,10 @@ TSP_QmlDocument::TSP_QmlDocument(TSP_Application* pApp, const std::wstring& titl
 }
 //---------------------------------------------------------------------------
 TSP_QmlDocument::~TSP_QmlDocument()
-{}
+{
+    if (m_pDocumentModel)
+        delete m_pDocumentModel;
+}
 //---------------------------------------------------------------------------
 void TSP_QmlDocument::DeclareContextProperties(QQmlApplicationEngine* pEngine)
 {
@@ -63,50 +77,279 @@ void TSP_QmlDocument::DeclareContextProperties(QQmlApplicationEngine* pEngine)
     pEngine->rootContext()->setContextProperty("tspDocumentModel", m_pDocumentModel);
 }
 //---------------------------------------------------------------------------
+bool TSP_QmlDocument::Create()
+{
+    M_TRY
+    {
+        if (!m_pDocumentModel)
+        {
+            M_LogErrorT("Create document - FAILED - document model is missing");
+            return false;
+        }
+
+        // close the currently opened document before opening a new one
+        if (GetStatus() != TSP_Document::IEDocStatus::IE_DS_Closed)
+            Close();
+
+        SetStatus(TSP_Document::IEDocStatus::IE_DS_Opening);
+
+        // set the default title
+        try
+        {
+            std::wostringstream sstr;
+
+            //% "New document"
+            //: New document default name
+            sstr << qtTrId("id-New-Document").toStdWString();
+
+            if (m_OpenedCount)
+                sstr << L" (" << std::to_wstring(m_OpenedCount) << L")";
+
+            SetTitle(sstr.str());
+        }
+        catch (...)
+        {
+            M_LogErrorT("Create document - FAILED - could not set document title");
+            return false;
+        }
+
+        // create the document view
+        if (!m_pDocumentModel->CreateView())
+        {
+            M_LogErrorT("Create document - FAILED - could not create document view");
+            Close();
+            return false;
+        }
+
+        std::wostringstream sstr;
+
+        //% "Root-Atlas"
+        //: Root atlas name
+        sstr << qtTrId("id-Root-Atlas").toStdWString();
+
+        // by default, a document always contain one, and only one, atlas
+        if (!AddAtlas(sstr.str()))
+        {
+            M_LogErrorT("Create document - FAILED - could not create the main atlas");
+            Close();
+            return false;
+        }
+
+        ++m_OpenedCount;
+
+        SetStatus(TSP_Document::IEDocStatus::IE_DS_Opened);
+
+        return true;
+    }
+    M_CATCH_LOG
+
+    return false;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlDocument::Close()
+{
+    M_TRY
+    {
+        if (GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
+            return;
+
+        // document model defined?
+        if (m_pDocumentModel)
+        {
+            // delete the document view
+            m_pDocumentModel->DeleteView();
+
+            // notify the model that no atlas is selected
+            m_pDocumentModel->setSelectedAtlasUID("");
+        }
+
+        // close the document itself
+        TSP_Document::Close();
+    }
+    M_CATCH_LOG
+}
+//---------------------------------------------------------------------------
+std::size_t TSP_QmlDocument::GetOpenedCount() const
+{
+    return m_OpenedCount;
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_QmlDocument::CreateAtlas()
+{
+    return new TSP_QmlAtlas(this);
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_QmlDocument::CreateAtlas(const std::wstring& name)
+{
+    return new TSP_QmlAtlas(name, this);
+}
+//---------------------------------------------------------------------------
 TSP_Atlas* TSP_QmlDocument::AddAtlas()
 {
-    if (!m_pDocumentModel)
-        // FIXME LOG
-        return nullptr;
+    M_TRY
+    {
+        std::wostringstream sstr;
 
-    m_pDocumentModel->beginAddAtlas();
-    TSP_Document::AddAtlas();
-    m_pDocumentModel->endAddAtlas();
+        //% "New atlas"
+        //: New atlas default name
+        sstr << qtTrId("id-New-Atlas").toStdWString();
+
+        const std::size_t atlasCount = GetAtlasCount();
+
+        if (atlasCount)
+            sstr << L" (" << std::to_wstring(atlasCount) << L")";
+
+        return AddAtlas(sstr.str());
+    }
+    M_CATCH_LOG
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 TSP_Atlas* TSP_QmlDocument::AddAtlas(const std::wstring& name)
 {
-    if (!m_pDocumentModel)
-        return nullptr;
+    M_TRY
+    {
+        if (!m_pDocumentModel)
+        {
+            M_LogErrorT("Add atlas - FAILED - document model is missing");
+            return nullptr;
+        }
 
-    m_pDocumentModel->beginAddAtlas();
-    TSP_Document::AddAtlas(name);
-    m_pDocumentModel->endAddAtlas();
+        // add a new atlas in document
+        TSP_Atlas* pAtlas = TSP_Document::AddAtlas(name);
+
+        // succeeded?
+        if (!pAtlas)
+        {
+            M_LogErrorT("Add atlas - FAILED - atlas could not be created");
+            return nullptr;
+        }
+
+        // add atlas in the document view
+        m_pDocumentModel->beginAddAtlas();
+        const bool success = AddAtlasOnDocView(pAtlas);
+        m_pDocumentModel->endAddAtlas();
+
+        // succeeded?
+        if (!success)
+        {
+            M_LogErrorT("Add atlas - FAILED - atlas could not be added on view");
+            TSP_Document::RemoveAtlas(pAtlas);
+            return nullptr;
+        }
+
+        return pAtlas;
+    }
+    M_CATCH_LOG
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 void TSP_QmlDocument::RemoveAtlas(std::size_t index)
 {
-    if (!m_pDocumentModel)
-        return;
+    M_TRY
+    {
+        if (!m_pDocumentModel)
+        {
+            M_LogErrorT("Remove atlas - FAILED - document model is missing");
+            return;
+        }
 
-    m_pDocumentModel->beginRemoveAtlas();
-    TSP_Document::RemoveAtlas(index);
-    m_pDocumentModel->endRemoveAtlas();
+        TSP_QmlAtlas* pAtlas = static_cast<TSP_QmlAtlas*>(GetAtlas(index));
+
+        if (!pAtlas)
+            return;
+
+        // remove the atlas from the view
+        m_pDocumentModel->beginRemoveAtlas();
+        m_pDocumentModel->removeAtlas(QString::fromStdString(pAtlas->GetUID()));
+        m_pDocumentModel->endRemoveAtlas();
+
+        // remove atlas from the document
+        TSP_Document::RemoveAtlas(index);
+    }
+    M_CATCH_LOG
 }
 //---------------------------------------------------------------------------
 void TSP_QmlDocument::RemoveAtlas(TSP_Atlas* pAtlas)
 {
-    if (!m_pDocumentModel)
-        return;
+    M_TRY
+    {
+        if (!pAtlas)
+            return;
 
-    m_pDocumentModel->beginRemoveAtlas();
-    TSP_Document::RemoveAtlas(pAtlas);
-    m_pDocumentModel->endRemoveAtlas();
+        if (!m_pDocumentModel)
+        {
+            M_LogErrorT("Remove atlas - FAILED - document model is missing");
+            return;
+        }
+
+        // remove the atlas from the view
+        m_pDocumentModel->beginRemoveAtlas();
+        m_pDocumentModel->removeAtlas(QString::fromStdString(pAtlas->GetUID()));
+        m_pDocumentModel->endRemoveAtlas();
+
+        // remove atlas from the document
+        TSP_Document::RemoveAtlas(pAtlas);
+    }
+    M_CATCH_LOG
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_QmlDocument::GetSelectedAtlas() const
+{
+    M_TRY
+    {
+        if (!m_pDocumentModel)
+            return nullptr;
+
+        // get the selected atlas unique identifier
+        const std::string atlasUID = m_pDocumentModel->QuerySelectedAtlasUID().toStdString();
+
+        // get the atlas
+        return TSP_Document::GetAtlas(atlasUID);
+    }
+    M_CATCH_LOG
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 void TSP_QmlDocument::Initialize()
 {
-    // initialize document instances
+    // initialize document model instance
     m_pDocumentModel = new TSP_QmlDocumentModel(this);
+}
+//---------------------------------------------------------------------------
+bool TSP_QmlDocument::AddAtlasOnDocView(TSP_Atlas* pAtlas)
+{
+    if (!pAtlas)
+        return false;
+
+    if (!m_pDocumentModel)
+        return false;
+
+    // get atlas unique identifier
+    const std::string uid = pAtlas->GetUID();
+
+    // add atlas on the document view
+    m_pDocumentModel->addAtlas(QString::fromStdString(uid));
+
+    // get the atlas
+    TSP_QmlAtlas* pQmlAtlas = static_cast<TSP_QmlAtlas*>(pAtlas);
+
+    if (!pQmlAtlas)
+        return false;
+
+    // get the newly added component proxy
+    TSP_QmlAtlasProxy* pProxy = static_cast<TSP_QmlAtlasProxy*>(TSP_QmlProxyDictionary::Instance()->GetProxy(uid));
+
+    if (!pProxy)
+        return false;
+
+    // link the atlas and the proxy
+    pQmlAtlas->SetProxy(pProxy);
+    pProxy->SetAtlas(pQmlAtlas);
+
+    return true;
 }
 //---------------------------------------------------------------------------

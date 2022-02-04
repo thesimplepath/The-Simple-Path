@@ -40,6 +40,7 @@
 
 // application
 #include "TSP_MainFormModel.h"
+#include "TSP_PageListModel.h"
 
 /**
 * Main application
@@ -75,8 +76,23 @@ class TSP_Application
         */
         virtual QQmlApplicationEngine* GetQtEngine() const;
 
-        // FIXME comment
+        /**
+        * Gets the document
+        *@return the document
+        */
         virtual TSP_QmlDocument* GetDocument() const;
+
+        /**
+        * Gets the main form model
+        *@return the main form model
+        */
+        virtual TSP_MainFormModel* GetMainFormModel() const;
+
+        /**
+        * Gets the page list model
+        *@return the page list model
+        */
+        virtual TSP_PageListModel* GetPageListModel() const;
 
         /**
         * Executes the main application
@@ -90,6 +106,7 @@ class TSP_Application
         QQmlApplicationEngine* m_pEngine        = nullptr;
         TSP_QmlDocument*       m_pDocument      = nullptr;
         TSP_MainFormModel*     m_pMainFormModel = nullptr;
+        TSP_PageListModel*     m_pPageListModel = nullptr;
 
         /**
         * Initializes the qt application

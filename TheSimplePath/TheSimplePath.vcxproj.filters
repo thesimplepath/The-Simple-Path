@@ -149,9 +149,6 @@
     <ClCompile Include="TSP_MainFormModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\QT\TSP_ProxyDictionary.cpp">
-      <Filter>Source Files\Qt</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Box.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -163,12 +160,6 @@
     </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Item.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\QT\TSP_AtlasModel.cpp">
-      <Filter>Source Files\Qt</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\QT\TSP_PageModel.cpp">
-      <Filter>Source Files\Qt</Filter>
     </ClCompile>
     <ClCompile Include="Classes\QT\TSP_QmlActivity.cpp">
       <Filter>Source Files\Qt</Filter>
@@ -199,6 +190,18 @@
     </ClCompile>
     <ClCompile Include="Classes\Core\TSP_Link.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlAtlasProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlProxyDictionary.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Common\TSP_GlobalMacros.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="TSP_PageListModel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +389,6 @@
     <ClInclude Include="Classes\Core\TSP_Activity.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\QT\TSP_ProxyDictionary.h">
-      <Filter>Header Files\Qt</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Box.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -415,6 +415,12 @@
     </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Link.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlProxyDictionary.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Common\TSP_GlobalMacros.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -504,16 +510,25 @@
     <None Include="UI\js\TSP_JSHelper.js">
       <Filter>Resource Files\UI\js</Filter>
     </None>
+    <None Include="UI\TSP_SymbolPageView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Styles.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\qmldir">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="Resources\Images\Page.svg">
+      <Filter>Resource Files\Resources\Images</Filter>
+    </None>
+    <None Include="UI\TSP_PageListView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TSP_MainFormModel.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Classes\QT\TSP_AtlasModel.h">
-      <Filter>Header Files\Qt</Filter>
-    </QtMoc>
-    <QtMoc Include="Classes\QT\TSP_PageModel.h">
-      <Filter>Header Files\Qt</Filter>
     </QtMoc>
     <QtMoc Include="Classes\Qt\TSP_QmlDocumentModel.h">
       <Filter>Header Files\Qt</Filter>
@@ -529,6 +544,12 @@
     </QtMoc>
     <QtMoc Include="Classes\Qt\TSP_QmlProxy.h">
       <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlAtlasProxy.h">
+      <Filter>Header Files\Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="TSP_PageListModel.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

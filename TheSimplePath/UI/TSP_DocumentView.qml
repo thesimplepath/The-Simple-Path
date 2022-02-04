@@ -1,18 +1,33 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import QtQuick.Templates 2.15 as T
 
 /**
-* Application document view
+* Document view
 *@author Jean-Milost Reymond
 */
 T.Control
 {
+    /**
+    * Document status
+    *@note This enum is linked with the one located in TSP_Document.
+    *      Don't modify it without updating its twin
+    */
+    enum IEDocStatus
+    {
+        IE_DS_Closed = 0,
+        IE_DS_Opening,
+        IE_DS_Opened,
+        IE_DS_Error
+    }
+
     // advanced properties
     property var    m_Document: this
     property var    m_Model:    tspDocumentModel
     property string m_Name:     ""
-    property int    m_GenIndex: 0
+    property string m_Type:     "TSP_DocumentView"
+    property bool   m_Deleted:  false
 
     // common properties
     id: ctDocumentView
@@ -31,33 +46,16 @@ T.Control
         color: "white"
 
         /**
-        * Models stack view
+        * Atlas view stack
         */
-        StackView
+        StackLayout
         {
             // common properties
-            id: svDocumentView
-            objectName: "svDocumentView"
+            id: slAtlasStack
+            objectName: "slAtlasStack"
             anchors.fill: parent
-            initialItem: null//cpAtlasItem//null
+            clip: true
         }
-
-        /*
-        //REM FIXME
-        Component.onCompleted:
-        {
-            addAtlas();
-        }
-        */
-        /*REM
-        Component
-        {
-            id: cpAtlasItem
-
-            TSP_AtlasView
-            {}
-        }
-        */
     }
 
     /**
@@ -71,6 +69,53 @@ T.Control
         target: m_Model
 
         /**
+        * Called when an atlas should be added to the document view
+        *@param uid - atlas unique identifier to add
+        */
+        function onAddAtlasToView(uid)
+        {
+            addAtlas(uid);
+        }
+
+        /**
+        * Called when an atlas should be removed from the document view
+        *@param uid - atlas unique identifier to remove
+        */
+        function onRemoveAtlasFromView(uid)
+        {
+            removeAtlas(uid);
+        }
+
+        /**
+        * Called when the currently selected atlas is queried
+        */
+        function onQueryAtlasUID()
+        {
+            if (!m_Model)
+                return;
+
+            // no current index selected?
+            if (slAtlasStack.currentIndex < 0)
+            {
+                m_Model.onSelectedAtlasChanged("");
+                return;
+            }
+
+            // get the selected atlas view
+            const atlasView = slAtlasStack.children[slAtlasStack.currentIndex];
+
+            // found it?
+            if (atlasView === null || atlasView === undefined)
+            {
+                m_Model.onSelectedAtlasChanged("");
+                return;
+            }
+
+            // notify the model about the currently selected atlas
+            m_Model.selectedAtlasUID = atlasView.atlasProxy.uid;
+        }
+
+        /**
         * Called when a row is inserted
         *@param {QModelIndex} parentIndex - parent index which will own the row(s) to insert
         *@param {QModelIndex} first - first added row index
@@ -79,8 +124,6 @@ T.Control
         function onRowsInserted(parentIndex, first, last)
         {
             console.log("Atlas(es) inserted in document - first - " + first + " - last - " + last + " - parent index - " + parentIndex);
-
-            addAtlas();
         }
 
         /**
@@ -96,14 +139,20 @@ T.Control
     }
 
     /**
-    * Adds an atlas
+    * Creates a new atlas and adds it to the document view
+    *@param uid - atlas unique identifier
     *@return newly created atlas, null on error
     */
-    function addAtlas()
+    function addAtlas(uid)
     {
-        // FIXME
-        let name = "MyAtlas";
-        console.log("Create new atlas... - " + name);
+        // cannot create an atlas if its uid is invalid
+        if (!uid.length)
+        {
+            console.error("Add atlas - FAILED - cannot create atlas if unique identifier is empty");
+            return null;
+        }
+
+        console.log("Add atlas - uid - " + uid);
 
         // load the item component
         let component = Qt.createComponent('TSP_AtlasView.qml');
@@ -115,19 +164,71 @@ T.Control
             return null;
         }
 
-        let m_GenIndex = 1;
+        // build atlas identifier
+        const atlasId = "atAtlas_" + uid;
 
         // create and show new item object
-        let item = component.createObject(svDocumentView, {"id":         "atAtlas" + m_GenIndex,
-                                                           "objectName": "atAtlas" + m_GenIndex});
+        let item = component.createObject(slAtlasStack, {"id":         atlasId,
+                                                         "objectName": atlasId});
+
+        // succeeded?
+        if (!item)
+        {
+            console.error("Add atlas - an error occurred while the item was added to document");
+            return null;
+        }
+
+        // declare the unique identifier in the atlas proxy
+        item.atlasProxy.uid = uid;
 
         // show the newly added atlas onto the document view
-        svDocumentView.push(item);
+        slAtlasStack.currentIndex = slAtlasStack.count - 1;
 
-        console.log("Add atlas - succeeded - new item - " + item.objectName);
-
-        ++m_GenIndex;
+        console.log("Add atlas - succeeded - new item - object name - " + item.objectName);
 
         return item;
+    }
+
+    /**
+    * Removes an atlas from the document view
+    *@param uid - atlas unique identifier
+    */
+    function removeAtlas(uid)
+    {
+        // cannot remove an atlas if its uid is invalid
+        if (!uid.length)
+            return;
+
+        console.log("Remove atlas - uid - " + uid);
+
+        var atlasName;
+        var deleted = false;
+
+        // iterate through atlas view stack until find the view to delete, and deletes it
+        for (var i = slAtlasStack.children.length - 1; i >= 0; --i)
+            // found the atlas to delete?
+            if (slAtlasStack.children[i].m_Type         === "TSP_AtlasView" &&
+               !slAtlasStack.children[i].m_Deleted                          &&
+                slAtlasStack.children[i].atlasProxy.uid === uid)
+            {
+                // keep the atlas name for logging
+                atlasName = slAtlasStack.children[i].objectName;
+
+                // NOTE setting the deleted property just before destroying the component may seem incoherent,
+                // however the destroyed item is kept in memory until the garbage collector deletes it, and may
+                // be thus still found when the children are iterated. This may cause a deleting item to be
+                // processed as a normal item in other situations where it shouldn't
+                slAtlasStack.children[i].m_Deleted = true;
+                slAtlasStack.children[i].destroy();
+
+                deleted = true;
+                break;
+            }
+
+        // log success or failure
+        if (deleted)
+            console.log("Remove atlas - succeeded - view name - " + atlasName);
+        else
+            console.error("Remove atlas - FAILED");
     }
 }

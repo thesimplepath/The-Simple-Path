@@ -43,10 +43,10 @@ class TSP_QmlLinkProxy : public TSP_QmlProxy
 {
     Q_OBJECT
 
-    // properties
-    Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
-    Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
+    public:
+        Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
+        Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
+        Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
 
     public slots:
         /**

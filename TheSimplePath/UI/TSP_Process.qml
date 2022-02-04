@@ -10,7 +10,7 @@ TSP_Box
     // common properties
     m_Color:       "#202020"
     m_BgColor:     "#009ed6"
-    m_TextColor:   "white"
+    m_TextColor:   Styles.m_LightTextColor
     m_Radius:      10
     m_BorderWidth: 2
 

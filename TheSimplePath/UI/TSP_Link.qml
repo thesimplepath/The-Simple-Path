@@ -28,7 +28,7 @@ Item
     property string m_UID:         ""
     property string m_Color:       "#202020"
     property string m_BgColor:     "white"
-    property string m_TextColor:   "#202020"
+    property string m_TextColor:   Styles.m_DarkTextColor
     property real   m_ScaleFactor: 1
     property int    m_TextMargin:  2
 
@@ -223,7 +223,7 @@ Item
                 anchors.topMargin:   m_TextMargin
                 anchors.right:       parent.right
                 anchors.rightMargin: m_TextMargin
-                font.family:         "Arial"
+                font.family:         Styles.m_FontFamily
                 font.pointSize:      9
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
@@ -246,7 +246,7 @@ Item
                 anchors.top:         txTitle.bottom
                 anchors.right:       parent.right
                 anchors.rightMargin: m_TextMargin
-                font.family:         "Arial"
+                font.family:         Styles.m_FontFamily
                 font.pointSize:      9
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
@@ -269,7 +269,7 @@ Item
                 anchors.top:          txDescription.bottom
                 anchors.right:        parent.right
                 anchors.rightMargin:  m_TextMargin
-                font.family:          "Arial"
+                font.family:          Styles.m_FontFamily
                 font.pointSize:       9
                 horizontalAlignment:  Text.AlignHCenter
                 verticalAlignment:    Text.AlignVCenter

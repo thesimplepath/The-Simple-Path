@@ -1,9 +1,8 @@
 /****************************************************************************
- * ==> TSP_QmlDocumentModel ------------------------------------------------*
+ * ==> TSP_PageListModel ---------------------------------------------------*
  ****************************************************************************
- * Description:  Qt document qml model                                      *
- * Contained in: Qt                                                         *
- * Developer:    Jean-Milost Reymond                                        *
+ * Description: Page list model                                             *
+ * Developer:   Jean-Milost Reymond                                         *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
  *                                                                          *
@@ -27,22 +26,68 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlDocumentModel.h"
+#include "TSP_PageListModel.h"
 
- // qt classes
-#include "Qt\TSP_QmlDocument.h"
+ // application
+#include "TSP_Application.h"
 
 //---------------------------------------------------------------------------
-// TSP_QmlDocumentModel
+// TSP_PageListModel
 //---------------------------------------------------------------------------
-TSP_QmlDocumentModel::TSP_QmlDocumentModel(TSP_QmlDocument* pDocument, QObject* pParent) :
+TSP_PageListModel::TSP_PageListModel(TSP_Application* pApp, QObject* pParent) :
     QAbstractListModel(pParent),
-    m_pDocument(pDocument)
+    m_pApp(pApp)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlDocumentModel::~TSP_QmlDocumentModel()
+TSP_PageListModel::~TSP_PageListModel()
 {}
 //---------------------------------------------------------------------------
+void TSP_PageListModel::onAddPageClicked()
+{
+    addPage();
+}
+//---------------------------------------------------------------------------
+void TSP_PageListModel::onDeletePageClicked()
+{
+    emit testSignal();
+}
+//---------------------------------------------------------------------------
+void TSP_PageListModel::addPage()
+{
+    const int count = rowCount();
+
+    beginInsertRows(QModelIndex(), count, count);
+    ++m_TempCount;
+    endInsertRows();
+}
+//---------------------------------------------------------------------------
+QString TSP_PageListModel::getPageName(int index) const
+{
+    return "Item " + QString::number(index);
+}
+//---------------------------------------------------------------------------
+int TSP_PageListModel::rowCount(const QModelIndex& pParent) const
+{
+    return m_TempCount;
+}
+//---------------------------------------------------------------------------
+/*REM
+void TSP_QmlDocumentModel::beginAddPage()
+{
+    const int count = rowCount();
+
+    beginInsertRows(QModelIndex(), count, count);
+}
+*/
+//---------------------------------------------------------------------------
+/*REM
+void TSP_QmlDocumentModel::endAddPage()
+{
+    endInsertRows();
+}
+*/
+//---------------------------------------------------------------------------
+/*REM
 int TSP_QmlDocumentModel::getDocStatus() const
 {
     if (!m_pDocument)
@@ -50,7 +95,9 @@ int TSP_QmlDocumentModel::getDocStatus() const
 
     return (int)m_pDocument->GetStatus();
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::setDocStatus(int docStatus)
 {
     if (!m_pDocument)
@@ -58,17 +105,23 @@ void TSP_QmlDocumentModel::setDocStatus(int docStatus)
 
     m_pDocument->SetStatus((TSP_Document::IEDocStatus)docStatus);
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 QString TSP_QmlDocumentModel::getSelectedAtlasUID() const
 {
     return m_SelectedAtlasUID;
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::setSelectedAtlasUID(QString uid)
 {
     m_SelectedAtlasUID = uid;
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 bool TSP_QmlDocumentModel::CreateView()
 {
     if (!m_pDocument)
@@ -81,7 +134,9 @@ bool TSP_QmlDocumentModel::CreateView()
     // NOTE emit is synchronous, so it's safe to test if document was opened
     return (m_pDocument->GetStatus() != TSP_Document::IEDocStatus::IE_DS_Error);
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 bool TSP_QmlDocumentModel::DeleteView()
 {
     if (!m_pDocument)
@@ -92,29 +147,16 @@ bool TSP_QmlDocumentModel::DeleteView()
 
     return true;
 }
+*/
 //---------------------------------------------------------------------------
-TSP_QmlDocument* TSP_QmlDocumentModel::GetDocument() const
-{
-    return m_pDocument;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlDocumentModel::beginAddAtlas()
-{
-    const int count = rowCount();
-
-    beginInsertRows(QModelIndex(), count, count);
-}
-//---------------------------------------------------------------------------
-void TSP_QmlDocumentModel::endAddAtlas()
-{
-    endInsertRows();
-}
-//---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::addAtlas(const QString& uid)
 {
     emit addAtlasToView(uid);
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::beginRemoveAtlas()
 {
     const int count = rowCount();
@@ -124,17 +166,23 @@ void TSP_QmlDocumentModel::beginRemoveAtlas()
 
     beginRemoveRows(QModelIndex(), count - 1, count - 1);
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::endRemoveAtlas()
 {
     endRemoveRows();
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 void TSP_QmlDocumentModel::removeAtlas(const QString& uid)
 {
     emit removeAtlasFromView(uid);
 }
+*/
 //---------------------------------------------------------------------------
+/*REM
 QString TSP_QmlDocumentModel::QuerySelectedAtlasUID()
 {
     // query the latest selected atlas on the document view
@@ -142,17 +190,23 @@ QString TSP_QmlDocumentModel::QuerySelectedAtlasUID()
 
     return m_SelectedAtlasUID;
 }
+*/
 //---------------------------------------------------------------------------
-int TSP_QmlDocumentModel::rowCount(const QModelIndex& pParent) const
-{
-    if (!m_pDocument)
-        return 0;
-
-    return m_pDocument->GetAtlasCount();
-}
+//REM
+//int TSP_PageListModel::rowCount(const QModelIndex& pParent) const
+//{
+//    /*REM
+//    if (!m_pDocument)
+//        return 0;
+//
+//    return m_pDocument->GetAtlasCount();
+//    */
+//    return 0;//FIXME
+//}
 //---------------------------------------------------------------------------
-QVariant TSP_QmlDocumentModel::data(const QModelIndex& index, int role) const
+QVariant TSP_PageListModel::data(const QModelIndex& index, int role) const
 {
+    /*REM
     if (!m_pDocument)
         return QVariant();
 
@@ -163,14 +217,15 @@ QVariant TSP_QmlDocumentModel::data(const QModelIndex& index, int role) const
             // get the title
             return QString::fromStdWString(m_pDocument->GetTitle());
     }
+    */
 
     return QVariant();
 }
 //---------------------------------------------------------------------------
-QHash<int, QByteArray> TSP_QmlDocumentModel::roleNames() const
+QHash<int, QByteArray> TSP_PageListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[(int)TSP_QmlDocumentModel::IEDataRole::IE_DR_Title] = "title";
+    //REMroles[(int)TSP_QmlDocumentModel::IEDataRole::IE_DR_Title] = "title";
 
     return roles;
 }

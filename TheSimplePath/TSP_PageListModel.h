@@ -1,9 +1,8 @@
 /****************************************************************************
- * ==> TSP_AtlasModel ------------------------------------------------------*
+ * ==> TSP_PageListModel ---------------------------------------------------*
  ****************************************************************************
- * Description:  A model for the atlas                                      *
- * Contained in: Models                                                     *
- * Developer:    Jean-Milost Reymond                                        *
+ * Description: Page list model                                             *
+ * Developer:   Jean-Milost Reymond                                         *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
  *                                                                          *
@@ -29,33 +28,102 @@
 
 #pragma once
 
-// std
-#include <vector>
-
-// core classes
-#include "Core\TSP_Atlas.h"
-
 // qt
 #include <QObject>
 #include <QAbstractListModel>
 
+// class prototype
+class TSP_Application;
+
 /**
-* A model for the atlas
+* Page list model
 *@author Jean-Milost Reymond
 */
-class TSP_AtlasModel : public QAbstractListModel
+class TSP_PageListModel : public QAbstractListModel
 {
     Q_OBJECT
-    //Q_PROPERTY(float x READ userName WRITE setUserName NOTIFY userNameChanged)
+
+    /*REM
+    public:
+        Q_PROPERTY(QString itemName READ getItemName WRITE setItemName NOTIFY itemNameChanged);
+        Q_PROPERTY(QString selectedAtlasUID READ getSelectedAtlasUID WRITE setSelectedAtlasUID NOTIFY selectedAtlasUIDChanged);
+    */
+
+    //REM
+    //public slots:
+    //    /**
+    //    * Gets the document status
+    //    *@return the document status
+    //    */
+    //    int getDocStatus() const;
+
+    //    /**
+    //    * Sets the document status
+    //    *@param status - the document status
+    //    */
+    //    void setDocStatus(int status);
+
+    //    /**
+    //    * Gets the selected atlas unique identifier
+    //    *@return the selected atlas unique identifier
+    //    */
+    //    QString getSelectedAtlasUID() const;
+
+    //    /**
+    //    * Sets the selected atlas unique identifier
+    //    *@param uid - the selected atlas unique identifier
+    //    */
+    //    void setSelectedAtlasUID(QString uid);
+
+    //signals:
+    //    void createDocumentView(const QString& name, int openedCount);
+    //    void deleteDocumentView();
+    //    void addAtlasToView(const QString& uid);
+    //    void removeAtlasFromView(const QString& uid);
+    //    void queryAtlasUID();
+    //    void docStatusChanged(int status);
+    //    void selectedAtlasUIDChanged(const QString& uid);
+
+    signals:
+        void testSignal();
 
     public:
         /**
-        * Constructor
-        *@param pParent - object which will be the parent of this object
+        * Data roles
         */
-        explicit TSP_AtlasModel(QObject* pParent = nullptr);
+        enum class IEDataRole
+        {
+            IE_DR_Title = 0
+        };
 
-        virtual ~TSP_AtlasModel();
+        /**
+        * Constructor
+        *@param pApp - main application
+        *@param pParent - parent object owning this object
+        */
+        explicit TSP_PageListModel(TSP_Application* pApp, QObject* pParent = nullptr);
+
+        virtual ~TSP_PageListModel();
+
+        /**
+        * Called when the add page button was clicked on the page list view
+        */
+        virtual Q_INVOKABLE void onAddPageClicked();
+
+        /**
+        * Called when the delete page button was clicked on the page list view
+        */
+        virtual Q_INVOKABLE void onDeletePageClicked();
+
+        /**
+        * Adds a page
+        */
+        virtual Q_INVOKABLE void addPage();
+
+        /**
+        * Gets the page name at index
+        */
+        virtual Q_INVOKABLE QString getPageName(int index) const;
 
         /**
         * Get row count
@@ -79,5 +147,6 @@ class TSP_AtlasModel : public QAbstractListModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     private:
-        TSP_Atlas* m_pAtlas = nullptr;
+        TSP_Application* m_pApp = nullptr;
+        std::size_t      m_TempCount = 0;
 };

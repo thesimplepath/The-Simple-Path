@@ -18,5 +18,10 @@
         <file>UI/TSP_Process.qml</file>
         <file>UI/TSP_Start.qml</file>
         <file>UI/js/TSP_JSHelper.js</file>
+        <file>UI/TSP_SymbolPageView.qml</file>
+        <file>UI/TSP_Styles.qml</file>
+        <file>UI/qmldir</file>
+        <file>Resources/Images/Page.svg</file>
+        <file>UI/TSP_PageListView.qml</file>
     </qresource>
 </RCC>

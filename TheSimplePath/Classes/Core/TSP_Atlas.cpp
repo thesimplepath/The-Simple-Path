@@ -55,16 +55,26 @@ TSP_Atlas::~TSP_Atlas()
         delete pPage;
 }
 //---------------------------------------------------------------------------
+TSP_Page* TSP_Atlas::CreatePage()
+{
+    return new TSP_Page(this);
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Atlas::CreatePage(const std::wstring& name)
+{
+    return new TSP_Page(name, this);
+}
+//---------------------------------------------------------------------------
 TSP_Page* TSP_Atlas::AddPage()
 {
-    auto pPage = std::make_unique<TSP_Page>(this);
+    std::unique_ptr<TSP_Page> pPage(CreatePage());
     m_Pages.push_back(pPage.get());
     return pPage.release();
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_Atlas::AddPage(const std::wstring& name)
 {
-    auto pPage = std::make_unique<TSP_Page>(name, this);
+    std::unique_ptr<TSP_Page> pPage(CreatePage(name));
     m_Pages.push_back(pPage.get());
     return pPage.release();
 }

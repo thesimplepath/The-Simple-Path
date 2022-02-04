@@ -29,7 +29,7 @@ T.Control
     property var    m_PageContent:       parent
     property string m_Color:             "#202020"
     property string m_BgColor:           "white"
-    property string m_TextColor:         "#202020"
+    property string m_TextColor:         Styles.m_DarkTextColor
     property string m_HandleColor:       "#c0c0c0"
     property string m_HandleBorderColor: "black"
     property string m_UID:               ""
@@ -52,7 +52,7 @@ T.Control
 
     /**
     * Box proxy
-    *@note This component will auto-create a new c++ TSP_BoxProxy instance
+    *@note This component will auto-create a new c++ TSP_QmlBoxProxy instance
     */
     BoxProxy
     {
@@ -191,7 +191,7 @@ T.Control
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: "Arial"
+            font.family: Styles.m_FontFamily
             font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
@@ -212,7 +212,7 @@ T.Control
             anchors.top: txTitle.bottom
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: "Arial"
+            font.family: Styles.m_FontFamily
             font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
@@ -233,7 +233,7 @@ T.Control
             anchors.top: txDescription.bottom
             anchors.right: parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: "Arial"
+            font.family: Styles.m_FontFamily
             font.pointSize: 9
             wrapMode: Text.WordWrap
             color: m_TextColor
@@ -425,6 +425,7 @@ T.Control
     /// called when component was fully created
     Component.onCompleted:
     {
+        // FIXME expose box proxy in an atlas and get uid from it directly
         // get and link the unique identifier created in the c++ proxy class
         m_UID = bpBoxProxy.uid;
     }

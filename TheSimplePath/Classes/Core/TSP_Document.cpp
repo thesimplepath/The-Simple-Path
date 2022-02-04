@@ -52,16 +52,43 @@ TSP_Document::~TSP_Document()
         delete pAtlas;
 }
 //---------------------------------------------------------------------------
+void TSP_Document::Close()
+{
+    // already closed?
+    if (GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
+        return;
+
+    // delete atlases
+    for each (auto pAtlas in m_Atlases)
+        delete pAtlas;
+
+    m_Atlases.clear();
+
+    // reset values to default
+    m_Title.clear();
+    m_DocStatus = TSP_Document::IEDocStatus::IE_DS_Closed;
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_Document::CreateAtlas()
+{
+    return new TSP_Atlas(this);
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_Document::CreateAtlas(const std::wstring& name)
+{
+    return new TSP_Atlas(name, this);
+}
+//---------------------------------------------------------------------------
 TSP_Atlas* TSP_Document::AddAtlas()
 {
-    auto pAtlas = std::make_unique<TSP_Atlas>(this);
+    std::unique_ptr<TSP_Atlas> pAtlas(CreateAtlas());
     m_Atlases.push_back(pAtlas.get());
     return pAtlas.release();
 }
 //---------------------------------------------------------------------------
 TSP_Atlas* TSP_Document::AddAtlas(const std::wstring& name)
 {
-    auto pAtlas = std::make_unique<TSP_Atlas>(name, this);
+    std::unique_ptr<TSP_Atlas> pAtlas(CreateAtlas(name));
     m_Atlases.push_back(pAtlas.get());
     return pAtlas.release();
 }
@@ -96,6 +123,17 @@ TSP_Atlas* TSP_Document::GetAtlas(std::size_t index) const
         return nullptr;
 
     return m_Atlases[index];
+}
+//---------------------------------------------------------------------------
+TSP_Atlas* TSP_Document::GetAtlas(const std::string& uid) const
+{
+    // search for atlas matching with the uid
+    for (IAtlases::const_iterator it = m_Atlases.begin(); it != m_Atlases.end(); ++it)
+        // found it?
+        if ((*it)->GetUID() == uid)
+            return (*it);
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 std::size_t TSP_Document::GetAtlasCount() const

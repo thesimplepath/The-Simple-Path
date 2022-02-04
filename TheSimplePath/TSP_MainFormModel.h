@@ -48,33 +48,11 @@ class TSP_MainFormModel : public QObject
 
     public:
         /**
-        * Document status
-        */
-        enum class IEDocStatus
-        {
-            IE_DS_Closed = 0,
-            IE_DS_Opened,
-            IE_DS_Error
-        };
-        Q_ENUM(IEDocStatus);
-
-        Q_PROPERTY(int docStatus READ getDocStatus WRITE setDocStatus NOTIFY docStatusChanged);
-
-    Q_SIGNALS:
-        void newDocument(const QString& name);
-        void docStatusChanged(int status);
-
-    public slots:
-        int getDocStatus() const;
-        void setDocStatus(int status);
-
-    public:
-        /**
         * Constructor
         *@param pApp - main application
         *@param pParent - parent object owning this object
         */
-        TSP_MainFormModel(TSP_Application* pApp, QObject* pParent = nullptr);
+        explicit TSP_MainFormModel(TSP_Application* pApp, QObject* pParent = nullptr);
 
         virtual ~TSP_MainFormModel();
 
@@ -96,12 +74,11 @@ class TSP_MainFormModel : public QObject
         virtual Q_INVOKABLE void onNewDocumentClicked();
 
         /**
-        * Called when the test button was clicked on the user interface
+        * Called when the close document button was clicked on the user interface
         */
-        virtual Q_INVOKABLE void onTestClicked();
+        virtual Q_INVOKABLE void onCloseDocumentClicked();
 
     private:
         TSP_Application* m_pApp      = nullptr;
-        IEDocStatus      m_DocStatus = IEDocStatus::IE_DS_Closed;
         QPageSize        m_PageSize;
 };

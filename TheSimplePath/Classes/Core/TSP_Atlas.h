@@ -74,6 +74,19 @@ class TSP_Atlas : public TSP_Item
         virtual inline void SetName(const std::wstring& name);
 
         /**
+        * Creates a page
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage();
+
+        /**
+        * Creates a page
+        *@param name - page name
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage(const std::wstring& name);
+
+        /**
         * Adds a new page in atlas
         *@return newly added page
         */

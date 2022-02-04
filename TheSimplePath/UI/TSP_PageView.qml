@@ -15,6 +15,7 @@ import thesimplepath.proxys 1.0
 T.Control
 {
     // aliases
+    property alias pageProxy:     ppPageProxy
     property alias pageViewport:  rcPageViewport
     property alias pageContainer: rcPageContainer
     property alias pageContent:   rcPageContent
@@ -23,7 +24,6 @@ T.Control
 
     // advanced properties
     property var    m_Page:            this
-    property var    m_Model:           tspPageModel
     property string m_UID:             ""
     property real   m_ScaleFactor:     1
     property real   m_ZoomMin:         0.5
@@ -40,7 +40,7 @@ T.Control
     // common properties
     id:           ctPageView
     objectName:   "ctPageView"
-    anchors.fill: parent
+    //REM anchors.fill: parent
 
     /**
     * Page proxy
@@ -315,15 +315,6 @@ T.Control
             rcPageViewport.m_SbVertSize = rcPageViewport.height / rcPageContainer.height
             rcPageViewport.m_SbVertPos  = JSHelper.clamp(rcPageViewport.m_SbVertPos, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
         }
-    }
-
-    /**
-    * Bind signals from the c++ model to the view
-    */
-    Connections
-    {
-        // common properties
-        target: m_Model
     }
 
     /// called when component was fully created

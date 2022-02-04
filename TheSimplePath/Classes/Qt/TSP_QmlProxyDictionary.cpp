@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_ProxyDictionary -------------------------------------------------*
+ * ==> TSP_QmlProxyDictionary ----------------------------------------------*
  ****************************************************************************
- * Description:  Provides a proxy dictionary                                *
- * Contained in: Core                                                       *
+ * Description:  Provides a qml proxy dictionary                            *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,28 +27,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_ProxyDictionary.h"
+#include "TSP_QmlProxyDictionary.h"
 
 //---------------------------------------------------------------------------
 // Static members
 //---------------------------------------------------------------------------
-TSP_ProxyDictionary* TSP_ProxyDictionary::m_pProxyDictionary = nullptr;
-std::mutex           TSP_ProxyDictionary::m_Mutex;
+std::unique_ptr<TSP_QmlProxyDictionary::IInstance> TSP_QmlProxyDictionary::m_pProxyDictionary;
+std::mutex                                         TSP_QmlProxyDictionary::m_Mutex;
 //---------------------------------------------------------------------------
-// TSP_ProxyDictionary
+// TSP_QmlProxyDictionary::IInstance
 //---------------------------------------------------------------------------
-TSP_ProxyDictionary::TSP_ProxyDictionary()
+TSP_QmlProxyDictionary::IInstance::IInstance()
+{
+    m_pInstance = new TSP_QmlProxyDictionary();
+}
+//---------------------------------------------------------------------------
+TSP_QmlProxyDictionary::IInstance::~IInstance()
+{
+    if (m_pInstance)
+        delete m_pInstance;
+}
+//---------------------------------------------------------------------------
+// TSP_QmlProxyDictionary
+//---------------------------------------------------------------------------
+TSP_QmlProxyDictionary::TSP_QmlProxyDictionary()
 {}
 //---------------------------------------------------------------------------
-TSP_ProxyDictionary::TSP_ProxyDictionary(const TSP_ProxyDictionary& other)
+TSP_QmlProxyDictionary::TSP_QmlProxyDictionary(const TSP_QmlProxyDictionary& other)
 {
     throw new std::exception("Cannot create a copy of a singleton class");
 }
 //---------------------------------------------------------------------------
-TSP_ProxyDictionary::~TSP_ProxyDictionary()
+TSP_QmlProxyDictionary::~TSP_QmlProxyDictionary()
 {}
 //---------------------------------------------------------------------------
-const TSP_ProxyDictionary& TSP_ProxyDictionary::operator = (const TSP_ProxyDictionary& other)
+const TSP_QmlProxyDictionary& TSP_QmlProxyDictionary::operator = (const TSP_QmlProxyDictionary& other)
 {
     throw new std::exception("Cannot create a copy of a singleton class");
 
@@ -56,7 +69,7 @@ const TSP_ProxyDictionary& TSP_ProxyDictionary::operator = (const TSP_ProxyDicti
     return *this;
 }
 //---------------------------------------------------------------------------
-TSP_ProxyDictionary* TSP_ProxyDictionary::Instance()
+TSP_QmlProxyDictionary* TSP_QmlProxyDictionary::Instance()
 {
     // check instance out of the thread lock (double check lock)
     if (!m_pProxyDictionary)
@@ -66,17 +79,17 @@ TSP_ProxyDictionary* TSP_ProxyDictionary::Instance()
 
         // create the instance
         if (!m_pProxyDictionary)
-            m_pProxyDictionary = new (std::nothrow)TSP_ProxyDictionary();
+            m_pProxyDictionary.reset(new (std::nothrow)IInstance());
     }
 
     // still not created?
     if (!m_pProxyDictionary)
         throw new std::exception("Could not create the document item dictionary unique instance");
 
-    return m_pProxyDictionary;
+    return m_pProxyDictionary->m_pInstance;
 }
 //---------------------------------------------------------------------------
-void TSP_ProxyDictionary::Release()
+void TSP_QmlProxyDictionary::Release()
 {
     // lock up the thread
     std::unique_lock<std::mutex> lock(m_Mutex);
@@ -85,11 +98,10 @@ void TSP_ProxyDictionary::Release()
         return;
 
     // delete the instance
-    delete m_pProxyDictionary;
-    m_pProxyDictionary = nullptr;
+    m_pProxyDictionary.reset(nullptr);
 }
 //---------------------------------------------------------------------------
-void TSP_ProxyDictionary::Register(const std::string& uid, void* pProxy)
+void TSP_QmlProxyDictionary::Register(const std::string& uid, void* pProxy)
 {
     if (uid.empty())
         return;
@@ -112,7 +124,7 @@ void TSP_ProxyDictionary::Register(const std::string& uid, void* pProxy)
         m_ReverseDictionary[pProxy] = uid;
 }
 //---------------------------------------------------------------------------
-void TSP_ProxyDictionary::Unregister(const std::string& uid)
+void TSP_QmlProxyDictionary::Unregister(const std::string& uid)
 {
     if (uid.empty())
         return;
@@ -136,7 +148,7 @@ void TSP_ProxyDictionary::Unregister(const std::string& uid)
         m_ReverseDictionary.erase(itReverse);
 }
 //---------------------------------------------------------------------------
-void TSP_ProxyDictionary::Unregister(void* pProxy)
+void TSP_QmlProxyDictionary::Unregister(void* pProxy)
 {
     if (!pProxy)
         return;
@@ -160,7 +172,7 @@ void TSP_ProxyDictionary::Unregister(void* pProxy)
         m_Dictionary.erase(it);
 }
 //---------------------------------------------------------------------------
-void* TSP_ProxyDictionary::GetProxy(const std::string& uid) const
+void* TSP_QmlProxyDictionary::GetProxy(const std::string& uid) const
 {
     IDictionary::const_iterator it = m_Dictionary.find(uid);
 
@@ -170,7 +182,7 @@ void* TSP_ProxyDictionary::GetProxy(const std::string& uid) const
     return nullptr;
 }
 //---------------------------------------------------------------------------
-std::string TSP_ProxyDictionary::GetUID(void* pProxy) const
+std::string TSP_QmlProxyDictionary::GetUID(void* pProxy) const
 {
     IReverseDictionary::const_iterator it = m_ReverseDictionary.find(pProxy);
 

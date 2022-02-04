@@ -142,9 +142,21 @@ class TSP_Logger
         std::wstring GetFileName(const std::wstring& appName) const;
 
     private:
-        static TSP_Logger*  m_pLogger;
-        static std::mutex   m_Mutex;
-               std::wstring m_Log;
+        /**
+        * Instance class, needed to allow unique_ptr usage despite of singleton privacy and without
+        * declare unique_ptr friend
+        */
+        struct IInstance
+        {
+            TSP_Logger* m_pInstance = nullptr;
+
+            IInstance();
+            virtual ~IInstance();
+        };
+
+        static std::unique_ptr<IInstance> m_pLogger;
+        static std::mutex                 m_Mutex;
+               std::wstring               m_Log;
 
         TSP_Logger();
 

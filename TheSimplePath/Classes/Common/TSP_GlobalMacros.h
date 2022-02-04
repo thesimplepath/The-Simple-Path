@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_PageModel -------------------------------------------------------*
- ****************************************************************************
- * Description:  A model for the page                                       *
- * Contained in: Component                                                  *
+ * ==> TSP_GlobalMacros ----------------------------------------------------*
+ * **************************************************************************
+ * Description : Macros collection which may be used globally               *
+ * Contained in: Common                                                     *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,21 +27,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_PageModel.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_PageModel
-//---------------------------------------------------------------------------
-TSP_PageModel::TSP_PageModel(QObject* pParent) :
-    QObject(pParent)
-{}
-//---------------------------------------------------------------------------
-TSP_PageModel::~TSP_PageModel()
-{}
-//---------------------------------------------------------------------------
-void TSP_PageModel::onSymbolAdded(const QString& pageUID, const QString& symbolUID)
-{}
-//---------------------------------------------------------------------------
-void TSP_PageModel::onMessageAdded(const QString& pageUID, const QString& msgUID)
-{}
-//---------------------------------------------------------------------------
+// common classes
+#include "TSP_Exception.h"
+
+/**
+* Opening try block
+*/
+#define M_TRY try
+
+/**
+* Closing catch block, error message is sent to log
+*/
+#define M_CATCH_LOG\
+    catch (std::exception& e)\
+    {\
+        M_LogException("STD", e.what());\
+    }\
+    catch (...)\
+    {\
+        M_LogException(TSP_ExceptionFormatter::m_GenericTypeName, "Unknown exception");\
+    }

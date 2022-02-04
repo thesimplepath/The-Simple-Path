@@ -29,6 +29,9 @@
 
 #include "TSP_QmlAtlas.h"
 
+// qt classes
+#include "TSP_QmlPage.h"
+
 //---------------------------------------------------------------------------
 // TSP_QmlAtlas
 //---------------------------------------------------------------------------
@@ -42,4 +45,49 @@ TSP_QmlAtlas::TSP_QmlAtlas(const std::wstring& name, TSP_QmlDocument* pOwner) :
 //---------------------------------------------------------------------------
 TSP_QmlAtlas::~TSP_QmlAtlas()
 {}
+//---------------------------------------------------------------------------
+TSP_QmlAtlasProxy* TSP_QmlAtlas::GetProxy() const
+{
+    return m_pProxy;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlAtlas::SetProxy(TSP_QmlAtlasProxy* pProxy)
+{
+    m_pProxy = pProxy;
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlAtlas::CreatePage()
+{
+    return new TSP_QmlPage(this);
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlAtlas::CreatePage(const std::wstring& name)
+{
+    return new TSP_QmlPage(name, this);
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlAtlas::AddPage()
+{
+    return TSP_Atlas::AddPage();
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
+{
+    return TSP_Atlas::AddPage(name);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlAtlas::RemovePage(std::size_t index)
+{
+    TSP_Atlas::RemovePage(index);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlAtlas::RemovePage(TSP_Page* pPage)
+{
+    TSP_Atlas::RemovePage(pPage);
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlAtlas::GetSelectedPage() const
+{
+    return nullptr;
+}
 //---------------------------------------------------------------------------

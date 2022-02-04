@@ -29,29 +29,31 @@
 
 #include "TSP_QmlProxy.h"
 
-// component classes
-#include "TSP_ProxyDictionary.h"
+// qt classes
+#include "TSP_QmlProxyDictionary.h"
 
 //---------------------------------------------------------------------------
 // TSP_QmlProxy
 //---------------------------------------------------------------------------
 TSP_QmlProxy::TSP_QmlProxy(QObject* pParent) :
     QObject(pParent)
-{
-    // use the pointer itself as unique identifier
-    m_UID = std::to_string(std::uintptr_t(this));
-
-    // register the instance in the document item dictionary
-    TSP_ProxyDictionary::Instance()->Register(m_UID, this);
-}
+{}
 //---------------------------------------------------------------------------
 TSP_QmlProxy::~TSP_QmlProxy()
 {
-    TSP_ProxyDictionary::Instance()->Unregister(m_UID);
+    TSP_QmlProxyDictionary::Instance()->Unregister(m_UID);
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlProxy::getUID() const
 {
     return QString::fromStdString(m_UID);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlProxy::setUID(const QString& uid)
+{
+    m_UID = uid.toStdString();
+
+    // register the instance in the document item dictionary
+    TSP_QmlProxyDictionary::Instance()->Register(m_UID, this);
 }
 //---------------------------------------------------------------------------

@@ -34,14 +34,40 @@
 #include "Common\TSP_StdFileBuffer.h"
 #include "Common\TSP_Logger.h"
 
+// qt classes
+#ifdef _DEBUG
+    #include "Qt/TSP_QmlProxyDictionary.h"
+#endif
+
 // qt
 #include <QDir>
+
+// windows
+#include <objbase.h>
+
+// uncomment the line below to log the memory leaks
+#ifdef _DEBUG
+    //#define LOG_MEMORY_LEAKS
+#endif
 
 // todo FIXME -cFeature -oJean: To generate a documentation from the source code, see: https://doc.qt.io/qt-5/01-qdoc-manual.html
 
 //---------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    // initialize memory leaks detection structures
+    #ifdef LOG_MEMORY_LEAKS
+        if (!SUCCEEDED(::CoInitialize(nullptr)))
+            return -1;
+
+        _CrtMemState sOld;
+        _CrtMemState sNew;
+        _CrtMemState sDiff;
+
+        // take a memory snapshot before execution begins
+        ::_CrtMemCheckpoint(&sOld);
+    #endif
+
     try
     {
         TSP_Logger::IHeader header;
@@ -101,6 +127,28 @@ int main(int argc, char *argv[])
     {
         return -1;
     }
+
+    // detect memory leaks, log them if found
+    #ifdef LOG_MEMORY_LEAKS
+        TSP_Logger::Release();
+        TSP_QmlProxyDictionary::Release();
+
+        // take a memory snapshot after execution ends
+        ::_CrtMemCheckpoint(&sNew);
+
+        // found a difference between memories?
+        if (::_CrtMemDifference(&sDiff, &sOld, &sNew))
+        {
+            ::OutputDebugString(L"-----------_CrtMemDumpStatistics ---------\n");
+            ::_CrtMemDumpStatistics(&sDiff);
+            ::OutputDebugString(L"-----------_CrtMemDumpAllObjectsSince ---------\n");
+            ::_CrtMemDumpAllObjectsSince(&sOld);
+            ::OutputDebugString(L"-----------_CrtDumpMemoryLeaks ---------\n");
+            ::_CrtDumpMemoryLeaks();
+        }
+
+        ::CoUninitialize();
+    #endif
 
     return result;
 }

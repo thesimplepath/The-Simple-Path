@@ -70,7 +70,37 @@ class TSP_QmlDocument : public TSP_Document
         * Declares the context properties (i.e models linked with qml, ...)
         *@param pEngine - application engine
         */
-        void DeclareContextProperties(QQmlApplicationEngine* pEngine);
+        virtual void DeclareContextProperties(QQmlApplicationEngine* pEngine);
+
+        /**
+        * Creates a new document
+        *@return true on success, otherwise false
+        */
+        virtual bool Create();
+
+        /**
+        * Closes a document
+        */
+        virtual void Close();
+
+        /**
+        * Gets the opened count
+        *@return the opened count
+        */
+        virtual std::size_t GetOpenedCount() const;
+
+        /**
+        * Creates an atlas
+        *@return newly created atlas
+        */
+        virtual TSP_Atlas* CreateAtlas();
+
+        /**
+        * Creates an atlas
+        *@param name - atlas name
+        *@return newly created atlas
+        */
+        virtual TSP_Atlas* CreateAtlas(const std::wstring& name);
 
         /**
         * Adds a new atlas in document
@@ -97,12 +127,26 @@ class TSP_QmlDocument : public TSP_Document
         */
         virtual void RemoveAtlas(TSP_Atlas* pAtlas);
 
+        /**
+        * Gets the currently selected atlas
+        *@return the currently selected atlas, nullptr if no atlas selected or on error
+        */
+        virtual TSP_Atlas* GetSelectedAtlas() const;
+
     private:
         TSP_Application*      m_pApp           = nullptr;
         TSP_QmlDocumentModel* m_pDocumentModel = nullptr;
+        std::size_t           m_OpenedCount    = 0;
 
         /**
         * Initializes the qt application
         */
         void Initialize();
+
+        /**
+        * Adds an atlas on the document view
+        *@param pAtlas - atlas to add
+        *@return true on success, otherwise false
+        */
+        bool AddAtlasOnDocView(TSP_Atlas* pAtlas);
 };

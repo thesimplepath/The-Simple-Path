@@ -43,6 +43,19 @@
 class TSP_Document
 {
     public:
+        /**
+        * Document status
+        *@note This enum is linked with the one located in TSP_DocumentView.
+        *      Don't modify it without updating its twin
+        */
+        enum class IEDocStatus
+        {
+            IE_DS_Closed = 0,
+            IE_DS_Opening,
+            IE_DS_Opened,
+            IE_DS_Error
+        };
+
         TSP_Document();
 
         /**
@@ -52,6 +65,29 @@ class TSP_Document
         TSP_Document(const std::wstring& title);
 
         virtual ~TSP_Document();
+
+        /**
+        * Creates a new document
+        *@return true on success, otherwise false
+        */
+        virtual bool Create() = 0;
+
+        /**
+        * Closes a document
+        */
+        virtual void Close();
+
+        /**
+        * Gets the document status
+        *@return the document status
+        */
+        virtual inline IEDocStatus GetStatus() const;
+
+        /**
+        * Sets the document status
+        *@param status - the document status
+        */
+        virtual inline void SetStatus(IEDocStatus status);
 
         /**
         * Gets the document title
@@ -64,6 +100,19 @@ class TSP_Document
         *@param title - the document title
         */
         virtual inline void SetTitle(const std::wstring& title);
+
+        /**
+        * Creates an atlas
+        *@return newly created atlas
+        */
+        virtual TSP_Atlas* CreateAtlas();
+
+        /**
+        * Creates an atlas
+        *@param name - atlas name
+        *@return newly created atlas
+        */
+        virtual TSP_Atlas* CreateAtlas(const std::wstring& name);
 
         /**
         * Adds a new atlas in document
@@ -98,6 +147,13 @@ class TSP_Document
         virtual TSP_Atlas* GetAtlas(std::size_t index) const;
 
         /**
+        * Gets atlas matching with uid
+        *@param uid - atlas unique identifier to get
+        *@return atlas, nullptr if not found or on error
+        */
+        virtual TSP_Atlas* GetAtlas(const std::string& uid) const;
+
+        /**
         * Gets atlas count
         *@return atlas count
         */
@@ -124,10 +180,21 @@ class TSP_Document
 
         IAtlases     m_Atlases;
         std::wstring m_Title;
+        IEDocStatus  m_DocStatus = IEDocStatus::IE_DS_Closed;
 };
 
 //---------------------------------------------------------------------------
 // TSP_Document
+//---------------------------------------------------------------------------
+TSP_Document::IEDocStatus TSP_Document::GetStatus() const
+{
+    return m_DocStatus;
+}
+//---------------------------------------------------------------------------
+void TSP_Document::SetStatus(IEDocStatus status)
+{
+    m_DocStatus = status;
+}
 //---------------------------------------------------------------------------
 std::wstring TSP_Document::GetTitle() const
 {

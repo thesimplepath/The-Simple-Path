@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_ProxyDictionary -------------------------------------------------*
+ * ==> TSP_QmlProxyDictionary ----------------------------------------------*
  ****************************************************************************
- * Description:  Provides a proxy dictionary                                *
- * Contained in: Core                                                       *
+ * Description:  Provides a qml proxy dictionary                            *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -34,10 +34,10 @@
 #include <mutex>
 
 /**
-* Provides a proxy dictionary
+* Provides a qml proxy dictionary
 *@author Jean-Milost Reymond
 */
-class TSP_ProxyDictionary
+class TSP_QmlProxyDictionary
 {
     public:
         /**
@@ -45,7 +45,7 @@ class TSP_ProxyDictionary
         *@return the dictionary instance
         *@throw exception if instance could not be created
         */
-        static TSP_ProxyDictionary* Instance();
+        static TSP_QmlProxyDictionary* Instance();
 
         /**
         * Releases the dictionary instance
@@ -86,27 +86,39 @@ class TSP_ProxyDictionary
         std::string GetUID(void* pProxy) const;
 
     private:
+        /**
+        * Instance class, needed to allow unique_ptr usage despite of singleton privacy and without
+        * declare unique_ptr friend
+        */
+        struct IInstance
+        {
+            TSP_QmlProxyDictionary* m_pInstance = nullptr;
+
+            IInstance();
+            virtual ~IInstance();
+        };
+
         typedef std::map<std::string, void*> IDictionary;
         typedef std::map<void*, std::string> IReverseDictionary;
 
-        static TSP_ProxyDictionary* m_pProxyDictionary;
-        static std::mutex           m_Mutex;
-               IDictionary          m_Dictionary;
-               IReverseDictionary   m_ReverseDictionary;
+        static std::unique_ptr<IInstance> m_pProxyDictionary;
+        static std::mutex                 m_Mutex;
+               IDictionary                m_Dictionary;
+               IReverseDictionary         m_ReverseDictionary;
 
-        TSP_ProxyDictionary();
+        TSP_QmlProxyDictionary();
 
         /**
         * Copy constructor
         *@param other - other dictionary to copy from
         */
-        TSP_ProxyDictionary(const TSP_ProxyDictionary& other);
+        TSP_QmlProxyDictionary(const TSP_QmlProxyDictionary& other);
 
-        ~TSP_ProxyDictionary();
+        ~TSP_QmlProxyDictionary();
 
         /**
         * Copy operator
         *@param other - other dictionary to copy from
         */
-        const TSP_ProxyDictionary& operator = (const TSP_ProxyDictionary& other);
+        const TSP_QmlProxyDictionary& operator = (const TSP_QmlProxyDictionary& other);
 };
