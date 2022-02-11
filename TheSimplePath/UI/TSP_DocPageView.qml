@@ -1,6 +1,9 @@
 ﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+// c++
+import thesimplepath.proxys 1.0
+
 /**
 * Document page view
 *@author Jean-Milost Reymond
@@ -8,11 +11,22 @@ import QtQuick.Controls 2.15
 TSP_PageView
 {
     // properties
-    property string m_Type: "TSP_DocPageView"
+    property string m_Type:    "TSP_DocPageView"
+    property bool   m_Deleted: false
 
     // advanced properties
     m_PageWidth:  m_MainFormModel.getPageWidth()
     m_PageHeight: m_MainFormModel.getPageHeight()
+
+    /**
+    * Document page proxy
+    *@note This component will auto-create a new c++ TSP_DocPageProxy instance
+    */
+    DocPageProxy
+    {
+        id: dpDocPageProxy
+        objectName: "dpDocPageProxy"
+    }
 
     /**
     * Adds a start component to the document, with a default size

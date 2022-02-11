@@ -102,7 +102,7 @@ TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
     {
         if (!m_pProxy)
         {
-            M_LogErrorT("Add atlas - FAILED - atlas proxy is missing");
+            M_LogErrorT("Add page - FAILED - atlas proxy is missing");
             return nullptr;
         }
 
@@ -117,7 +117,7 @@ TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
         }
 
         // notify atlas proxy that a new page should be added
-        if (!m_pProxy->addPage(QString::fromStdString(pQmlPage->GetUID())))
+        if (!m_pProxy->AddPage(QString::fromStdString(pQmlPage->GetUID())))
         {
             M_LogErrorT("Add page - FAILED - page could not be added on view");
             TSP_Atlas::RemovePage(pQmlPage);
@@ -133,14 +133,54 @@ TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
 //---------------------------------------------------------------------------
 void TSP_QmlAtlas::RemovePage(std::size_t index)
 {
-    // FIXME finalize this function
-    TSP_Atlas::RemovePage(index);
+    M_TRY
+    {
+        if (!m_pProxy)
+        {
+            M_LogErrorT("Remove page - FAILED - atlas proxy is missing");
+            return;
+        }
+
+        // get the page to remove
+        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(GetPage(index));
+
+        // found it?
+        if (!pQmlPage)
+            return;
+
+        // notify atlas proxy that a page was removed
+        m_pProxy->RemovePage(QString::fromStdString(pQmlPage->GetUID()));
+
+        // remove the page from document
+        TSP_Atlas::RemovePage(index);
+    }
+    M_CATCH_LOG
 }
 //---------------------------------------------------------------------------
 void TSP_QmlAtlas::RemovePage(TSP_Page* pPage)
 {
-    // FIXME finalize this function
-    TSP_Atlas::RemovePage(pPage);
+    M_TRY
+    {
+        if (!m_pProxy)
+        {
+            M_LogErrorT("Remove page - FAILED - atlas proxy is missing");
+            return;
+        }
+
+        // get the page to remove
+        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(pPage);
+
+        // found it?
+        if (!pQmlPage)
+            return;
+
+        // notify atlas proxy that a page was removed
+        m_pProxy->RemovePage(QString::fromStdString(pQmlPage->GetUID()));
+
+        // remove the page from document
+        TSP_Atlas::RemovePage(pPage);
+    }
+    M_CATCH_LOG
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlAtlas::GetSelectedPage() const

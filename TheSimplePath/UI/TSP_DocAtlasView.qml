@@ -40,6 +40,12 @@ T.Control
             // add the page and notify if it was added successfully
             apAtlasProxy.onPageAdded(addPage(uid) !== null);
         }
+
+        /// called when a page should be remove from the atlas view
+        onRemovePageFromView: function(uid)
+        {
+            removePage(uid);
+        }
     }
 
     /**

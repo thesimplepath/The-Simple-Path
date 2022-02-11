@@ -38,9 +38,8 @@ T.Control
     signal linkCanceled()
 
     // common properties
-    id:           ctPageView
-    objectName:   "ctPageView"
-    //REM anchors.fill: parent
+    id:         ctPageView
+    objectName: "ctPageView"
 
     /**
     * Page proxy

@@ -66,6 +66,7 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
     signals:
         void nameChanged(const QString& name);
         void addPageToView(const QString& uid);
+        void removePageFromView(const QString& uid);
 
     public:
         /**
@@ -93,7 +94,13 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         *@param uid - page unique identifier
         *@return true on success, otherwise false
         */
-        virtual bool addPage(const QString& uid);
+        virtual bool AddPage(const QString& uid);
+
+        /**
+        * Removes a page from the atlas
+        *@param uid - page unique identifier
+        */
+        virtual void RemovePage(const QString& uid);
 
         /**
         * Notify that a page was added

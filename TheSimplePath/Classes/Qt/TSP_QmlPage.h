@@ -37,6 +37,8 @@
 
 // qt classes
 #include "TSP_QmlAtlas.h"
+#include "TSP_QmlPageProxy.h"
+#include "TSP_QmlDocPageProxy.h"
 
 /**
 * Qt document page
@@ -61,10 +63,38 @@ class TSP_QmlPage : public TSP_Page
         virtual ~TSP_QmlPage();
 
         /**
+        * Gets the page proxy
+        *@return the page proxy, nullptr if no proxy
+        */
+        TSP_QmlPageProxy* GetProxy() const;
+
+        /**
+        * Sets the page proxy
+        *@param pProxy - the page proxy
+        */
+        void SetProxy(TSP_QmlPageProxy* pProxy);
+
+        /**
+        * Gets the document page proxy
+        *@return the document page proxy, nullptr if no proxy
+        */
+        TSP_QmlDocPageProxy* GetDocProxy() const;
+
+        /**
+        * Sets the document page proxy
+        *@param pProxy - the document page proxy
+        */
+        void SetDocProxy(TSP_QmlDocPageProxy* pProxy);
+
+        /**
         * Checks if the page is a child of another page
         *@return true if the page is a child of another page, otherwise false
         */
         virtual inline bool IsChild() const;
+
+    private:
+        TSP_QmlPageProxy*    m_pProxy    = nullptr;
+        TSP_QmlDocPageProxy* m_pDocProxy = nullptr;
 };
 
 //---------------------------------------------------------------------------

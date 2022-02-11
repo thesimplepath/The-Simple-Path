@@ -1,7 +1,8 @@
 /****************************************************************************
- * ==> TSP_QmlPageProxy ----------------------------------------------------*
+ * ==> TSP_QmlDocPageProxy -------------------------------------------------*
  ****************************************************************************
- * Description:  Page proxy between qml view and application engine         *
+ * Description:  Document page proxy between qml view and application       *
+ *               engine                                                     *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -32,74 +33,38 @@
 // qt classes
 #include "TSP_QmlProxy.h"
 
-// qt
-#include <QObject>
-
 // classes prototypes
-class TSP_Page;
+class TSP_QmlPage;
 
 /**
-* Page proxy
+* Document page proxy
 *@author Jean-Milost Reymond
 */
-class TSP_QmlPageProxy : public TSP_QmlProxy
+class TSP_QmlDocPageProxy : public TSP_QmlProxy
 {
     Q_OBJECT
-
-    public:
-        Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
-
-    public slots:
-        /**
-        * Gets the atlas name
-        *@return the atlas name
-        */
-        virtual QString getName() const;
-
-        /**
-        * Sets the atlas name
-        *@param name - the atlas name
-        */
-        virtual void setName(const QString& name);
-
-    signals:
-        void nameChanged(const QString& name);
 
     public:
         /**
         * Constructor
         *@param pParent - object which will be the parent of this object
         */
-        explicit TSP_QmlPageProxy(QObject* pParent = nullptr);
+        explicit TSP_QmlDocPageProxy(QObject* pParent = nullptr);
 
-        virtual ~TSP_QmlPageProxy();
+        virtual ~TSP_QmlDocPageProxy();
 
         /**
         * Gets the linked page
         *@return the linked page, nullptr if no page
         */
-        virtual TSP_Page* GetPage() const;
+        virtual TSP_QmlPage* GetPage() const;
 
         /**
         * Sets the linked page
         *@param pPage - the linked page
         */
-        virtual void SetPage(TSP_Page* pPage);
-
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param symbolUID - symbol unique identifier
-        */
-        virtual Q_INVOKABLE void symbolAdded(const QString& pageUID, const QString& symbolUID);
-
-        /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param messageUID - message unique identifier
-        */
-        virtual Q_INVOKABLE void messageAdded(const QString& pageUID, const QString& messageUID);
+        virtual void SetPage(TSP_QmlPage* pPage);
 
     private:
-        TSP_Page* m_pPage = nullptr;
+        TSP_QmlPage* m_pPage = nullptr;
 };

@@ -56,6 +56,7 @@ T.Frame
                 height: 20
                 radius: 3
                 text: "+"
+                enabled: false
 
                 /// called when button is clicked
                 onClicked:
@@ -80,6 +81,7 @@ T.Frame
                 height: 20
                 radius: 3
                 text: "-"
+                enabled: false
 
                 /// called when button is clicked
                 onClicked:
@@ -258,7 +260,8 @@ T.Frame
         ListView
         {
             // declared properties
-            property int m_ItemHeight: 25
+            property int m_ItemHeight:     25
+            property int m_LastKnownCount: 0
 
             // common properties
             id: lvPageListView
@@ -299,9 +302,46 @@ T.Frame
             /// called when the item count changed
             onCountChanged:
             {
-                // select the last added item
-                currentIndex = count - 1;
+                // enable the delete button only if the view contains more than 1 page
+                btDeletePage.enabled = count > 1;
+
+                // if an index was added, or if the index is out of bounds, select the last one
+                if (m_LastKnownCount < count || currentIndex >= count)
+                    currentIndex = count - 1;
+
+                m_LastKnownCount = count;
             }
+        }
+    }
+
+    /**
+    * Document model connections
+    */
+    Connections
+    {
+        // common properties
+        id: cnDocModel
+        objectName: "cnDocModel"
+        target: tspDocumentModel
+
+        /**
+        * Called when a new document view should be created
+        *@param {string} name - document name
+        *@param {number} openedCount - document opened count
+        */
+        function onCreateDocumentView(name, openedCount)
+        {
+            // enable the add button
+            btAddPage.enabled = true;
+        }
+
+        /**
+        * Called when the document view should be deleted
+        */
+        function onDeleteDocumentView()
+        {
+            // disable the add button
+            btAddPage.enabled = false;
         }
     }
 }

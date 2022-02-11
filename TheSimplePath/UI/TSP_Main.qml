@@ -202,8 +202,8 @@ ApplicationWindow
     Connections
     {
         // common properties
-        id: cnMainView
-        objectName: "cnMainView"
+        id: cnDocModel
+        objectName: "cnDocModel"
         target: tspDocumentModel
 
         /**

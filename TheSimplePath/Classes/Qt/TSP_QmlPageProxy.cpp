@@ -29,6 +29,9 @@
 
 #include "TSP_QmlPageProxy.h"
 
+ // qt classes
+#include "TSP_QmlPage.h"
+
 //---------------------------------------------------------------------------
 // TSP_QmlPageProxy
 //---------------------------------------------------------------------------
@@ -38,6 +41,32 @@ TSP_QmlPageProxy::TSP_QmlPageProxy(QObject* pParent) :
 //---------------------------------------------------------------------------
 TSP_QmlPageProxy::~TSP_QmlPageProxy()
 {}
+//---------------------------------------------------------------------------
+QString TSP_QmlPageProxy::getName() const
+{
+    if (!m_pPage)
+        return "";
+
+    return QString::fromStdWString(m_pPage->GetName());
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::setName(const QString& name)
+{
+    if (!m_pPage)
+        return;
+
+    m_pPage->SetName(name.toStdWString());
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_QmlPageProxy::GetPage() const
+{
+    return m_pPage;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::SetPage(TSP_Page* pPage)
+{
+    m_pPage = pPage;
+}
 //---------------------------------------------------------------------------
 void TSP_QmlPageProxy::symbolAdded(const QString& pageUID, const QString& symbolUID)
 {

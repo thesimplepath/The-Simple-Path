@@ -43,3 +43,23 @@ TSP_QmlPage::TSP_QmlPage(const std::wstring& name, TSP_QmlAtlas* pOwner) :
 TSP_QmlPage::~TSP_QmlPage()
 {}
 //---------------------------------------------------------------------------
+TSP_QmlPageProxy* TSP_QmlPage::GetProxy() const
+{
+    return m_pProxy;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPage::SetProxy(TSP_QmlPageProxy* pProxy)
+{
+    m_pProxy = pProxy;
+}
+//---------------------------------------------------------------------------
+TSP_QmlDocPageProxy* TSP_QmlPage::GetDocProxy() const
+{
+    return m_pDocProxy;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPage::SetDocProxy(TSP_QmlDocPageProxy* pProxy)
+{
+    m_pDocProxy = pProxy;
+}
+//---------------------------------------------------------------------------

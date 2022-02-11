@@ -206,6 +206,9 @@
     <ClCompile Include="Classes\Qt\TSP_QtGlobalMacros.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlDocPageProxy.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -556,6 +559,9 @@
     </QtMoc>
     <QtMoc Include="TSP_PageListModel.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlDocPageProxy.h">
+      <Filter>Header Files\Qt</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

@@ -68,13 +68,18 @@ void TSP_QmlAtlasProxy::SetAtlas(TSP_QmlAtlas* pAtlas)
     m_pAtlas = pAtlas;
 }
 //---------------------------------------------------------------------------
-bool TSP_QmlAtlasProxy::addPage(const QString& uid)
+bool TSP_QmlAtlasProxy::AddPage(const QString& uid)
 {
     m_PageAdded = false;
 
     emit addPageToView(uid);
 
     return m_PageAdded;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlAtlasProxy::RemovePage(const QString& uid)
+{
+    emit removePageFromView(uid);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlAtlasProxy::onPageAdded(bool success)

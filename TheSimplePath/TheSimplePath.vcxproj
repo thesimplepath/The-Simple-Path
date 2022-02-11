@@ -352,6 +352,7 @@
     <ClCompile Include="Classes\QT\TSP_QmlAtlas.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlAtlasProxy.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlBoxProxy.cpp" />
+    <ClCompile Include="Classes\Qt\TSP_QmlDocPageProxy.cpp" />
     <ClCompile Include="Classes\QT\TSP_QmlDocument.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlDocumentModel.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlLinkProxy.cpp" />
@@ -427,6 +428,7 @@
     <ClInclude Include="Classes\QT\TSP_QmlAtlas.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlBoxProxy.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlAtlasProxy.h" />
+    <QtMoc Include="Classes\Qt\TSP_QmlDocPageProxy.h" />
     <ClInclude Include="Classes\QT\TSP_QmlDocument.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlDocumentModel.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlLinkProxy.h" />
