@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import QtQuick.Shapes 1.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.1
 
 // javascript
 import "js/TSP_JSHelper.js" as JSHelper
@@ -26,6 +27,25 @@ ApplicationWindow
     width: 800
     height: 600
     title: qsTr("The Simple Path")
+
+    /**
+    * Error message dialog
+    */
+    MessageDialog
+    {
+        // common properties
+        id: mdError
+        objectName: "mdError"
+        icon: StandardIcon.Critical
+        standardButtons: StandardButton.Ok
+        visible: false
+
+        /// called when user clicked on the Ok button
+        onAccepted:
+        {
+            close();
+        }
+    }
 
     /**
     * Toolbox
@@ -147,6 +167,32 @@ ApplicationWindow
                 color: "#808080"
                 anchors.fill: parent
             }
+        }
+    }
+
+    /**
+    * Main form model connections
+    */
+    Connections
+    {
+        // common properties
+        id: cnMainForm
+        objectName: "cnMainForm"
+        target: m_MainFormModel
+
+        /**
+        * Called when an error message should be shown
+        *@param {string} title - dialog title
+        *@param {string} msg - error message
+        *@param {string} detailedMsg - detailed error message, ignored if empty
+        */
+        function onShowErrorDialog(title, msg, detailedMsg)
+        {
+            // show the error dialog box
+            mdError.title        = title;
+            mdError.text         = msg;
+            mdError.detailedText = detailedMsg;
+            mdError.open();
         }
     }
 

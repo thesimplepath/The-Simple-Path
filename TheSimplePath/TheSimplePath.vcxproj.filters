@@ -203,6 +203,9 @@
     <ClCompile Include="TSP_PageListModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QtGlobalMacros.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -422,6 +425,9 @@
     <ClInclude Include="Classes\Common\TSP_GlobalMacros.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QtGlobalMacros.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CodeConvention.txt">
@@ -463,9 +469,6 @@
       <Filter>Third-Party\stduuid\gsl</Filter>
     </None>
     <None Include="UI\TSP_Activity.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
-    <None Include="UI\TSP_AtlasView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
     <None Include="UI\TSP_Box.qml">
@@ -510,9 +513,6 @@
     <None Include="UI\js\TSP_JSHelper.js">
       <Filter>Resource Files\UI\js</Filter>
     </None>
-    <None Include="UI\TSP_SymbolPageView.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="UI\TSP_Styles.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
@@ -523,6 +523,12 @@
       <Filter>Resource Files\Resources\Images</Filter>
     </None>
     <None Include="UI\TSP_PageListView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_DocAtlasView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_DocPageView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
   </ItemGroup>

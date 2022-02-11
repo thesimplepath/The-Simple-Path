@@ -29,6 +29,13 @@
 
 #include "TSP_QmlAtlas.h"
 
+// std
+#include <sstream>
+
+ // common classes
+#include "Common/TSP_Exception.h"
+#include "Common/TSP_GlobalMacros.h"
+
 // qt classes
 #include "TSP_QmlPage.h"
 
@@ -68,21 +75,71 @@ TSP_Page* TSP_QmlAtlas::CreatePage(const std::wstring& name)
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlAtlas::AddPage()
 {
-    return TSP_Atlas::AddPage();
+    M_TRY
+    {
+        std::wostringstream sstr;
+
+        //: New page default name
+        //% "New page"
+        sstr << qtTrId("id-new-page").toStdWString();
+
+        const std::size_t pageCount = GetPageCount();
+
+        // FIXME this doesn't work, what happens if a random page is removed?
+        if (pageCount)
+            sstr << L" (" << std::to_wstring(pageCount) << L")";
+
+        return AddPage(sstr.str());
+    }
+    M_CATCH_LOG
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
 {
-    return TSP_Atlas::AddPage(name);
+    M_TRY
+    {
+        if (!m_pProxy)
+        {
+            M_LogErrorT("Add atlas - FAILED - atlas proxy is missing");
+            return nullptr;
+        }
+
+        // add a new page in atlas
+        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(TSP_Atlas::AddPage(name));
+
+        // succeeded?
+        if (!pQmlPage)
+        {
+            M_LogErrorT("Add page - FAILED - page could not be created");
+            return nullptr;
+        }
+
+        // notify atlas proxy that a new page should be added
+        if (!m_pProxy->addPage(QString::fromStdString(pQmlPage->GetUID())))
+        {
+            M_LogErrorT("Add page - FAILED - page could not be added on view");
+            TSP_Atlas::RemovePage(pQmlPage);
+            return nullptr;
+        }
+
+        return pQmlPage;
+    }
+    M_CATCH_LOG
+
+    return nullptr;
 }
 //---------------------------------------------------------------------------
 void TSP_QmlAtlas::RemovePage(std::size_t index)
 {
+    // FIXME finalize this function
     TSP_Atlas::RemovePage(index);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlAtlas::RemovePage(TSP_Page* pPage)
 {
+    // FIXME finalize this function
     TSP_Atlas::RemovePage(pPage);
 }
 //---------------------------------------------------------------------------

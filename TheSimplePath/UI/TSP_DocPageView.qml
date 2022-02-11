@@ -2,13 +2,13 @@
 import QtQuick.Controls 2.15
 
 /**
-* Symbol page view
+* Document page view
 *@author Jean-Milost Reymond
 */
 TSP_PageView
 {
     // properties
-    property string m_Type: "TSP_SymbolPageView"
+    property string m_Type: "TSP_DocPageView"
 
     // advanced properties
     m_PageWidth:  m_MainFormModel.getPageWidth()

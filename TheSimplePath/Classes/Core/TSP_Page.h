@@ -125,10 +125,12 @@ class TSP_Page : public TSP_Item
         */
         virtual std::size_t GetComponentCount() const;
 
+    protected:
+        TSP_Item* m_pOwner = nullptr;
+
     private:
         typedef std::vector<TSP_Component*> IComponents;
 
-        TSP_Atlas*   m_pOwner;
         IComponents  m_Components;
         std::wstring m_Name;
 };

@@ -59,4 +59,19 @@ class TSP_QmlPage : public TSP_Page
         TSP_QmlPage(const std::wstring& name, TSP_QmlAtlas* pOwner);
 
         virtual ~TSP_QmlPage();
+
+        /**
+        * Checks if the page is a child of another page
+        *@return true if the page is a child of another page, otherwise false
+        */
+        virtual inline bool IsChild() const;
 };
+
+//---------------------------------------------------------------------------
+// TSP_QmlPage
+//---------------------------------------------------------------------------
+bool TSP_QmlPage::IsChild() const
+{
+    return dynamic_cast<TSP_QmlPage*>(m_pOwner);
+}
+//---------------------------------------------------------------------------

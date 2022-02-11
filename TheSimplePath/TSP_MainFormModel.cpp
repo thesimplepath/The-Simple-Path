@@ -28,9 +28,6 @@
 
 #include "TSP_MainFormModel.h"
 
-// qt classes
-#include "Qt\TSP_QmlProxyDictionary.h" // REM?
-
 // application
 #include "TSP_Application.h"
 
@@ -87,6 +84,11 @@ int TSP_MainFormModel::getPageHeight() const
         ::ReleaseDC(nullptr, hDC);
 
     return height;
+}
+//---------------------------------------------------------------------------
+void TSP_MainFormModel::showError(const QString& title, const QString& msg, const QString& detailedMsg)
+{
+    emit showErrorDialog(title, msg, detailedMsg);
 }
 //---------------------------------------------------------------------------
 void TSP_MainFormModel::onNewDocumentClicked()

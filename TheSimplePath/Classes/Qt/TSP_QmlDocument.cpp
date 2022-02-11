@@ -81,6 +81,12 @@ bool TSP_QmlDocument::Create()
 {
     M_TRY
     {
+        if (!m_pApp)
+        {
+            M_LogErrorT("Create document - FAILED - application is missing");
+            return false;
+        }
+
         if (!m_pDocumentModel)
         {
             M_LogErrorT("Create document - FAILED - document model is missing");
@@ -98,9 +104,9 @@ bool TSP_QmlDocument::Create()
         {
             std::wostringstream sstr;
 
-            //% "New document"
             //: New document default name
-            sstr << qtTrId("id-New-Document").toStdWString();
+            //% "New document"
+            sstr << qtTrId("id-new-document").toStdWString();
 
             if (m_OpenedCount)
                 sstr << L" (" << std::to_wstring(m_OpenedCount) << L")";
@@ -123,14 +129,39 @@ bool TSP_QmlDocument::Create()
 
         std::wostringstream sstr;
 
-        //% "Root-Atlas"
         //: Root atlas name
-        sstr << qtTrId("id-Root-Atlas").toStdWString();
+        //% "Root-Atlas"
+        sstr << qtTrId("id-root-atlas").toStdWString();
 
         // by default, a document always contain one, and only one, atlas
-        if (!AddAtlas(sstr.str()))
+        TSP_QmlAtlas* pQmlAtlas = static_cast<TSP_QmlAtlas*>(AddAtlas(sstr.str()));
+
+        // was atlas created successfully?
+        if (!pQmlAtlas)
         {
             M_LogErrorT("Create document - FAILED - could not create the main atlas");
+            Close();
+            return false;
+        }
+
+        // get the page list model
+        TSP_PageListModel* pPageListModel = m_pApp->GetPageListModel();
+
+        // found it?
+        if (!pPageListModel)
+        {
+            M_LogErrorT("Create document - FAILED - could not get the page list model");
+            Close();
+            return false;
+        }
+
+        // set the current page owner
+        pPageListModel->SetPageOwner(pQmlAtlas);
+
+        // create a default page
+        if (!pPageListModel->addPage())
+        {
+            M_LogErrorT("Create document - FAILED - could not create the default page");
             Close();
             return false;
         }
@@ -163,6 +194,17 @@ void TSP_QmlDocument::Close()
             m_pDocumentModel->setSelectedAtlasUID("");
         }
 
+        // main app defined?
+        if (m_pApp)
+        {
+            // get page list model
+            TSP_PageListModel* pPageListModel = m_pApp->GetPageListModel();
+
+            // clear the page list model
+            if (pPageListModel)
+                pPageListModel->clear();
+        }
+
         // close the document itself
         TSP_Document::Close();
     }
@@ -190,9 +232,9 @@ TSP_Atlas* TSP_QmlDocument::AddAtlas()
     {
         std::wostringstream sstr;
 
-        //% "New atlas"
         //: New atlas default name
-        sstr << qtTrId("id-New-Atlas").toStdWString();
+        //% "New atlas"
+        sstr << qtTrId("id-new-atlas").toStdWString();
 
         const std::size_t atlasCount = GetAtlasCount();
 

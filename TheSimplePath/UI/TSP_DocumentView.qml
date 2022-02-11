@@ -70,7 +70,7 @@ T.Control
 
         /**
         * Called when an atlas should be added to the document view
-        *@param uid - atlas unique identifier to add
+        *@param {string} uid - atlas unique identifier to add
         */
         function onAddAtlasToView(uid)
         {
@@ -79,7 +79,7 @@ T.Control
 
         /**
         * Called when an atlas should be removed from the document view
-        *@param uid - atlas unique identifier to remove
+        *@param {string} uid - atlas unique identifier to remove
         */
         function onRemoveAtlasFromView(uid)
         {
@@ -140,7 +140,7 @@ T.Control
 
     /**
     * Creates a new atlas and adds it to the document view
-    *@param uid - atlas unique identifier
+    *@param {string} uid - atlas unique identifier
     *@return newly created atlas, null on error
     */
     function addAtlas(uid)
@@ -155,7 +155,7 @@ T.Control
         console.log("Add atlas - uid - " + uid);
 
         // load the item component
-        let component = Qt.createComponent('TSP_AtlasView.qml');
+        let component = Qt.createComponent('TSP_DocAtlasView.qml');
 
         // succeeded?
         if (component.status !== Component.Ready)
@@ -191,7 +191,7 @@ T.Control
 
     /**
     * Removes an atlas from the document view
-    *@param uid - atlas unique identifier
+    *@param {string} uid - atlas unique identifier
     */
     function removeAtlas(uid)
     {
@@ -201,14 +201,13 @@ T.Control
 
         console.log("Remove atlas - uid - " + uid);
 
-        var atlasName;
-        var deleted = false;
+        let atlasName;
 
         // iterate through atlas view stack until find the view to delete, and deletes it
-        for (var i = slAtlasStack.children.length - 1; i >= 0; --i)
+        for (let i = slAtlasStack.children.length - 1; i >= 0; --i)
             // found the atlas to delete?
-            if (slAtlasStack.children[i].m_Type         === "TSP_AtlasView" &&
-               !slAtlasStack.children[i].m_Deleted                          &&
+            if (slAtlasStack.children[i].m_Type         === "TSP_DocAtlasView" &&
+               !slAtlasStack.children[i].m_Deleted                             &&
                 slAtlasStack.children[i].atlasProxy.uid === uid)
             {
                 // keep the atlas name for logging
@@ -220,15 +219,13 @@ T.Control
                 // processed as a normal item in other situations where it shouldn't
                 slAtlasStack.children[i].m_Deleted = true;
                 slAtlasStack.children[i].destroy();
-
-                deleted = true;
                 break;
             }
 
-        // log success or failure
-        if (deleted)
-            console.log("Remove atlas - succeeded - view name - " + atlasName);
-        else
-            console.error("Remove atlas - FAILED");
+        // log deleted atlas
+        if (atlasName.length)
+            console.log("Remove atlas - view was removed - name - " + atlasName);
+
+        console.log("Remove atlas - succeeded");
     }
 }

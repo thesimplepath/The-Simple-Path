@@ -102,8 +102,10 @@ class TSP_Component : public TSP_Item
         */
         virtual bool SetComments(const std::wstring& value);
 
+    protected:
+        TSP_Item* m_pOwner = nullptr;
+
     private:
-        TSP_Page*      m_pOwner;
         TSP_Attributes m_Attributes;
         std::wstring   m_Title; // FIXME attribute?
         std::wstring   m_Description; // FIXME attribute?

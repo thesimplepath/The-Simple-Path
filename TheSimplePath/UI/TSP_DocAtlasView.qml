@@ -7,7 +7,7 @@ import QtQuick.Templates 2.15 as T
 import thesimplepath.proxys 1.0
 
 /**
-* Atlas view
+* Document atlas view
 *@author Jean-Milost Reymond
 */
 T.Control
@@ -17,7 +17,7 @@ T.Control
 
     // advanced properties
     property var    m_Atlas:   this
-    property string m_Type:    "TSP_AtlasView"
+    property string m_Type:    "TSP_DocAtlasView"
     property bool   m_Deleted: false
 
     // common properties
@@ -33,6 +33,13 @@ T.Control
         // common properties
         id: apAtlasProxy
         objectName: "apAtlasProxy"
+
+        /// called when a page should be added to the atlas view
+        onAddPageToView: function(uid)
+        {
+            // add the page and notify if it was added successfully
+            apAtlasProxy.onPageAdded(addPage(uid) !== null);
+        }
     }
 
     /**
@@ -46,31 +53,31 @@ T.Control
         anchors.fill: parent
         currentIndex: 0
         clip: true
-
-        /// called when page is loaded
-        Component.onCompleted:
-        {
-            addPage("1234");
-        }
     }
 
     /**
-    * Bind signals from the c++ model to the view
+    * Page list view model connections
     */
     Connections
     {
         // common properties
+        id: cnPageListView
+        objectName: "cnPageListView"
         target: tspPageListModel
 
-        function onTestSignal()
+        /**
+        * Called when the selected page should be shown
+        *@param {number} index - selected page index, -1 if no selected page
+        */
+        function onShowSelectedPage(index)
         {
-            console.log("***** ***** This signal ALSO!!!");
+            slPageStack.currentIndex = index;
         }
     }
 
     /**
     * Creates a new page and adds it to the atlas view
-    *@param uid - page unique identifier
+    *@param {string} uid - page unique identifier
     *@return newly created page, null on error
     */
     function addPage(uid)
@@ -85,7 +92,7 @@ T.Control
         console.log("Add page - uid - " + uid);
 
         // load the item component
-        let component = Qt.createComponent('TSP_SymbolPageView.qml');
+        let component = Qt.createComponent('TSP_DocPageView.qml');
 
         // succeeded?
         if (component.status !== Component.Ready)
@@ -121,7 +128,7 @@ T.Control
 
     /**
     * Removes a page from the atlas view
-    *@param uid - page unique identifier
+    *@param {string} uid - page unique identifier
     */
     function removePage(uid)
     {
@@ -131,14 +138,13 @@ T.Control
 
         console.log("Remove page - uid - " + uid);
 
-        var pageName;
-        var deleted = false;
+        let pageName;
 
         // iterate through page view stack until find the view to delete, and deletes it
         for (var i = slPageStack.children.length - 1; i >= 0; --i)
             // found the atlas to delete?
-            if (slPageStack.children[i].m_Type        === "TSP_SymbolPageView" &&
-               !slPageStack.children[i].m_Deleted                              &&
+            if (slPageStack.children[i].m_Type        === "TSP_DocPageView" &&
+               !slPageStack.children[i].m_Deleted                           &&
                 slPageStack.children[i].pageProxy.uid === uid)
             {
                 // keep the page name for logging
@@ -150,15 +156,13 @@ T.Control
                 // processed as a normal item in other situations where it shouldn't
                 slPageStack.children[i].m_Deleted = true;
                 slPageStack.children[i].destroy();
-
-                deleted = true;
                 break;
             }
 
-        // log success or failure
-        if (deleted)
-            console.log("Remove page - succeeded - view name - " + atlasName);
-        else
-            console.error("Remove page - FAILED");
+        // log deleted page
+        if (pageName.length)
+            console.log("Remove page - view was removed - name - " + pageName);
+
+        console.log("Remove page - succeeded");
     }
 }

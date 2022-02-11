@@ -65,6 +65,7 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
 
     signals:
         void nameChanged(const QString& name);
+        void addPageToView(const QString& uid);
 
     public:
         /**
@@ -79,14 +80,28 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         * Gets the linked atlas
         *@return the linked atlas, nullptr if no atlas
         */
-        TSP_QmlAtlas* GetAtlas() const;
+        virtual TSP_QmlAtlas* GetAtlas() const;
 
         /**
         * Sets the linked atlas
         *@param pAtlas - the linked atlas
         */
-        void SetAtlas(TSP_QmlAtlas* pAtlas);
+        virtual void SetAtlas(TSP_QmlAtlas* pAtlas);
+
+        /**
+        * Adds a new page on the atlas
+        *@param uid - page unique identifier
+        *@return true on success, otherwise false
+        */
+        virtual bool addPage(const QString& uid);
+
+        /**
+        * Notify that a page was added
+        *@param success - if true, the page was added successfully
+        */
+        virtual Q_INVOKABLE void onPageAdded(bool success);
 
     private:
-        TSP_QmlAtlas* m_pAtlas = nullptr;
+        TSP_QmlAtlas* m_pAtlas    = nullptr;
+        bool          m_PageAdded = false;
 };

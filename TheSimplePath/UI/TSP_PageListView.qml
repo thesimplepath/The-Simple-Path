@@ -147,7 +147,7 @@ T.Frame
                         // common properties
                         id: txPageViewItemText
                         objectName: "txPageViewItemText"
-                        text: tspPageListModel.getPageName(index)
+                        text: pageName
                         anchors.left: imPageItemGlyph.right
                         anchors.top: parent.top
                         anchors.right: parent.right
@@ -287,38 +287,21 @@ T.Frame
                 visible: true
                 minimumSize: 0.1
             }
-        }
 
-        /**
-        * Bind signals from the c++ model to the view
-        */
-        /*REM
-        //REM ?
-        Connections
-        {
-            // common properties
-            target: tspPageListModel
-            */
-
-            /*REM
-            function onTestSignal()
+            /// called when the index changed on the list view
+            onCurrentIndexChanged:
             {
-                console.log("+++++ +++++ This signal responded!!!");
+                // notify the model that the selected page changed
+                if (tspPageListModel)
+                    tspPageListModel.onPageSelected(currentIndex);
             }
-            */
 
-            /**
-            * Called when a row is inserted
-            *@param {QModelIndex} parentIndex - parent index which will own the row(s) to insert
-            *@param {QModelIndex} first - first added row index
-            *@param {QModelIndex} last - last added row index
-            */
-            /*REM
-            function onRowsInserted(parentIndex, first, last)
+            /// called when the item count changed
+            onCountChanged:
             {
-                //REM lvPageListView.append({text: "New page 1"})
+                // select the last added item
+                currentIndex = count - 1;
             }
         }
-        */
     }
 }

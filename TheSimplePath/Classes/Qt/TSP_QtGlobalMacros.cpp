@@ -1,8 +1,9 @@
 /****************************************************************************
- * ==> TSP_Component -------------------------------------------------------*
- ****************************************************************************
- * Description:  Component (which may be inserted on a page)                *
- * Contained in: Core                                                       *
+ * ==> TSP_QtGlobalMacros --------------------------------------------------*
+ * **************************************************************************
+ * Description : Macros collection depending on Qt which may be used        *
+ *               globally                                                   *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,66 +28,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_Component.h"
+#include "TSP_QtGlobalMacros.h"
 
-// core classes
-#include "TSP_Page.h"
+// qt
+#include <QCoreApplication>
 
 //---------------------------------------------------------------------------
-// TSP_Component
+// TSP_QtGlobalMsg
 //---------------------------------------------------------------------------
-TSP_Component::TSP_Component(TSP_Page* pOwner) :
-    TSP_Item(),
-    m_pOwner(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_Component::TSP_Component(const std::wstring& title,
-                             const std::wstring& description,
-                             const std::wstring& comments,
-                                   TSP_Page*     pOwner) :
-    TSP_Item(),
-    m_pOwner(pOwner),
-    m_Title(title),
-    m_Description(description),
-    m_Comments(comments)
-{}
-//---------------------------------------------------------------------------
-TSP_Component::~TSP_Component()
-{
-    for each (auto pAttribute in m_Attributes)
-        delete pAttribute;
-}
-//---------------------------------------------------------------------------
-std::wstring TSP_Component::GetTitle() const
-{
-    return m_Title;
-}
-//---------------------------------------------------------------------------
-bool TSP_Component::SetTitle(const std::wstring& value)
-{
-    m_Title = value;
-    return true;
-}
-//---------------------------------------------------------------------------
-std::wstring TSP_Component::GetDescription() const
-{
-    return m_Description;
-}
-//---------------------------------------------------------------------------
-bool TSP_Component::SetDescription(const std::wstring& value)
-{
-    m_Description = value;
-    return true;
-}
-//---------------------------------------------------------------------------
-std::wstring TSP_Component::GetComments() const
-{
-    return m_Comments;
-}
-//---------------------------------------------------------------------------
-bool TSP_Component::SetComments(const std::wstring& value)
-{
-    m_Comments = value;
-    return true;
-}
+//: Unknown error dialog title
+//% "Unknown error"
+const QString TSP_QtGlobalMsg::m_UnknownTitle = qtTrId("id-error-unknown-title");
+
+//: Unknown error message
+//% "An unknown error happened."
+const QString TSP_QtGlobalMsg::m_UnknownMsg = qtTrId("id-error-unknown-msg");
 //---------------------------------------------------------------------------

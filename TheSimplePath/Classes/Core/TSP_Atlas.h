@@ -136,12 +136,14 @@ class TSP_Atlas : public TSP_Item
         */
         virtual bool Save() const;
 
+    protected:
+        TSP_Document* m_pOwner = nullptr;
+
     private:
         typedef std::vector<TSP_Page*> IPages;
 
-        TSP_Document* m_pOwner;
-        IPages        m_Pages;
-        std::wstring  m_Name;
+        IPages       m_Pages;
+        std::wstring m_Name;
 };
 
 //---------------------------------------------------------------------------

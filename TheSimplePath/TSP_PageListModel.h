@@ -28,6 +28,12 @@
 
 #pragma once
 
+// core classes
+#include "Core/TSP_Item.h"
+
+// qt classes
+#include "Qt/TSP_QmlPage.h"
+
 // qt
 #include <QObject>
 #include <QAbstractListModel>
@@ -75,17 +81,8 @@ class TSP_PageListModel : public QAbstractListModel
     //    */
     //    void setSelectedAtlasUID(QString uid);
 
-    //signals:
-    //    void createDocumentView(const QString& name, int openedCount);
-    //    void deleteDocumentView();
-    //    void addAtlasToView(const QString& uid);
-    //    void removeAtlasFromView(const QString& uid);
-    //    void queryAtlasUID();
-    //    void docStatusChanged(int status);
-    //    void selectedAtlasUIDChanged(const QString& uid);
-
     signals:
-        void testSignal();
+        void showSelectedPage(int index);
 
     public:
         /**
@@ -93,7 +90,7 @@ class TSP_PageListModel : public QAbstractListModel
         */
         enum class IEDataRole
         {
-            IE_DR_Title = 0
+            IE_DR_PageName = 0
         };
 
         /**
@@ -106,6 +103,18 @@ class TSP_PageListModel : public QAbstractListModel
         virtual ~TSP_PageListModel();
 
         /**
+        * Gets the current page owner
+        *@return the current page owner, nullptr if no current page owner defined
+        */
+        virtual TSP_Item* GetPageOwner() const;
+
+        /**
+        * Sets the current page owner
+        *@param pPageOwner - the current page owner
+        */
+        virtual void SetPageOwner(TSP_Item* pPageOwner);
+
+        /**
         * Called when the add page button was clicked on the page list view
         */
         virtual Q_INVOKABLE void onAddPageClicked();
@@ -116,14 +125,50 @@ class TSP_PageListModel : public QAbstractListModel
         virtual Q_INVOKABLE void onDeletePageClicked();
 
         /**
-        * Adds a page
+        * Clears the view content
         */
-        virtual Q_INVOKABLE void addPage();
+        virtual Q_INVOKABLE void clear();
+
+        /**
+        * Adds a page
+        *@return true on success, otherwise false
+        */
+        virtual Q_INVOKABLE bool addPage();
+
+        /**
+        * Deletes a page
+        *@return true on success, otherwise false
+        */
+        virtual Q_INVOKABLE bool deletePage();
 
         /**
         * Gets the page name at index
         */
         virtual Q_INVOKABLE QString getPageName(int index) const;
+
+        /**
+        * Get page at index
+        *@return page, nullptr if not found or on error
+        */
+        virtual TSP_QmlPage* GetPage(int index) const;
+
+        /**
+        * Get currently selected page
+        *@return selected page, nullptr if not found or on error
+        */
+        virtual TSP_QmlPage* GetSelectedPage() const;
+
+        /**
+        * Get currently selected page index
+        *@return selected index, or -1 if no page selected
+        */
+        virtual Q_INVOKABLE int getSelectedPageIndex() const;
+
+        /**
+        * Called when a new page was selected from user interface
+        *@param index - selected page index, -1 if no page selected
+        */
+        virtual Q_INVOKABLE void onPageSelected(int index);
 
         /**
         * Get row count
@@ -147,6 +192,7 @@ class TSP_PageListModel : public QAbstractListModel
         virtual QHash<int, QByteArray> roleNames() const;
 
     private:
-        TSP_Application* m_pApp = nullptr;
-        std::size_t      m_TempCount = 0;
+        TSP_Application* m_pApp             =  nullptr;
+        TSP_Item*        m_pPageOwner       =  nullptr;
+        int              m_SelectedPageItem = -1;
 };

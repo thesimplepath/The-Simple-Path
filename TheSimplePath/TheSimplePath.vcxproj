@@ -108,19 +108,19 @@
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <QtInstall>Qt 5.15.2 32bit</QtInstall>
-    <QtModules>core;network;gui;qml;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtInstall>Qt 5.15.2 64bit</QtInstall>
-    <QtModules>core;network;gui;qml;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>Qt 5.15.2 32bit</QtInstall>
-    <QtModules>core;network;gui;qml;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="QtSettings">
     <QtInstall>Qt 5.15.2 64bit</QtInstall>
-    <QtModules>core;network;gui;qml;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -359,6 +359,7 @@
     <ClCompile Include="Classes\Qt\TSP_QmlPageProxy.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlProxy.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlProxyDictionary.cpp" />
+    <ClCompile Include="Classes\Qt\TSP_QtGlobalMacros.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TSP_Application.cpp" />
     <ClCompile Include="TSP_GlobalSettings.cpp" />
@@ -433,6 +434,7 @@
     <QtMoc Include="Classes\Qt\TSP_QmlPageProxy.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlProxy.h" />
     <ClInclude Include="Classes\Qt\TSP_QmlProxyDictionary.h" />
+    <ClInclude Include="Classes\Qt\TSP_QtGlobalMacros.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\cursorstreamwrapper.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\document.h" />
@@ -494,9 +496,10 @@
     <None Include="UI\js\TSP_JSHelper.js" />
     <None Include="UI\qmldir" />
     <None Include="UI\TSP_Activity.qml" />
-    <None Include="UI\TSP_AtlasView.qml" />
     <None Include="UI\TSP_Box.qml" />
     <None Include="UI\TSP_Connector.qml" />
+    <None Include="UI\TSP_DocAtlasView.qml" />
+    <None Include="UI\TSP_DocPageView.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
     <None Include="UI\TSP_End.qml" />
     <None Include="UI\TSP_Handle.qml" />
@@ -510,7 +513,6 @@
     <None Include="UI\TSP_Process.qml" />
     <None Include="UI\TSP_Start.qml" />
     <None Include="UI\TSP_Styles.qml" />
-    <None Include="UI\TSP_SymbolPageView.qml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

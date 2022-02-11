@@ -1,7 +1,8 @@
 /****************************************************************************
- * ==> TSP_QmlAtlasProxy ---------------------------------------------------*
- ****************************************************************************
- * Description:  Atlas proxy between qml view and application engine        *
+ * ==> TSP_QtGlobalMacros --------------------------------------------------*
+ * **************************************************************************
+ * Description : Macros collection depending on Qt which may be used        *
+ *               globally                                                   *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,58 +28,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlAtlasProxy.h"
+#pragma once
 
-// qt classes
-#include "TSP_QmlAtlas.h"
+// common classes
+#include "Common/TSP_Exception.h"
 
-//---------------------------------------------------------------------------
-// TSP_QmlAtlasProxy
-//---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::TSP_QmlAtlasProxy(QObject* pParent) :
-    TSP_QmlProxy(pParent)
-{}
-//---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::~TSP_QmlAtlasProxy()
-{}
-//---------------------------------------------------------------------------
-QString TSP_QmlAtlasProxy::getName() const
-{
-    if (!m_pAtlas)
-        return "";
+// qt
+#include <QString>
 
-    return QString::fromStdWString(m_pAtlas->GetName());
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::setName(const QString& name)
+/**
+* Global translated messages related to Qt/Qml
+*/
+class TSP_QtGlobalMsg
 {
-    if (!m_pAtlas)
-        return;
+    public:
+        static const QString m_UnknownTitle;
+        static const QString m_UnknownMsg;
+};
 
-    m_pAtlas->SetName(name.toStdWString());
-}
-//---------------------------------------------------------------------------
-TSP_QmlAtlas* TSP_QmlAtlasProxy::GetAtlas() const
-{
-    return m_pAtlas;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::SetAtlas(TSP_QmlAtlas* pAtlas)
-{
-    m_pAtlas = pAtlas;
-}
-//---------------------------------------------------------------------------
-bool TSP_QmlAtlasProxy::addPage(const QString& uid)
-{
-    m_PageAdded = false;
-
-    emit addPageToView(uid);
-
-    return m_PageAdded;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::onPageAdded(bool success)
-{
-    m_PageAdded = success;
-}
-//---------------------------------------------------------------------------
+/**
+* Closing catch block, error message is sent to log
+*/
+#define M_CATCH_QT_MSG\
+    catch (std::exception& e)\
+    {\
+        M_LogException("STD", e.what());\
+        m_pApp->GetMainFormModel()->showError(TSP_QtGlobalMsg::m_UnknownTitle,\
+                                              TSP_QtGlobalMsg::m_UnknownMsg,\
+                                              e.what());\
+    }\
+    catch (...)\
+    {\
+        M_LogException(TSP_ExceptionFormatter::m_GenericTypeName, "Unknown exception");\
+        m_pApp->GetMainFormModel()->showError(TSP_QtGlobalMsg::m_UnknownTitle,\
+                                              TSP_QtGlobalMsg::m_UnknownMsg,\
+                                              "Unknown exception");\
+    }

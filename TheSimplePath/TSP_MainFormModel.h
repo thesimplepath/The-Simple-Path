@@ -46,6 +46,9 @@ class TSP_MainFormModel : public QObject
 {
     Q_OBJECT
 
+    signals:
+        void showErrorDialog(const QString& title, const QString& msg, const QString& detailedMsg);
+
     public:
         /**
         * Constructor
@@ -67,6 +70,14 @@ class TSP_MainFormModel : public QObject
         *@return page height, in pixels
         */
         virtual Q_INVOKABLE int getPageHeight() const;
+
+        /**
+        * Shows an error dialog box to the user
+        *@param title - dialog title
+        *@param msg - error message
+        *@param detailedMsg - detailed error message, ignored if empty
+        */
+        virtual Q_INVOKABLE void showError(const QString& title, const QString& msg, const QString& detailedMsg = "");
 
         /**
         * Called when the new document button was clicked on the user interface
