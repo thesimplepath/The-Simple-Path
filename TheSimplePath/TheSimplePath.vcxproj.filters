@@ -69,15 +69,6 @@
     <Filter Include="Resource Files\Resources\Images">
       <UniqueIdentifier>{0908b82c-574f-49d0-8b9c-6ab2a694d056}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Third-Party\stduuid">
-      <UniqueIdentifier>{2dd289ef-c52c-4cbb-a25c-e458ef218606}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Third-Party\stduuid\include">
-      <UniqueIdentifier>{ef59256d-a3ad-4a61-9f02-8efd7a5ba86b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Third-Party\stduuid\gsl">
-      <UniqueIdentifier>{9bbe1303-4448-4be5-af36-dcec039df87a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\UI\js">
       <UniqueIdentifier>{dc6270d3-b3e7-4a5a-a75f-039311f4967d}</UniqueIdentifier>
     </Filter>
@@ -170,9 +161,6 @@
     <ClCompile Include="Classes\QT\TSP_QmlDocument.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\QT\TSP_QmlPage.cpp">
-      <Filter>Source Files\Qt</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Qt\TSP_QmlDocumentModel.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
@@ -206,7 +194,22 @@
     <ClCompile Include="Classes\Qt\TSP_QtGlobalMacros.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Qt\TSP_QmlDocPageProxy.cpp">
+    <ClCompile Include="Classes\Qt\TSP_QmlBox.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlAtlasPage.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlPage.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_Process.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlProcess.cpp">
+      <Filter>Source Files\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Qt\TSP_QmlLink.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
   </ItemGroup>
@@ -389,9 +392,6 @@
     <ClInclude Include="Classes\Core\TSP_Atlas.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Third-Party\stduuid\include\uuid.h">
-      <Filter>Third-Party\stduuid\include</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Core\TSP_Activity.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -408,9 +408,6 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="Classes\QT\TSP_QmlActivity.h">
-      <Filter>Header Files\Qt</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\QT\TSP_QmlPage.h">
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
     <ClInclude Include="Classes\QT\TSP_QmlAtlas.h">
@@ -431,6 +428,24 @@
     <ClInclude Include="Classes\Qt\TSP_QtGlobalMacros.h">
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlBox.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlAtlasPage.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlPage.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_Process.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlProcess.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Qt\TSP_QmlLink.h">
+      <Filter>Header Files\Qt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CodeConvention.txt">
@@ -443,33 +458,6 @@
     </None>
     <None Include="Resources\Images\PageBreak_Logo_Process.svg">
       <Filter>Resource Files\Resources\Images</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\gsl">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\gsl_algorithm">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\gsl_assert">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\gsl_byte">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\gsl_util">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\multi_span">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\pointers">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\span">
-      <Filter>Third-Party\stduuid\gsl</Filter>
-    </None>
-    <None Include="Third-Party\stduuid\gsl\string_span">
-      <Filter>Third-Party\stduuid\gsl</Filter>
     </None>
     <None Include="UI\TSP_Activity.qml">
       <Filter>Resource Files\UI</Filter>
@@ -559,9 +547,6 @@
     </QtMoc>
     <QtMoc Include="TSP_PageListModel.h">
       <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Classes\Qt\TSP_QmlDocPageProxy.h">
-      <Filter>Header Files\Qt</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

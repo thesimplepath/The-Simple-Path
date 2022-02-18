@@ -1,8 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlDocPageProxy -------------------------------------------------*
+ * ==> TSP_QmlLink ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Document page proxy between qml view and application       *
- *               engine                                                     *
+ * Description:  Qt link component                                          *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -28,43 +27,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#pragma once
+#include "TSP_QmlLink.h"
 
-// qt classes
-#include "TSP_QmlProxy.h"
-
-// classes prototypes
-class TSP_QmlPage;
-
-/**
-* Document page proxy
-*@author Jean-Milost Reymond
-*/
-class TSP_QmlDocPageProxy : public TSP_QmlProxy
+//---------------------------------------------------------------------------
+// TSP_QmlLink
+//---------------------------------------------------------------------------
+TSP_QmlLink::TSP_QmlLink(TSP_Page* pOwner) :
+    TSP_Link(pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_QmlLink::TSP_QmlLink(const std::wstring& title,
+                         const std::wstring& description,
+                         const std::wstring& comments,
+                               TSP_Page*     pOwner) :
+    TSP_Link(title, description, comments, pOwner)
+{}
+//---------------------------------------------------------------------------
+TSP_QmlLink::~TSP_QmlLink()
+{}
+//---------------------------------------------------------------------------
+TSP_QmlLinkProxy* TSP_QmlLink::GetProxy() const
 {
-    Q_OBJECT
-
-    public:
-        /**
-        * Constructor
-        *@param pParent - object which will be the parent of this object
-        */
-        explicit TSP_QmlDocPageProxy(QObject* pParent = nullptr);
-
-        virtual ~TSP_QmlDocPageProxy();
-
-        /**
-        * Gets the linked page
-        *@return the linked page, nullptr if no page
-        */
-        virtual TSP_QmlPage* GetPage() const;
-
-        /**
-        * Sets the linked page
-        *@param pPage - the linked page
-        */
-        virtual void SetPage(TSP_QmlPage* pPage);
-
-    private:
-        TSP_QmlPage* m_pPage = nullptr;
-};
+    return m_pProxy;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlLink::SetProxy(TSP_QmlLinkProxy* pProxy)
+{
+    m_pProxy = pProxy;
+}
+//---------------------------------------------------------------------------

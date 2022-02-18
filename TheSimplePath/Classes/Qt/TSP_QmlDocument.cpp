@@ -134,7 +134,7 @@ bool TSP_QmlDocument::Create()
         sstr << qtTrId("id-root-atlas").toStdWString();
 
         // by default, a document always contain one, and only one, atlas
-        TSP_QmlAtlas* pQmlAtlas = static_cast<TSP_QmlAtlas*>(AddAtlas(sstr.str()));
+        TSP_QmlAtlas* pQmlAtlas = static_cast<TSP_QmlAtlas*>(CreateAndAddAtlas(sstr.str()));
 
         // was atlas created successfully?
         if (!pQmlAtlas)
@@ -226,7 +226,7 @@ TSP_Atlas* TSP_QmlDocument::CreateAtlas(const std::wstring& name)
     return new TSP_QmlAtlas(name, this);
 }
 //---------------------------------------------------------------------------
-TSP_Atlas* TSP_QmlDocument::AddAtlas()
+TSP_Atlas* TSP_QmlDocument::CreateAndAddAtlas()
 {
     M_TRY
     {
@@ -241,14 +241,14 @@ TSP_Atlas* TSP_QmlDocument::AddAtlas()
         if (atlasCount)
             sstr << L" (" << std::to_wstring(atlasCount) << L")";
 
-        return AddAtlas(sstr.str());
+        return CreateAndAddAtlas(sstr.str());
     }
     M_CATCH_LOG
 
     return nullptr;
 }
 //---------------------------------------------------------------------------
-TSP_Atlas* TSP_QmlDocument::AddAtlas(const std::wstring& name)
+TSP_Atlas* TSP_QmlDocument::CreateAndAddAtlas(const std::wstring& name)
 {
     M_TRY
     {
@@ -259,7 +259,7 @@ TSP_Atlas* TSP_QmlDocument::AddAtlas(const std::wstring& name)
         }
 
         // add a new atlas in document
-        TSP_Atlas* pAtlas = TSP_Document::AddAtlas(name);
+        TSP_Atlas* pAtlas = TSP_Document::CreateAndAddAtlas(name);
 
         // succeeded?
         if (!pAtlas)
@@ -268,9 +268,9 @@ TSP_Atlas* TSP_QmlDocument::AddAtlas(const std::wstring& name)
             return nullptr;
         }
 
-        // add atlas in the document view
+        // create atlas view and adds it on the user interface
         m_pDocumentModel->beginAddAtlas();
-        const bool success = AddAtlasOnDocView(pAtlas);
+        const bool success = CreateAtlasView(pAtlas);
         m_pDocumentModel->endAddAtlas();
 
         // succeeded?
@@ -362,7 +362,7 @@ void TSP_QmlDocument::Initialize()
     m_pDocumentModel = new TSP_QmlDocumentModel(this);
 }
 //---------------------------------------------------------------------------
-bool TSP_QmlDocument::AddAtlasOnDocView(TSP_Atlas* pAtlas)
+bool TSP_QmlDocument::CreateAtlasView(TSP_Atlas* pAtlas)
 {
     if (!pAtlas)
         return false;

@@ -30,9 +30,7 @@
 
 // core classes
 #include "Core/TSP_Item.h"
-
-// qt classes
-#include "Qt/TSP_QmlPage.h"
+#include "Core/TSP_Page.h"
 
 // qt
 #include <QObject>
@@ -150,13 +148,13 @@ class TSP_PageListModel : public QAbstractListModel
         * Get page at index
         *@return page, nullptr if not found or on error
         */
-        virtual TSP_QmlPage* GetPage(int index) const;
+        virtual TSP_Page* GetPage(int index) const;
 
         /**
         * Get currently selected page
         *@return selected page, nullptr if not found or on error
         */
-        virtual TSP_QmlPage* GetSelectedPage() const;
+        virtual TSP_Page* GetSelectedPage() const;
 
         /**
         * Get currently selected page index

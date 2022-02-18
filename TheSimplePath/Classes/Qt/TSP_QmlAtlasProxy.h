@@ -67,6 +67,7 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         void nameChanged(const QString& name);
         void addPageToView(const QString& uid);
         void removePageFromView(const QString& uid);
+        void queryPageIndex();
 
     public:
         /**
@@ -103,12 +104,25 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         virtual void RemovePage(const QString& uid);
 
         /**
+        * Queries the selected page index
+        *@return the selected page index
+        */
+        virtual int QuerySelectedPageIndex();
+
+        /**
         * Notify that a page was added
         *@param success - if true, the page was added successfully
         */
         virtual Q_INVOKABLE void onPageAdded(bool success);
 
+        /**
+        * Notify that a the selected page index was queried
+        *@param index - selected page index, -1 if no page selected
+        */
+        virtual Q_INVOKABLE void onSelectedPageIndexQueried(int index);
+
     private:
-        TSP_QmlAtlas* m_pAtlas    = nullptr;
-        bool          m_PageAdded = false;
+        TSP_QmlAtlas* m_pAtlas       =  nullptr;
+        int           m_SelectedPage = -1;
+        bool          m_PageAdded    =  false;
 };

@@ -37,7 +37,8 @@
 #include "Common/TSP_GlobalMacros.h"
 
 // qt classes
-#include "TSP_QmlPage.h"
+#include "TSP_QmlAtlasPage.h"
+#include "TSP_QmlProxyDictionary.h"
 
 //---------------------------------------------------------------------------
 // TSP_QmlAtlas
@@ -65,15 +66,15 @@ void TSP_QmlAtlas::SetProxy(TSP_QmlAtlasProxy* pProxy)
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlAtlas::CreatePage()
 {
-    return new TSP_QmlPage(this);
+    return new TSP_QmlAtlasPage(this);
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlAtlas::CreatePage(const std::wstring& name)
 {
-    return new TSP_QmlPage(name, this);
+    return new TSP_QmlAtlasPage(name, this);
 }
 //---------------------------------------------------------------------------
-TSP_Page* TSP_QmlAtlas::AddPage()
+TSP_Page* TSP_QmlAtlas::CreateAndAddPage()
 {
     M_TRY
     {
@@ -89,14 +90,14 @@ TSP_Page* TSP_QmlAtlas::AddPage()
         if (pageCount)
             sstr << L" (" << std::to_wstring(pageCount) << L")";
 
-        return AddPage(sstr.str());
+        return CreateAndAddPage(sstr.str());
     }
     M_CATCH_LOG
 
     return nullptr;
 }
 //---------------------------------------------------------------------------
-TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
+TSP_Page* TSP_QmlAtlas::CreateAndAddPage(const std::wstring& name)
 {
     M_TRY
     {
@@ -107,7 +108,7 @@ TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
         }
 
         // add a new page in atlas
-        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(TSP_Atlas::AddPage(name));
+        TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(TSP_Atlas::CreateAndAddPage(name));
 
         // succeeded?
         if (!pQmlPage)
@@ -116,10 +117,10 @@ TSP_Page* TSP_QmlAtlas::AddPage(const std::wstring& name)
             return nullptr;
         }
 
-        // notify atlas proxy that a new page should be added
-        if (!m_pProxy->AddPage(QString::fromStdString(pQmlPage->GetUID())))
+        // create a new page view and adds it on the user interface
+        if (!CreatePageView(pQmlPage))
         {
-            M_LogErrorT("Add page - FAILED - page could not be added on view");
+            M_LogErrorT("Add page - FAILED - page view could not be created");
             TSP_Atlas::RemovePage(pQmlPage);
             return nullptr;
         }
@@ -142,7 +143,7 @@ void TSP_QmlAtlas::RemovePage(std::size_t index)
         }
 
         // get the page to remove
-        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(GetPage(index));
+        TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(GetPage(index));
 
         // found it?
         if (!pQmlPage)
@@ -168,7 +169,7 @@ void TSP_QmlAtlas::RemovePage(TSP_Page* pPage)
         }
 
         // get the page to remove
-        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(pPage);
+        TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(pPage);
 
         // found it?
         if (!pQmlPage)
@@ -183,8 +184,50 @@ void TSP_QmlAtlas::RemovePage(TSP_Page* pPage)
     M_CATCH_LOG
 }
 //---------------------------------------------------------------------------
-TSP_Page* TSP_QmlAtlas::GetSelectedPage() const
+TSP_Page* TSP_QmlAtlas::GetSelectedPage()
 {
-    return nullptr;
+    // queries the selected page index
+    m_SelectedPage = m_pProxy->QuerySelectedPageIndex();
+
+    // is index out of bounds?
+    if (m_SelectedPage < 0 || (std::size_t)m_SelectedPage >= GetPageCount())
+        return nullptr;
+
+    // get the selected page
+    return GetPage(m_SelectedPage);
+}
+//---------------------------------------------------------------------------
+bool TSP_QmlAtlas::CreatePageView(TSP_Page* pPage)
+{
+    if (!pPage)
+        return false;
+
+    if (!m_pProxy)
+        return false;
+
+    // get page unique identifier
+    const std::string uid = pPage->GetUID();
+
+    // notify atlas proxy that a new page should be added
+    if (!m_pProxy->AddPage(QString::fromStdString(uid)))
+        return false;
+
+    // get the page
+    TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(pPage);
+
+    if (!pQmlPage)
+        return false;
+
+    // get the newly added component proxy
+    TSP_QmlPageProxy* pProxy = static_cast<TSP_QmlPageProxy*>(TSP_QmlProxyDictionary::Instance()->GetProxy(uid));
+
+    if (!pProxy)
+        return false;
+
+    // link the page and its proxy
+    pQmlPage->SetProxy(pProxy);
+    pProxy->SetPage(pQmlPage);
+
+    return true;
 }
 //---------------------------------------------------------------------------

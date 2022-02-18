@@ -223,7 +223,7 @@ T.Control
             }
 
         // log deleted atlas
-        if (atlasName.length)
+        if (atlasName !== undefined && atlasName.length)
             console.log("Remove atlas - view was removed - name - " + atlasName);
 
         console.log("Remove atlas - succeeded");

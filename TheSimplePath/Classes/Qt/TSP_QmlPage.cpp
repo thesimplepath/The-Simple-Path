@@ -29,14 +29,14 @@
 
 #include "TSP_QmlPage.h"
 
-//---------------------------------------------------------------------------
-// TSP_QmlPage
-//---------------------------------------------------------------------------
-TSP_QmlPage::TSP_QmlPage(TSP_QmlAtlas* pOwner) :
+ //---------------------------------------------------------------------------
+ // TSP_QmlPage
+ //---------------------------------------------------------------------------
+TSP_QmlPage::TSP_QmlPage(TSP_Item* pOwner) :
     TSP_Page(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlPage::TSP_QmlPage(const std::wstring& name, TSP_QmlAtlas* pOwner) :
+TSP_QmlPage::TSP_QmlPage(const std::wstring& name, TSP_Item* pOwner) :
     TSP_Page(name, pOwner)
 {}
 //---------------------------------------------------------------------------
@@ -53,13 +53,63 @@ void TSP_QmlPage::SetProxy(TSP_QmlPageProxy* pProxy)
     m_pProxy = pProxy;
 }
 //---------------------------------------------------------------------------
-TSP_QmlDocPageProxy* TSP_QmlPage::GetDocProxy() const
+TSP_Box* TSP_QmlPage::CreateAndAddBox(const std::wstring& name,
+                                      const std::wstring& description,
+                                      const std::wstring& comments,
+                                            int           x,
+                                            int           y)
 {
-    return m_pDocProxy;
+    std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
+
+    // add a box on the page view
+    if (!CreateBoxView(pBox.get(), "box", x, y))
+        return nullptr;
+
+    // set the box data
+    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
+    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
+    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
+
+    // add newly created box to page
+    if (!TSP_Page::Add(pBox.get()))
+        return nullptr;
+
+    return pBox.release();
 }
 //---------------------------------------------------------------------------
-void TSP_QmlPage::SetDocProxy(TSP_QmlDocPageProxy* pProxy)
+TSP_Link* TSP_QmlPage::CreateAndAddLink(const std::wstring& name,
+                                        const std::wstring& description,
+                                        const std::wstring& comments,
+                                              int           x,
+                                              int           y)
 {
-    m_pDocProxy = pProxy;
+    std::unique_ptr<TSP_QmlLink> pLink = std::make_unique<TSP_QmlLink>(this);
+
+    /*FIXME finalize this code, and reenable when available
+    // add a link on the page view
+    if (!CreateLinkView(pLink.get(), "link", x, y))
+        return nullptr;
+
+    // set the box data
+    pLink->GetProxy()->setTitle(QString::fromStdWString(name));
+    pLink->GetProxy()->setDescription(QString::fromStdWString(description));
+    pLink->GetProxy()->setComments(QString::fromStdWString(comments));
+    */
+
+    // add newly created link to page
+    if (!TSP_Page::Add(pLink.get()))
+        return nullptr;
+
+    return pLink.release();
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPage::Remove(const std::string& uid)
+{
+    TSP_Page::Remove(uid);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPage::Remove(TSP_Component* pComponent)
+{
+    TSP_Page::Remove(pComponent);
 }
 //---------------------------------------------------------------------------

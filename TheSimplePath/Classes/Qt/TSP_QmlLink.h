@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlBoxProxy -----------------------------------------------------*
+ * ==> TSP_QmlLink ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Box proxy between qml view and application engine          *
+ * Description:  Qt link component                                          *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -29,91 +29,52 @@
 
 #pragma once
 
+// core classes
+#include "Core\TSP_Link.h"
+#include "Core\TSP_Page.h"
+
 // qt classes
-#include "TSP_QmlProxy.h"
-
-// qt
-#include <QObject>
-
-// class prototypes
-class TSP_Box;
+#include "TSP_QmlLinkProxy.h"
 
 /**
-* Box proxy
+* Qt link component
 *@author Jean-Milost Reymond
 */
-class TSP_QmlBoxProxy : public TSP_QmlProxy
+class TSP_QmlLink : public TSP_Link
 {
-    Q_OBJECT
-
-    public:
-        Q_PROPERTY(QString title       READ getTitle       WRITE setTitle       NOTIFY titleChanged)
-        Q_PROPERTY(QString description READ getDescription WRITE setDescription NOTIFY descriptionChanged)
-        Q_PROPERTY(QString comments    READ getComments    WRITE setComments    NOTIFY commentsChanged)
-
-    public slots:
-        /**
-        * Gets the box title
-        *@return the box title
-        */
-        virtual QString getTitle() const;
-
-        /**
-        * Gets the box description
-        *@return the box description
-        */
-        virtual QString getDescription() const;
-
-        /**
-        * Gets the box comments
-        *@return the box comments
-        */
-        virtual QString getComments() const;
-
-        /**
-        * Sets the box title
-        *@param title - the box title
-        */
-        virtual void setTitle(const QString& title);
-
-        /**
-        * Sets the box description
-        *@return the box description
-        */
-        virtual void setDescription(const QString& description);
-
-        /**
-        * Sets the box comments
-        *@return the box comments
-        */
-        virtual void setComments(const QString& comments);
-
-    signals:
-        void titleChanged(const QString& title);
-        void descriptionChanged(const QString& description);
-        void commentsChanged(const QString& comments);
-
     public:
         /**
         * Constructor
-        *@param pParent - object which will be the parent of this object
+        *@param pOwner - the page owner
         */
-        explicit TSP_QmlBoxProxy(QObject* pParent = nullptr);
-
-        virtual ~TSP_QmlBoxProxy();
+        TSP_QmlLink(TSP_Page* pOwner);
 
         /**
-        * Gets the linked box
-        *@return the linked box, nullptr if no box
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
         */
-        virtual TSP_Box* GetBox() const;
+        TSP_QmlLink(const std::wstring& title,
+                    const std::wstring& description,
+                    const std::wstring& comments,
+                          TSP_Page*     pOwner);
+
+        virtual ~TSP_QmlLink();
 
         /**
-        * Sets the linked box
-        *@param pBox - the linked box
+        * Gets the link proxy
+        *@return the link proxy, nullptr if no proxy
         */
-        virtual void SetBox(TSP_Box* pBox);
+        TSP_QmlLinkProxy* GetProxy() const;
+
+        /**
+        * Sets the link proxy
+        *@param pProxy - the link proxy
+        */
+        void SetProxy(TSP_QmlLinkProxy* pProxy);
 
     private:
-        TSP_Box* m_pBox = nullptr;
+        TSP_QmlLinkProxy* m_pProxy = nullptr;
 };

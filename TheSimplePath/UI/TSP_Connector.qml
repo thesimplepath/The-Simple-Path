@@ -13,10 +13,12 @@ T.Control
 {
     /**
     * Connector position
+    *@note This enum is linked with the one located in TSP_QmlBox.
+    *      Don't modify it without updating its twin
     */
     enum IEPosition
     {
-        IE_P_None,
+        IE_P_None = 0,
         IE_P_Left,
         IE_P_Top,
         IE_P_Right,
@@ -81,7 +83,7 @@ T.Control
                             " - start connector - "                        + ctConnector.objectName);
 
                 // send signal to notify that a new link should be added from this connector
-                m_AddingLinkItem = m_Page.doAddLink(ctConnector, null, "link");
+                m_AddingLinkItem = m_Page.startAddLink(ctConnector);
 
                 // notify the page that a link is currently dragging
                 if (m_AddingLinkItem && m_PageContent)
@@ -127,7 +129,7 @@ T.Control
                     }
 
                 // found a valid target connector?
-                if (targetConn && targetConn.visible && targetConn.m_Box.m_UID !== m_Box.m_UID)
+                if (targetConn && targetConn.visible && targetConn.m_Box.boxProxy.uid !== m_Box.boxProxy.uid)
                 {
                     console.log("Connector - link added successfully - name - " + m_AddingLinkItem.objectName);
 

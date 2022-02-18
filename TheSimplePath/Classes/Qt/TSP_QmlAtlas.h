@@ -87,17 +87,17 @@ class TSP_QmlAtlas : public TSP_Atlas
         virtual TSP_Page* CreatePage(const std::wstring& name);
 
         /**
-        * Adds a new page in atlas
+        * Creates a new page and adds it in atlas
         *@return newly added page
         */
-        virtual TSP_Page* AddPage();
+        virtual TSP_Page* CreateAndAddPage();
 
         /**
-        * Adds a new page in atlas
+        * Creates a new page and adds it in atlas
         *@param name - page name
         *@return newly added page
         */
-        virtual TSP_Page* AddPage(const std::wstring& name);
+        virtual TSP_Page* CreateAndAddPage(const std::wstring& name);
 
         /**
         * Removes a page
@@ -115,8 +115,15 @@ class TSP_QmlAtlas : public TSP_Atlas
         * Gets the currently selected page
         *@return the currently selected page, nullptr if no page selected or on error
         */
-        virtual TSP_Page* GetSelectedPage() const;
+        virtual TSP_Page* GetSelectedPage();
 
     private:
-        TSP_QmlAtlasProxy* m_pProxy = nullptr;
+        TSP_QmlAtlasProxy* m_pProxy       =  nullptr;
+        int                m_SelectedPage = -1;
+
+        /**
+        * Creates a new page view and adds it to the user interface
+        *@param pPage - page for which the view should be added
+        */
+        bool CreatePageView(TSP_Page* pPage);
 };

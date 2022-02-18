@@ -15,6 +15,7 @@ import thesimplepath.proxys 1.0
 T.Control
 {
     // aliases
+    property alias boxProxy:        bpBoxProxy
     property alias titleText:       txTitle
     property alias descriptionText: txDescription
     property alias commentsText:    txComments
@@ -32,7 +33,6 @@ T.Control
     property string m_TextColor:         Styles.m_DarkTextColor
     property string m_HandleColor:       "#c0c0c0"
     property string m_HandleBorderColor: "black"
-    property string m_UID:               ""
     property real   m_ScaleFactor:       1
     property int    m_MouseStartX:       0
     property int    m_MouseStartY:       0
@@ -420,13 +420,5 @@ T.Control
 
             txComments.text = comments;
         }
-    }
-
-    /// called when component was fully created
-    Component.onCompleted:
-    {
-        // FIXME expose box proxy in an atlas and get uid from it directly
-        // get and link the unique identifier created in the c++ proxy class
-        m_UID = bpBoxProxy.uid;
     }
 }

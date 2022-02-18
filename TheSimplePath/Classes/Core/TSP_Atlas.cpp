@@ -65,14 +65,14 @@ TSP_Page* TSP_Atlas::CreatePage(const std::wstring& name)
     return new TSP_Page(name, this);
 }
 //---------------------------------------------------------------------------
-TSP_Page* TSP_Atlas::AddPage()
+TSP_Page* TSP_Atlas::CreateAndAddPage()
 {
     std::unique_ptr<TSP_Page> pPage(CreatePage());
     m_Pages.push_back(pPage.get());
     return pPage.release();
 }
 //---------------------------------------------------------------------------
-TSP_Page* TSP_Atlas::AddPage(const std::wstring& name)
+TSP_Page* TSP_Atlas::CreateAndAddPage(const std::wstring& name)
 {
     std::unique_ptr<TSP_Page> pPage(CreatePage(name));
     m_Pages.push_back(pPage.get());

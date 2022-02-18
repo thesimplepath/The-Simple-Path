@@ -89,6 +89,11 @@ class TSP_MainFormModel : public QObject
         */
         virtual Q_INVOKABLE void onCloseDocumentClicked();
 
+        /**
+        * Called when the add process button was clicked on the user interface
+        */
+        virtual Q_INVOKABLE void onAddProcessClicked();
+
     private:
         TSP_Application* m_pApp      = nullptr;
         QPageSize        m_PageSize;

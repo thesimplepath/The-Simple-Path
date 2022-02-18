@@ -79,14 +79,14 @@ TSP_Atlas* TSP_Document::CreateAtlas(const std::wstring& name)
     return new TSP_Atlas(name, this);
 }
 //---------------------------------------------------------------------------
-TSP_Atlas* TSP_Document::AddAtlas()
+TSP_Atlas* TSP_Document::CreateAndAddAtlas()
 {
     std::unique_ptr<TSP_Atlas> pAtlas(CreateAtlas());
     m_Atlases.push_back(pAtlas.get());
     return pAtlas.release();
 }
 //---------------------------------------------------------------------------
-TSP_Atlas* TSP_Document::AddAtlas(const std::wstring& name)
+TSP_Atlas* TSP_Document::CreateAndAddAtlas(const std::wstring& name)
 {
     std::unique_ptr<TSP_Atlas> pAtlas(CreateAtlas(name));
     m_Atlases.push_back(pAtlas.get());

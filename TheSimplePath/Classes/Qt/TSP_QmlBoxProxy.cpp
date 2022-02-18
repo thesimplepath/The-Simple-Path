@@ -29,6 +29,9 @@
 
 #include "TSP_QmlBoxProxy.h"
 
+ // core classes
+#include "Core/TSP_Box.h"
+
 //---------------------------------------------------------------------------
 // TSP_QmlBoxProxy
 //---------------------------------------------------------------------------
@@ -41,37 +44,65 @@ TSP_QmlBoxProxy::~TSP_QmlBoxProxy()
 //---------------------------------------------------------------------------
 QString TSP_QmlBoxProxy::getTitle() const
 {
-    return m_Title;
+    if (!m_pBox)
+        return "";
+
+    return QString::fromStdWString(m_pBox->GetTitle());
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlBoxProxy::getDescription() const
 {
-    return m_Description;
+    if (!m_pBox)
+        return "";
+
+    return QString::fromStdWString(m_pBox->GetDescription());
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlBoxProxy::getComments() const
 {
-    return m_Comments;
+    if (!m_pBox)
+        return "";
+
+    return QString::fromStdWString(m_pBox->GetComments());
 }
 //---------------------------------------------------------------------------
 void TSP_QmlBoxProxy::setTitle(const QString& title)
 {
-    m_Title = title;
+    if (!m_pBox)
+        return;
 
-    emit titleChanged(m_Title);
+    m_pBox->SetTitle(title.toStdWString());
+
+    emit titleChanged(title);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlBoxProxy::setDescription(const QString& description)
 {
-    m_Description = description;
+    if (!m_pBox)
+        return;
 
-    emit descriptionChanged(m_Description);
+    m_pBox->SetDescription(description.toStdWString());
+
+    emit descriptionChanged(description);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlBoxProxy::setComments(const QString& comments)
 {
-    m_Comments = comments;
+    if (!m_pBox)
+        return;
 
-    emit commentsChanged(m_Comments);
+    m_pBox->SetComments(comments.toStdWString());
+
+    emit commentsChanged(comments);
+}
+//---------------------------------------------------------------------------
+TSP_Box* TSP_QmlBoxProxy::GetBox() const
+{
+    return m_pBox;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlBoxProxy::SetBox(TSP_Box* pBox)
+{
+    m_pBox = pBox;
 }
 //---------------------------------------------------------------------------

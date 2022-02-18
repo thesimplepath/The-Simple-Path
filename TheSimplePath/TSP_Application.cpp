@@ -35,7 +35,6 @@
 #include "QT\TSP_QmlBoxProxy.h"
 #include "QT\TSP_QmlLinkProxy.h"
 #include "QT\TSP_QmlPageProxy.h"
-#include "QT\TSP_QmlDocPageProxy.h"
 #include "QT\TSP_QmlAtlasProxy.h"
 
 // qt
@@ -82,11 +81,10 @@ void TSP_Application::DeclareContextProperties()
     M_LogT("Execute - declaring context properties...");
 
     // component proxies registration
-    qmlRegisterType<TSP_QmlBoxProxy>    ("thesimplepath.proxys", 1, 0, "BoxProxy");
-    qmlRegisterType<TSP_QmlLinkProxy>   ("thesimplepath.proxys", 1, 0, "LinkProxy");
-    qmlRegisterType<TSP_QmlPageProxy>   ("thesimplepath.proxys", 1, 0, "PageProxy");
-    qmlRegisterType<TSP_QmlDocPageProxy>("thesimplepath.proxys", 1, 0, "DocPageProxy");
-    qmlRegisterType<TSP_QmlAtlasProxy>  ("thesimplepath.proxys", 1, 0, "AtlasProxy");
+    qmlRegisterType<TSP_QmlBoxProxy>  ("thesimplepath.proxys", 1, 0, "BoxProxy");
+    qmlRegisterType<TSP_QmlLinkProxy> ("thesimplepath.proxys", 1, 0, "LinkProxy");
+    qmlRegisterType<TSP_QmlPageProxy> ("thesimplepath.proxys", 1, 0, "PageProxy");
+    qmlRegisterType<TSP_QmlAtlasProxy>("thesimplepath.proxys", 1, 0, "AtlasProxy");
 
     // models registration
     m_pEngine->rootContext()->setContextProperty("tspMainFormModel", m_pMainFormModel);

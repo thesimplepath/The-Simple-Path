@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlAtlasProxy ---------------------------------------------------*
+ * ==> TSP_QmlProcess ------------------------------------------------------*
  ****************************************************************************
- * Description:  Atlas proxy between qml view and application engine        *
+ * Description:  Qt process component                                       *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,79 +27,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlAtlasProxy.h"
-
-// qt classes
-#include "TSP_QmlAtlas.h"
+#include "TSP_QmlProcess.h"
 
 //---------------------------------------------------------------------------
-// TSP_QmlAtlasProxy
+// TSP_QmlProcess
 //---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::TSP_QmlAtlasProxy(QObject* pParent) :
-    TSP_QmlProxy(pParent)
+TSP_QmlProcess::TSP_QmlProcess(TSP_QmlAtlasPage* pOwner) :
+    TSP_Process(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::~TSP_QmlAtlasProxy()
+TSP_QmlProcess::TSP_QmlProcess(const std::wstring&     title,
+                               const std::wstring&     description,
+                               const std::wstring&     comments,
+                                     TSP_QmlAtlasPage* pOwner) :
+    TSP_Process(title, description, comments, pOwner)
 {}
 //---------------------------------------------------------------------------
-QString TSP_QmlAtlasProxy::getName() const
-{
-    if (!m_pAtlas)
-        return "";
-
-    return QString::fromStdWString(m_pAtlas->GetName());
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::setName(const QString& name)
-{
-    if (!m_pAtlas)
-        return;
-
-    m_pAtlas->SetName(name.toStdWString());
-
-    emit nameChanged(name);
-}
-//---------------------------------------------------------------------------
-TSP_QmlAtlas* TSP_QmlAtlasProxy::GetAtlas() const
-{
-    return m_pAtlas;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::SetAtlas(TSP_QmlAtlas* pAtlas)
-{
-    m_pAtlas = pAtlas;
-}
-//---------------------------------------------------------------------------
-bool TSP_QmlAtlasProxy::AddPage(const QString& uid)
-{
-    m_PageAdded = false;
-
-    emit addPageToView(uid);
-
-    return m_PageAdded;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::RemovePage(const QString& uid)
-{
-    emit removePageFromView(uid);
-}
-//---------------------------------------------------------------------------
-int TSP_QmlAtlasProxy::QuerySelectedPageIndex()
-{
-    m_SelectedPage = -1;
-
-    emit queryPageIndex();
-
-    return m_SelectedPage;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::onPageAdded(bool success)
-{
-    m_PageAdded = success;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::onSelectedPageIndexQueried(int index)
-{
-    m_SelectedPage = index;
-}
+TSP_QmlProcess::~TSP_QmlProcess()
+{}
 //---------------------------------------------------------------------------

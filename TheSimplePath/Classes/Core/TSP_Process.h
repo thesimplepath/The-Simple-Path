@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_QmlActivity -----------------------------------------------------*
+ * ==> TSP_Process ---------------------------------------------------------*
  ****************************************************************************
- * Description:  Qt activity component                                      *
- * Contained in: Qt                                                         *
+ * Description:  Process component                                          *
+ * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -27,22 +27,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlActivity.h"
+#pragma once
 
-//---------------------------------------------------------------------------
-// TSP_QmlActivity
-//---------------------------------------------------------------------------
-TSP_QmlActivity::TSP_QmlActivity(TSP_QmlProcessPage* pOwner) :
-    TSP_Activity(pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_QmlActivity::TSP_QmlActivity(const std::wstring&       title,
-                                 const std::wstring&       description,
-                                 const std::wstring&       comments,
-                                       TSP_QmlProcessPage* pOwner) :
-    TSP_Activity(title, description, comments, pOwner)
-{}
-//---------------------------------------------------------------------------
-TSP_QmlActivity::~TSP_QmlActivity()
-{}
-//---------------------------------------------------------------------------
+// core classes
+#include "TSP_Box.h"
+#include "TSP_Attribute.h"
+
+/**
+* Process component
+*@author Jean-Milost Reymond
+*/
+class TSP_Process : public TSP_Box
+{
+    public:
+        /**
+        * Constructor
+        *@param pOwner - the page owner
+        */
+        TSP_Process(TSP_Page* pOwner);
+
+        /**
+        * Constructor
+        *@param title - component title
+        *@param description - component description
+        *@param comments - component comments
+        *@param pOwner - component owner
+        */
+        TSP_Process(const std::wstring& title,
+                    const std::wstring& description,
+                    const std::wstring& comments,
+                          TSP_Page*     pOwner);
+
+        virtual ~TSP_Process();
+
+    private:
+};

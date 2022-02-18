@@ -19,16 +19,6 @@ TSP_PageView
     m_PageHeight: m_MainFormModel.getPageHeight()
 
     /**
-    * Document page proxy
-    *@note This component will auto-create a new c++ TSP_DocPageProxy instance
-    */
-    DocPageProxy
-    {
-        id: dpDocPageProxy
-        objectName: "dpDocPageProxy"
-    }
-
-    /**
     * Adds a start component to the document, with a default size
     *@param {number} x - component x position, in pixels
     *@param {number} y - component y position, in pixels
@@ -329,22 +319,22 @@ TSP_PageView
     }
 
     /**
-    * Called when a link should be added
-    *@param {TSP_Connector} from - connector belonging to box the link is attached from
-    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
-    *@param {string} linkType - optional link type
+    * Called when starting to add a link
+    *@param {TSP_Connector} from - connector belonging to box the link starts from
     *@return {TSP_Link} added link, null on error
     */
-    function doAddLink(from, to, linkType)
+    /*FIXME RE-ENABLE WHEN READY
+    function startAddLink(from)
     {
-        return addMessage(from, to);
+        return addMessage(from, null);
     }
+    */
 
-    //REM FIXME
+    /*REM FIXME
     /// called when page is loaded
     Component.onCompleted:
     {
-    /*REM
+    / *REM
         let start = addStartDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200,  50);
         let activity = addActivityDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 250);
         let end = addEndDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 450);
@@ -355,7 +345,7 @@ TSP_PageView
         let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
         addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", start.bottomConnector, activity.topConnector);
         addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", activity.bottomConnector, end.topConnector);
-        */
+        * /
         let start = addStartDefSize(200,  50);
         let activity = addActivityDefSize(200, 250);
         let end = addEndDefSize(200, 450);
@@ -367,4 +357,5 @@ TSP_PageView
         addMessage(start.bottomConnector, activity.topConnector);
         addMessage(activity.bottomConnector, end.topConnector);
     }
+    */
 }

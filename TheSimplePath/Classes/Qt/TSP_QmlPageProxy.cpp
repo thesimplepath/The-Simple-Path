@@ -29,7 +29,10 @@
 
 #include "TSP_QmlPageProxy.h"
 
- // qt classes
+// core classes
+#include "Core\TSP_Page.h"
+
+// qt classes
 #include "TSP_QmlPage.h"
 
 //---------------------------------------------------------------------------
@@ -56,6 +59,8 @@ void TSP_QmlPageProxy::setName(const QString& name)
         return;
 
     m_pPage->SetName(name.toStdWString());
+
+    emit nameChanged(name);
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_QmlPageProxy::GetPage() const
@@ -68,13 +73,40 @@ void TSP_QmlPageProxy::SetPage(TSP_Page* pPage)
     m_pPage = pPage;
 }
 //---------------------------------------------------------------------------
-void TSP_QmlPageProxy::symbolAdded(const QString& pageUID, const QString& symbolUID)
+bool TSP_QmlPageProxy::AddBox(const QString& type, const QString& uid, IEBoxPosition position, int x, int y)
 {
-    int ii = 0;
+    m_BoxAdded = false;
+
+    emit addBoxToView(type, uid, (int)position, x, y);
+
+    return m_BoxAdded;
 }
 //---------------------------------------------------------------------------
-void TSP_QmlPageProxy::messageAdded(const QString& pageUID, const QString& messageUID)
+void TSP_QmlPageProxy::onBoxAdded(bool success)
 {
-    int ii = 0;
+    m_BoxAdded = success;
+}
+//---------------------------------------------------------------------------
+QString TSP_QmlPageProxy::onAddLinkStart(const QString& fromUID, int position)
+{
+    if (!m_pPage)
+        return "";
+
+    // get the page
+    TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(m_pPage);
+
+    // found it?
+    if (!pQmlPage)
+        return "";
+
+    // FIXME finalize parameters
+    TSP_Link* pLink = pQmlPage->CreateAndAddLink(L"ABCD");
+
+    // succeeded?
+    if (!pLink)
+        return "";
+
+    // get newly added link unique identifier
+    return QString::fromStdString(pLink->GetUID());
 }
 //---------------------------------------------------------------------------

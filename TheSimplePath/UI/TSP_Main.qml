@@ -70,7 +70,6 @@ ApplicationWindow
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            height: 75
             text: qsTr("New document")
 
             /// called when button is clicked
@@ -92,7 +91,6 @@ ApplicationWindow
             anchors.left: btNewDocument.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            height: 75
             text: qsTr("Close document")
 
             /// called when button is clicked
@@ -100,6 +98,27 @@ ApplicationWindow
             {
                 if (m_MainFormModel)
                     m_MainFormModel.onCloseDocumentClicked();
+            }
+        }
+
+        /**
+        * Add process button
+        */
+        Button
+        {
+            // common properties
+            id: btAddProcess
+            objectName: "btAddProcess"
+            anchors.left: btCloseDocument.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            text: qsTr("Add process")
+
+            /// called when button is clicked
+            onClicked:
+            {
+                if (m_MainFormModel)
+                    m_MainFormModel.onAddProcessClicked();
             }
         }
     }

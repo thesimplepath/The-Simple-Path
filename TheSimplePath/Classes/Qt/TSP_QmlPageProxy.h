@@ -47,6 +47,19 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
     Q_OBJECT
 
     public:
+        /**
+        * Box default position type
+        *@note This enum is linked with the one located in TSP_PageView.
+        *      Don't modify it without updating its twin
+        */
+        enum class IEBoxPosition
+        {
+            IE_BP_Default = 0,
+            IE_BP_Centered,
+            IE_BP_Custom
+        };
+
+    public:
         Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
 
     public slots:
@@ -64,6 +77,7 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
 
     signals:
         void nameChanged(const QString& name);
+        void addBoxToView(const QString& type, const QString& uid, int position, int x, int y);
 
     public:
         /**
@@ -87,19 +101,31 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         virtual void SetPage(TSP_Page* pPage);
 
         /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param symbolUID - symbol unique identifier
+        * Adds a box on the page
+        *@param type - box type
+        *@param uid - box unique identifier
+        *@param position - default position where the box will appear
+        *@param x - box x position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param y - box y position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@return true on success, otherwise false
         */
-        virtual Q_INVOKABLE void symbolAdded(const QString& pageUID, const QString& symbolUID);
+        virtual bool AddBox(const QString& type, const QString& uid, IEBoxPosition position, int x, int y);
 
         /**
-        * Called when a symbol was added on a page
-        *@param pageUID - page unique identifier
-        *@param messageUID - message unique identifier
+        * Notify that a box was added
+        *@param success - if true, the box was added successfully
         */
-        virtual Q_INVOKABLE void messageAdded(const QString& pageUID, const QString& messageUID);
+        virtual Q_INVOKABLE void onBoxAdded(bool success);
+
+        /**
+        * Notify that a link started to be added
+        *@param fromUID - box unique identifier from which the link is added
+        *@param position - box connector position
+        *@return link unique identifier, empty string on error
+        */
+        virtual Q_INVOKABLE QString onAddLinkStart(const QString& fromUID, int position);
 
     private:
-        TSP_Page* m_pPage = nullptr;
+        TSP_Page* m_pPage    = nullptr;
+        bool      m_BoxAdded = false;
 };

@@ -14,6 +14,18 @@ import thesimplepath.proxys 1.0
 */
 T.Control
 {
+    /**
+    * Box default position type
+    *@note This enum is linked with the one located in TSP_QmlPageProxy.
+    *      Don't modify it without updating its twin
+    */
+    enum IEBoxPosition
+    {
+        IE_BP_Default = 0,
+        IE_BP_Centered,
+        IE_BP_Custom
+    }
+
     // aliases
     property alias pageProxy:     ppPageProxy
     property alias pageViewport:  rcPageViewport
@@ -24,16 +36,17 @@ T.Control
 
     // advanced properties
     property var    m_Page:            this
-    property string m_UID:             ""
     property real   m_ScaleFactor:     1
     property real   m_ZoomMin:         0.5
     property real   m_ZoomMax:         5.0
     property real   m_AutoScrollSpeed: 0.0025
     property int    m_PageWidth:       794  // default A4 width in pixels, under 96 dpi
     property int    m_PageHeight:      1123 // default A4 height in pixels, under 96 dpi
-    property int    m_GenIndex:        0
+    property int    m_DefX:            10
+    property int    m_DefY:            10
 
     // signals
+    signal doAddBox(var type, var uid, var position, var x, var y)
     signal linkAdded(var link)
     signal linkCanceled()
 
@@ -49,6 +62,37 @@ T.Control
     {
         id: ppPageProxy
         objectName: "ppPageProxy"
+
+        /// called when a box should be added to the view
+        onAddBoxToView: function(type, uid, position, x, y)
+        {
+            // search for box type to create
+            switch (type)
+            {
+                case "":
+                case "box":
+                {
+                    // calculate default position
+                    const width  = 144;
+                    const height = 93;
+
+                    // calculate the box position
+                    const [xPos, yPos] = getBoxPosition(position, x, y, width, height);
+
+                    // add a box to the page
+                    let box = addBox(xPos, yPos, width, height, uid);
+
+                    // notify if the box was added successfully
+                    onBoxAdded(box !== null && box !== undefined);
+
+                    return;
+                }
+
+                default:
+                    ctPageView.doAddBox(type, uid, position, x, y);
+                    break;
+            }
+        }
     }
 
     /**
@@ -316,11 +360,89 @@ T.Control
         }
     }
 
-    /// called when component was fully created
-    Component.onCompleted:
+    /**
+    * Calculates the next available default position
+    */
+    function calculateNextDefPos()
     {
-        // get and link the unique identifier created in the c++ proxy class
-        m_UID = ppPageProxy.uid;
+        m_DefX += 10;
+        m_DefY += 10;
+
+        if (m_DefX > 100)
+            m_DefX = 10;
+
+        if (m_DefY > 100)
+            m_DefY = 10;
+    }
+
+    /**
+    * Gets the box position
+    *@param {IEBoxPosition} position - the position type to apply
+    *@param {number} x - proposed x position
+    *@param {number} y - proposed y position
+    *@param {number} width - box width
+    *@param {number} height - box height
+    *@return box [x, y] position
+    */
+    function getBoxPosition(position, x, y, width, height)
+    {
+        // calculate default position
+        let xPos;
+        let yPos;
+
+        // search for position type to apply
+        switch (position)
+        {
+            case TSP_PageView.IEBoxPosition.IE_BP_Default:
+                // default position, align to page viewport left and top
+                xPos = (rcPageViewport.m_SbHorzPos * m_PageWidth)  + m_DefX;
+                yPos = (rcPageViewport.m_SbVertPos * m_PageHeight) + m_DefY;
+
+                // update the default position offsets
+                calculateNextDefPos();
+                break;
+
+            case TSP_PageView.IEBoxPosition.IE_BP_Centered:
+                // centered position, align to the center of the page viewport
+                xPos = (rcPageViewport.m_SbHorzPos * m_PageWidth)  + ((rcPageViewport.width  / 2) - (width  / 2));
+                yPos = (rcPageViewport.m_SbVertPos * m_PageHeight) + ((rcPageViewport.height / 2) - (height / 2));
+                break;
+
+            case TSP_PageView.IEBoxPosition.IE_BP_Custom:
+                // custom position
+                xPos = x;
+                yPos = y;
+
+                let doUseDefPos = false;
+
+                // if x is undefined (i.e -1), use the default one
+                if (xPos < 0)
+                {
+                    xPos        = m_DefX;
+                    doUseDefPos = true;
+                }
+
+                // if y is undefined (i.e -1), use the default one
+                if (yPos < 0)
+                {
+                    yPos        = m_DefY;
+                    doUseDefPos = true;
+                }
+
+                // if a default position was used, update the default position offsets
+                if (doUseDefPos)
+                    calculateNextDefPos();
+
+                break;
+
+            default:
+                // no position defined
+                xPos = 0;
+                yPos = 0;
+                break;
+        }
+
+        return [xPos, yPos];
     }
 
     /**
@@ -357,9 +479,10 @@ T.Control
     *@param {number} y - component y position, in pixels
     *@param {number} width - component width, in pixels
     *@param {number} height - component height, in pixels
+    *@param {string} uid - box unique identifier
     *@return {TSP_Box} added box, null on error
     */
-    function addBox(x, y, width, height)
+    function addBox(x, y, width, height, uid)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Box.qml');
@@ -371,18 +494,23 @@ T.Control
             return null;
         }
 
+        // build box identifier
+        const boxId = "bxBox_" + uid;
+
         // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":            "bxBox" + m_GenIndex,
-                                                          "objectName":    "bxBox" + m_GenIndex,
+        let item = component.createObject(rcPageContent, {"id":            boxId,
+                                                          "objectName":    boxId,
                                                           "x":             x,
                                                           "y":             y,
                                                           "width":         width,
                                                           "height":        height,
                                                           "m_ScaleFactor": m_ScaleFactor});
 
+        // declare the unique identifier in the box proxy
+        item.boxProxy.uid = uid;
+
         console.log("Add box - succeeded - new item - " + item.objectName);
 
-        ++m_GenIndex;
         return item;
     }
 
@@ -392,7 +520,7 @@ T.Control
     *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
     *@return {TSP_Link} added link, null on error
     */
-    function addLink(from, to)
+    function addLink(from, to, uid)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Link.qml');
@@ -409,9 +537,12 @@ T.Control
             return null;
         }
 
+        // build link identifier
+        const linkId = "lkLink_" + uid;
+
         // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":            "lkLink" + m_GenIndex,
-                                                          "objectName":    "lkLink" + m_GenIndex,
+        let item = component.createObject(rcPageContent, {"id":            linkId,
+                                                          "objectName":    linkId,
                                                           "m_From":        from,
                                                           "m_To":          to,
                                                           "m_ScaleFactor": m_ScaleFactor});
@@ -425,19 +556,31 @@ T.Control
             console.log("Add link - succeeded - new item - " + item.objectName);
         }
 
-        ++m_GenIndex;
         return item;
     }
 
     /**
-    * Called when a link should be added
-    *@param {TSP_Connector} from - connector belonging to box the link is attached from
-    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
-    *@param {string} linkType - optional link type
+    * Called when starting to add a link
+    *@param {TSP_Connector} from - connector belonging to box the link starts from
     *@return {TSP_Link} added link, null on error
     */
-    function doAddLink(from, to, linkType)
+    function startAddLink(from)
     {
-        return addLink(from, to);
+        // notify the page proxy that a link adding starts, and get the newly created link unique identifier
+        const linkUID = ppPageProxy.onAddLinkStart(from.m_Box.boxProxy.uid, from.m_Position);
+
+        // failed?
+        if (linkUID === null || linkUID === undefined || !linkUID.length)
+        {
+            console.log("Start add link - FAILED - link object could not be created");
+
+            // emit signal that link adding was canceled
+            linkCanceled();
+
+            return null;
+        }
+
+        // add the link on the interface
+        return addLink(from, null, linkUID);
     }
 }

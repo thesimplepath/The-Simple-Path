@@ -35,12 +35,12 @@
 //---------------------------------------------------------------------------
 // TSP_Page
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(TSP_Atlas* pOwner) :
+TSP_Page::TSP_Page(TSP_Item* pOwner) :
     TSP_Item(),
     m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_Page::TSP_Page(const std::wstring& name, TSP_Atlas* pOwner) :
+TSP_Page::TSP_Page(const std::wstring& name, TSP_Item* pOwner) :
     TSP_Item(),
     m_Name(name),
     m_pOwner(pOwner)
@@ -52,37 +52,36 @@ TSP_Page::~TSP_Page()
         delete pComponent;
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity()
+TSP_Box* TSP_Page::CreateAndAddBox(const std::wstring& name,
+                                   const std::wstring& description,
+                                   const std::wstring& comments)
 {
-    // FIXME config parameters
-    return AddActivity(L"", L"", L"", 0, 0);
+    std::unique_ptr<TSP_Box> pBox = std::make_unique<TSP_Box>(name, description, comments, this);
+    m_Components.push_back(pBox.get());
+    return pBox.release();
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::AddActivity(const std::wstring& name,
-                                    const std::wstring& description,
-                                    const std::wstring& comments,
-                                          int           x,
-                                          int           y)
+TSP_Link* TSP_Page::CreateAndAddLink(const std::wstring& name,
+                                     const std::wstring& description,
+                                     const std::wstring& comments)
 {
-    // FIXME handle x and y params
-    std::unique_ptr<TSP_Activity> pActivity =
-            std::make_unique<TSP_Activity>(name, description, comments, this);
-    m_Components.push_back(pActivity.get());
-    return pActivity.release();
+    std::unique_ptr<TSP_Link> pLink = std::make_unique<TSP_Link>(name, description, comments, this);
+    m_Components.push_back(pLink.get());
+    return pLink.release();
 }
 //---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(const std::string& uid)
+void TSP_Page::Remove(const std::string& uid)
 {
-    RemoveActivity(GetActivity(uid));
+    Remove(Get(uid));
 }
 //---------------------------------------------------------------------------
-void TSP_Page::RemoveActivity(TSP_Activity* pActivity)
+void TSP_Page::Remove(TSP_Component* pComponent)
 {
-    if (!pActivity)
+    if (!pComponent)
         return;
 
     for (std::size_t i = 0; i < m_Components.size(); ++i)
-        if (m_Components[i] == pActivity)
+        if (m_Components[i] == pComponent)
         {
             delete m_Components[i];
             m_Components.erase(m_Components.begin() + i);
@@ -90,37 +89,34 @@ void TSP_Page::RemoveActivity(TSP_Activity* pActivity)
         }
 }
 //---------------------------------------------------------------------------
-TSP_Activity* TSP_Page::GetActivity(const std::string& uid) const
+TSP_Component* TSP_Page::Get(const std::string& uid) const
 {
     for each (auto pComponent in m_Components)
         if (pComponent->GetUID() == uid)
-        {
-            TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
-
-            if (pActivity)
-                return pActivity;
-        }
+            return pComponent;
 
     return nullptr;
 }
 //---------------------------------------------------------------------------
-std::size_t TSP_Page::GetActivityCount() const
-{
-    std::size_t count = 0;
-
-    for each (auto pComponent in m_Components)
-    {
-        TSP_Activity* pActivity = dynamic_cast<TSP_Activity*>(pComponent);
-
-        if (pActivity)
-            return ++count;
-    }
-
-    return count;
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Page::GetComponentCount() const
+std::size_t TSP_Page::GetCount() const
 {
     return m_Components.size();
+}
+//---------------------------------------------------------------------------
+bool TSP_Page::Add(TSP_Component* pComponent)
+{
+    // no component?
+    if (!pComponent)
+        return false;
+
+    // check if component was already added in component list
+    for each (auto pComp in m_Components)
+        if (pComponent == pComp)
+            return false;
+
+    // add the component to component list
+    m_Components.push_back(pComponent);
+
+    return true;
 }
 //---------------------------------------------------------------------------

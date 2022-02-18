@@ -37,6 +37,7 @@
 
 // qt classes
 #include "Qt/TSP_QmlAtlas.h"
+#include "Qt/TSP_QmlAtlasPage.h"
 #include "Qt/TSP_QtGlobalMacros.h"
 
 // qt
@@ -157,12 +158,14 @@ bool TSP_PageListModel::addPage()
 
         beginInsertRows(QModelIndex(), count, count);
 
+        // FIXME this code is unsafe, test if the selected items exist
         // add a page to the selected atlas
-        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(m_pApp->GetDocument()->GetSelectedAtlas()->AddPage());
+        TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(m_pApp->GetDocument()->GetSelectedAtlas()->CreateAndAddPage());
 
         if (!pQmlPage)
         {
             M_LogErrorT("addPage - FAILED - could not add the page to the document");
+            endInsertRows();
             return false;
         }
 
@@ -264,7 +267,7 @@ QString TSP_PageListModel::getPageName(int index) const
     if (pQmlAtlas)
     {
         // get selected page
-        TSP_QmlPage* pPage = static_cast<TSP_QmlPage*>(pQmlAtlas->GetPage(index));
+        TSP_QmlAtlasPage* pPage = static_cast<TSP_QmlAtlasPage*>(pQmlAtlas->GetPage(index));
 
         // found it?
         if (!pPage)
@@ -283,7 +286,7 @@ QString TSP_PageListModel::getPageName(int index) const
     return errorName;
 }
 //---------------------------------------------------------------------------
-TSP_QmlPage* TSP_PageListModel::GetPage(int index) const
+TSP_Page* TSP_PageListModel::GetPage(int index) const
 {
     if (!m_pPageOwner)
         return nullptr;
@@ -301,7 +304,7 @@ TSP_QmlPage* TSP_PageListModel::GetPage(int index) const
     // found it?
     if (pQmlAtlas)
         // get page
-        return static_cast<TSP_QmlPage*>(pQmlAtlas->GetPage(index));
+        return static_cast<TSP_QmlAtlasPage*>(pQmlAtlas->GetPage(index));
 
     // FIXME test if page owner is a process and add page on it if yes
 
@@ -309,7 +312,7 @@ TSP_QmlPage* TSP_PageListModel::GetPage(int index) const
     return nullptr;
 }
 //---------------------------------------------------------------------------
-TSP_QmlPage* TSP_PageListModel::GetSelectedPage() const
+TSP_Page* TSP_PageListModel::GetSelectedPage() const
 {
     return GetPage(m_SelectedPageItem);
 }

@@ -36,7 +36,12 @@
 #include "Core\TSP_Activity.h"
 
 // qt classes
-#include "TSP_QmlPage.h"
+#include "TSP_QmlPage.h" // REM FIXME
+// FIXME #include "TSP_QmlProcessPage.h"
+
+// FIXME move to correct location
+class TSP_QmlProcessPage : public TSP_QmlPage
+{};
 
 /**
 * Qt activity component
@@ -49,7 +54,7 @@ class TSP_QmlActivity : public TSP_Activity
         * Constructor
         *@param pOwner - the page owner
         */
-        TSP_QmlActivity(TSP_QmlPage* pOwner);
+        TSP_QmlActivity(TSP_QmlProcessPage* pOwner);
 
         /**
         * Constructor
@@ -58,10 +63,10 @@ class TSP_QmlActivity : public TSP_Activity
         *@param comments - component comments
         *@param pOwner - component owner
         */
-        TSP_QmlActivity(const std::wstring& title,
-                        const std::wstring& description,
-                        const std::wstring& comments,
-                              TSP_QmlPage*  pOwner);
+        TSP_QmlActivity(const std::wstring&       title,
+                        const std::wstring&       description,
+                        const std::wstring&       comments,
+                              TSP_QmlProcessPage* pOwner);
 
         virtual ~TSP_QmlActivity();
 

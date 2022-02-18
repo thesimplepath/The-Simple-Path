@@ -115,17 +115,17 @@ class TSP_Document
         virtual TSP_Atlas* CreateAtlas(const std::wstring& name);
 
         /**
-        * Adds a new atlas in document
-        *@return newly added atlas
+        * Creates a new atlas and adds it in document
+        *@return newly created atlas
         */
-        virtual TSP_Atlas* AddAtlas();
+        virtual TSP_Atlas* CreateAndAddAtlas();
 
         /**
-        * Adds a new atlas in document
+        * Creates a new atlas and adds it in document
         *@param name - atlas name
-        *@return newly added atlas
+        *@return newly created atlas
         */
-        virtual TSP_Atlas* AddAtlas(const std::wstring& name);
+        virtual TSP_Atlas* CreateAndAddAtlas(const std::wstring& name);
 
         /**
         * Removes an atlas

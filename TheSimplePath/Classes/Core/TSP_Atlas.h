@@ -87,17 +87,17 @@ class TSP_Atlas : public TSP_Item
         virtual TSP_Page* CreatePage(const std::wstring& name);
 
         /**
-        * Adds a new page in atlas
+        * Creates a new page and adds it in atlas
         *@return newly added page
         */
-        virtual TSP_Page* AddPage();
+        virtual TSP_Page* CreateAndAddPage();
 
         /**
-        * Adds a new page in atlas
+        * Creates a new page and adds it in atlas
         *@param name - page name
         *@return newly added page
         */
-        virtual TSP_Page* AddPage(const std::wstring& name);
+        virtual TSP_Page* CreateAndAddPage(const std::wstring& name);
 
         /**
         * Removes a page

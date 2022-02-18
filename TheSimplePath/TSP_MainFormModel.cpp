@@ -28,6 +28,15 @@
 
 #include "TSP_MainFormModel.h"
 
+// common classes
+#include "Common/TSP_GlobalMacros.h"
+
+// qt classes
+#include "Qt/TSP_QmlDocument.h"
+#include "Qt/TSP_QmlAtlas.h"
+#include "Qt/TSP_QmlAtlasPage.h"
+#include "Qt/TSP_QtGlobalMacros.h"
+
 // application
 #include "TSP_Application.h"
 
@@ -93,37 +102,124 @@ void TSP_MainFormModel::showError(const QString& title, const QString& msg, cons
 //---------------------------------------------------------------------------
 void TSP_MainFormModel::onNewDocumentClicked()
 {
-    if (!m_pApp)
+    M_TRY
     {
-        M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
-        return;
-    }
+        // no application?
+        if (!m_pApp)
+        {
+            M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
+            return;
+        }
 
-    if (!m_pApp->GetDocument())
-    {
-        M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
-        return;
-    }
+        // no document?
+        if (!m_pApp->GetDocument())
+        {
+            M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
+            return;
+        }
 
-    // create the document
-    m_pApp->GetDocument()->Create();
+        // create the document
+        if (!m_pApp->GetDocument()->Create())
+        {
+            //: Create document error dialog title
+            //% "Create new document"
+            const QString title = qtTrId("id-error-create-doc-title");
+
+            //: Create document error dialog message
+            //% "Failed to create the new document."
+            const QString msg = qtTrId("id-error-create-doc-msg");
+
+            showError(title, msg);
+        }
+    }
+    M_CATCH_QT_MSG
 }
 //---------------------------------------------------------------------------
 void TSP_MainFormModel::onCloseDocumentClicked()
 {
-    if (!m_pApp)
+    M_TRY
     {
-        M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
-        return;
-    }
+        // no application?
+        if (!m_pApp)
+        {
+            M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
+            return;
+        }
 
-    if (!m_pApp->GetDocument())
+        // no document?
+        if (!m_pApp->GetDocument())
+        {
+            M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
+            return;
+        }
+
+        // close the document
+        m_pApp->GetDocument()->Close();
+    }
+    M_CATCH_QT_MSG
+}
+//---------------------------------------------------------------------------
+void TSP_MainFormModel::onAddProcessClicked()
+{
+    M_TRY
     {
-        M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
-        return;
-    }
+        // FIXME create a generic function in document to get selected atlas and page
+        // no application?
+        if (!m_pApp)
+        {
+            M_LogErrorT("onAddProcessClicked - FAILED - no application defined");
+            return;
+        }
 
-    // close the document
-    m_pApp->GetDocument()->Close();
+        // get document
+        TSP_QmlDocument* pDoc = m_pApp->GetDocument();
+
+        // no document?
+        if (!pDoc)
+        {
+            M_LogErrorT("onAddProcessClicked - FAILED - no document defined");
+            return;
+        }
+
+        // get selected atlas
+        TSP_QmlAtlas* pSelectedAtlas = static_cast<TSP_QmlAtlas*>(pDoc->GetSelectedAtlas());
+
+        // no selected atlas?
+        if (!pSelectedAtlas)
+        {
+            M_LogWarnT("onAddProcessClicked - no selected atlas");
+            return;
+        }
+
+        // get selected page
+        TSP_QmlAtlasPage* pSelectedPage = static_cast<TSP_QmlAtlasPage*>(pSelectedAtlas->GetSelectedPage());
+
+        // no selected page?
+        if (!pSelectedPage)
+        {
+            M_LogWarnT("onAddProcessClicked - no selected page");
+            return;
+        }
+
+        //: New process title
+        //% "New process"
+        const QString defProcessTitle = qtTrId("id-new-process-title");
+
+        // FIXME use add process instead (when created)
+        // add process
+        if (!pSelectedPage->CreateAndAddBox(defProcessTitle.toStdWString()))
+        {
+            //: Create process error dialog title
+            //% "Create new process"
+            const QString title = qtTrId("id-error-create-process-title");
+
+            //: Create process error dialog message
+            //% "Failed to create the new process."
+            const QString msg = qtTrId("id-error-create-process-msg");
+
+            showError(title, msg);
+        }
+    }
+    M_CATCH_QT_MSG
 }
 //---------------------------------------------------------------------------

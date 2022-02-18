@@ -1,8 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlDocPageProxy -------------------------------------------------*
+ * ==> TSP_QmlBox ----------------------------------------------------------*
  ****************************************************************************
- * Description:  Document page proxy between qml view and application       *
- *               engine                                                     *
+ * Description:  Qt box component                                           *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -28,28 +27,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlDocPageProxy.h"
+#include "TSP_QmlBox.h"
 
  // qt classes
-#include "TSP_QmlPage.h"
+#include "TSP_QmlAtlasPage.h"
 
 //---------------------------------------------------------------------------
-// TSP_QmlDocPageProxy
+// TSP_QmlBox
 //---------------------------------------------------------------------------
-TSP_QmlDocPageProxy::TSP_QmlDocPageProxy(QObject* pParent) :
-    TSP_QmlProxy(pParent)
+TSP_QmlBox::TSP_QmlBox(TSP_Page* pOwner) :
+    TSP_Box(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlDocPageProxy::~TSP_QmlDocPageProxy()
+TSP_QmlBox::TSP_QmlBox(const std::wstring& title,
+                       const std::wstring& description,
+                       const std::wstring& comments,
+                             TSP_Page*     pOwner) :
+    TSP_Box(title, description, comments, pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlPage* TSP_QmlDocPageProxy::GetPage() const
+TSP_QmlBox::~TSP_QmlBox()
+{}
+//---------------------------------------------------------------------------
+TSP_QmlBoxProxy* TSP_QmlBox::GetProxy() const
 {
-    return m_pPage;
+    return m_pProxy;
 }
 //---------------------------------------------------------------------------
-void TSP_QmlDocPageProxy::SetPage(TSP_QmlPage* pPage)
+void TSP_QmlBox::SetProxy(TSP_QmlBoxProxy* pProxy)
 {
-    m_pPage = pPage;
+    m_pProxy = pProxy;
 }
 //---------------------------------------------------------------------------

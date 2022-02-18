@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlAtlasProxy ---------------------------------------------------*
+ * ==> TSP_QmlAtlasPage ----------------------------------------------------*
  ****************************************************************************
- * Description:  Atlas proxy between qml view and application engine        *
+ * Description:  Qt document page owned by an atlas                         *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -27,79 +27,91 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   *
  ****************************************************************************/
 
-#include "TSP_QmlAtlasProxy.h"
-
-// qt classes
-#include "TSP_QmlAtlas.h"
+#include "TSP_QmlAtlasPage.h"
 
 //---------------------------------------------------------------------------
-// TSP_QmlAtlasProxy
+// TSP_QmlAtlasPage
 //---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::TSP_QmlAtlasProxy(QObject* pParent) :
-    TSP_QmlProxy(pParent)
+TSP_QmlAtlasPage::TSP_QmlAtlasPage(TSP_QmlAtlas* pOwner) :
+    TSP_QmlPage(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlAtlasProxy::~TSP_QmlAtlasProxy()
+TSP_QmlAtlasPage::TSP_QmlAtlasPage(const std::wstring& name, TSP_QmlAtlas* pOwner) :
+    TSP_QmlPage(name, pOwner)
 {}
 //---------------------------------------------------------------------------
-QString TSP_QmlAtlasProxy::getName() const
+TSP_QmlAtlasPage::~TSP_QmlAtlasPage()
+{}
+//---------------------------------------------------------------------------
+/*REM
+TSP_Box* TSP_QmlAtlasPage::CreateAndAddBox(const std::wstring& name,
+                                           const std::wstring& description,
+                                           const std::wstring& comments,
+                                                 int           x,
+                                                 int           y)
 {
-    if (!m_pAtlas)
-        return "";
+    std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
 
-    return QString::fromStdWString(m_pAtlas->GetName());
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::setName(const QString& name)
-{
-    if (!m_pAtlas)
-        return;
+    // add a box on the page view
+    if (!CreateBoxView(pBox.get(), "box", x, y))
+        return nullptr;
 
-    m_pAtlas->SetName(name.toStdWString());
+    // set the box data
+    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
+    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
+    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
 
-    emit nameChanged(name);
-}
-//---------------------------------------------------------------------------
-TSP_QmlAtlas* TSP_QmlAtlasProxy::GetAtlas() const
-{
-    return m_pAtlas;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::SetAtlas(TSP_QmlAtlas* pAtlas)
-{
-    m_pAtlas = pAtlas;
-}
-//---------------------------------------------------------------------------
-bool TSP_QmlAtlasProxy::AddPage(const QString& uid)
-{
-    m_PageAdded = false;
+    // add newly created box to page
+    if (!TSP_Page::Add(pBox.get()))
+        return nullptr;
 
-    emit addPageToView(uid);
+    return pBox.release();
+}
+*/
+//---------------------------------------------------------------------------
+/*REM
+TSP_Link* TSP_QmlAtlasPage::CreateAndAddLink(const std::wstring& name,
+                                             const std::wstring& description,
+                                             const std::wstring& comments,
+                                                   int           x,
+                                                   int           y)
+{
+*/
+    /*FIXME
+    std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
 
-    return m_PageAdded;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::RemovePage(const QString& uid)
-{
-    emit removePageFromView(uid);
-}
-//---------------------------------------------------------------------------
-int TSP_QmlAtlasProxy::QuerySelectedPageIndex()
-{
-    m_SelectedPage = -1;
+    if (!TSP_Page::Add(pBox.get()))
+        return nullptr;
 
-    emit queryPageIndex();
+    if (!CreateBoxView(pBox.get(), "box"))
+    {
+        TSP_Page::Remove(pBox.get());
+        return nullptr;
+    }
 
-    return m_SelectedPage;
+    // set the box data
+    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
+    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
+    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
+
+    return pBox.release();
+    */
+/*REM
+    return nullptr;
 }
+*/
 //---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::onPageAdded(bool success)
+/*REM
+void TSP_QmlAtlasPage::Remove(const std::string& uid)
 {
-    m_PageAdded = success;
+    TSP_Page::Remove(uid);
 }
+*/
 //---------------------------------------------------------------------------
-void TSP_QmlAtlasProxy::onSelectedPageIndexQueried(int index)
+/*REM
+void TSP_QmlAtlasPage::Remove(TSP_Component* pComponent)
 {
-    m_SelectedPage = index;
+    TSP_Page::Remove(pComponent);
 }
+*/
 //---------------------------------------------------------------------------

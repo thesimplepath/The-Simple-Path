@@ -1,7 +1,7 @@
 /****************************************************************************
- * ==> TSP_QmlPage ---------------------------------------------------------*
+ * ==> TSP_QmlAtlasPage ----------------------------------------------------*
  ****************************************************************************
- * Description:  Qt document page                                           *
+ * Description:  Qt document page owned by an atlas                         *
  * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
@@ -29,50 +29,35 @@
 
 #pragma once
 
-// core classes
-#include "Core/TSP_Page.h"
+// std
+#include <vector>
 
 // qt classes
-#include "TSP_QmlBox.h"
-#include "TSP_QmlBoxProxy.h"
-#include "TSP_QmlLink.h"
-#include "TSP_QmlLinkProxy.h"
+#include "TSP_QmlAtlas.h"
+#include "TSP_QmlPage.h"
 #include "TSP_QmlPageProxy.h"
-#include "TSP_QmlProxyDictionary.h"
 
 /**
-* Qt document page
+* Qt document page owned by an atlas
 *@author Jean-Milost Reymond
 */
-class TSP_QmlPage : public TSP_Page
+class TSP_QmlAtlasPage : public TSP_QmlPage
 {
     public:
         /**
         * Constructor
         *@param pOwner - the page owner
         */
-        TSP_QmlPage(TSP_Item* pOwner);
+        TSP_QmlAtlasPage(TSP_QmlAtlas* pOwner);
 
         /**
         * Constructor
         *@param name - the page name
         *@param pOwner - the page owner
         */
-        TSP_QmlPage(const std::wstring& name, TSP_Item* pOwner);
+        TSP_QmlAtlasPage(const std::wstring& name, TSP_QmlAtlas* pOwner);
 
-        virtual ~TSP_QmlPage();
-
-        /**
-        * Gets the page proxy
-        *@return the page proxy, nullptr if no proxy
-        */
-        virtual TSP_QmlPageProxy* GetProxy() const;
-
-        /**
-        * Sets the page proxy
-        *@param pProxy - the page proxy
-        */
-        virtual void SetProxy(TSP_QmlPageProxy* pProxy);
+        virtual ~TSP_QmlAtlasPage();
 
         /**
         * Creates a box and adds it in page
@@ -83,11 +68,13 @@ class TSP_QmlPage : public TSP_Page
         *@param y - link y position in pixels, set to default position if -1
         *@return newly created box
         */
+        /*REM
         virtual TSP_Box* CreateAndAddBox(const std::wstring& name,
-                                         const std::wstring& description =  L"",
-                                         const std::wstring& comments    =  L"",
-                                               int           x           = -1,
-                                               int           y           = -1);
+                                         const std::wstring& description = L"",
+                                         const std::wstring& comments    = L"",
+                                               int           x           =  -1,
+                                               int           y           =  -1);
+        */
 
         /**
         * Creates a link and adds it in page
@@ -98,75 +85,23 @@ class TSP_QmlPage : public TSP_Page
         *@param y - link y position in pixels, set to default position if -1
         *@return newly created link
         */
+        /*REM
         virtual TSP_Link* CreateAndAddLink(const std::wstring& name,
-                                           const std::wstring& description =  L"",
-                                           const std::wstring& comments    =  L"",
-                                                 int           x           = -1,
-                                                 int           y           = -1);
+                                           const std::wstring& description = L"",
+                                           const std::wstring& comments    = L"",
+                                                 int           x           =  -1,
+                                                 int           y           =  -1);
+        */
 
         /**
         * Removes a component
         *@param uid - component unique identifier to remove
         */
-        virtual void Remove(const std::string& uid);
+        //REM virtual void Remove(const std::string& uid);
 
         /**
         * Removes a component
         *@param pComponent - component to remove
         */
-        virtual void Remove(TSP_Component* pComponent);
-
-        /**
-        * Creates a new box view and adds it to the user interface
-        *@param pBox - box for which the view should be added
-        *@param pPageProxy - the page proxy in which the box view should be created
-        *@param type - box type to create
-        *@param x - box x position in pixels
-        *@param y - box y position in pixels
-        */
-        template <class T>
-        bool CreateBoxView(T* pBox, const QString& type, int x, int y);
-
-    private:
-        TSP_QmlPageProxy* m_pProxy = nullptr;
+        //REM virtual void Remove(TSP_Component* pComponent);
 };
-
-//---------------------------------------------------------------------------
-// TSP_QmlPage
-//---------------------------------------------------------------------------
-template <class T>
-bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y)
-{
-    if (!pBox)
-        return false;
-
-    if (!m_pProxy)
-        return false;
-
-    // get box unique identifier
-    const std::string uid = pBox->GetUID();
-
-    // define the box position type
-    TSP_QmlPageProxy::IEBoxPosition boxPos = TSP_QmlPageProxy::IEBoxPosition::IE_BP_Default;
-
-    // do use a custom position?
-    if (x > 0 && y > 0)
-        boxPos = TSP_QmlPageProxy::IEBoxPosition::IE_BP_Custom;
-
-    // notify page proxy that a new box should be added
-    if (!m_pProxy->AddBox(type, QString::fromStdString(pBox->GetUID()), boxPos, x, y))
-        return false;
-
-    // get the newly added component proxy
-    TSP_QmlBoxProxy* pProxy = static_cast<TSP_QmlBoxProxy*>(TSP_QmlProxyDictionary::Instance()->GetProxy(uid));
-
-    if (!pProxy)
-        return false;
-
-    // link the box and its proxy
-    pBox->SetProxy(pProxy);
-    pProxy->SetBox(pBox);
-
-    return true;
-}
-//---------------------------------------------------------------------------

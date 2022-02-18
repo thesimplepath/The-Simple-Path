@@ -37,14 +37,23 @@ T.Control
         /// called when a page should be added to the atlas view
         onAddPageToView: function(uid)
         {
-            // add the page and notify if it was added successfully
-            apAtlasProxy.onPageAdded(addPage(uid) !== null);
+            // add a page to the atlas
+            let page = addPage(uid);
+
+            // notify if the page was added successfully
+            apAtlasProxy.onPageAdded(page !== null && page !== undefined);
         }
 
         /// called when a page should be remove from the atlas view
         onRemovePageFromView: function(uid)
         {
             removePage(uid);
+        }
+
+        /// called when the selected page index was queried
+        onQueryPageIndex: function()
+        {
+            onSelectedPageIndexQueried(slPageStack.currentIndex);
         }
     }
 
@@ -166,7 +175,7 @@ T.Control
             }
 
         // log deleted page
-        if (pageName.length)
+        if (pageName !== undefined && pageName.length)
             console.log("Remove page - view was removed - name - " + pageName);
 
         console.log("Remove page - succeeded");

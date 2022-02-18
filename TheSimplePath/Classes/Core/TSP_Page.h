@@ -34,10 +34,8 @@
 
 // core classes
 #include "TSP_Item.h"
-#include "TSP_Activity.h"
-
-// class prototypes
-class TSP_Atlas;
+#include "TSP_Box.h"
+#include "TSP_Link.h"
 
 /**
 * Document page
@@ -50,16 +48,22 @@ class TSP_Page : public TSP_Item
         * Constructor
         *@param pOwner - the page owner
         */
-        TSP_Page(TSP_Atlas* pOwner);
+        TSP_Page(TSP_Item* pOwner);
 
         /**
         * Constructor
         *@param name - the page name
         *@param pOwner - the page owner
         */
-        TSP_Page(const std::wstring& name, TSP_Atlas* pOwner);
+        TSP_Page(const std::wstring& name, TSP_Item* pOwner);
 
         virtual ~TSP_Page();
+
+        /**
+        * Gets the page owner
+        *@return the page owner
+        */
+        virtual inline TSP_Item* GetOwner() const;
 
         /**
         * Gets the model name
@@ -74,69 +78,83 @@ class TSP_Page : public TSP_Item
         virtual inline void SetName(const std::wstring& name);
 
         /**
-        * Adds a new activity in page
-        *@return newly added activity
+        * Creates a box and adds it in page
+        *@param name - box name
+        *@param description - box description
+        *@param comments - box comments
+        *@return newly created box
         */
-        virtual TSP_Activity* AddActivity();
+        virtual TSP_Box* CreateAndAddBox(const std::wstring& name,
+                                         const std::wstring& description,
+                                         const std::wstring& comments);
 
         /**
-        * Adds a new activity in page
-        *@param name - activity name
-        *@param description - activity description
-        *@param comments - activity comments
-        *@param x - activity x position on page, in pixels
-        *@param y - activity y position on page, in pixels
-        *@return newly added activity
+        * Creates a link and adds it in page
+        *@param name - link name
+        *@param description - link description
+        *@param comments - link comments
+        *@return newly created link
         */
-        virtual TSP_Activity* AddActivity(const std::wstring& name,
-                                          const std::wstring& description,
-                                          const std::wstring& comments,
-                                                int           x,
-                                                int           y);
+        virtual TSP_Link* CreateAndAddLink(const std::wstring& name,
+                                           const std::wstring& description,
+                                           const std::wstring& comments);
 
         /**
-        * Removes an activity
-        *@param uid - activity unique identifier to remove
+        * Removes a component
+        *@param uid - component unique identifier to remove
         */
-        virtual void RemoveActivity(const std::string& uid);
+        virtual void Remove(const std::string& uid);
 
         /**
-        * Removes an activity
-        *@param pActivity - activity to remove
+        * Removes a component
+        *@param pComponent - component to remove
         */
-        virtual void RemoveActivity(TSP_Activity* pActivity);
+        virtual void Remove(TSP_Component* pComponent);
 
         /**
-        * Gets an activity
-        *@param uid - activity unique identifier to get
-        *@return activity, nullptr if not found or on error
+        * Gets a component
+        *@param uid - component unique identifier to get
+        *@return component, nullptr if not found or on error
         */
-        virtual TSP_Activity* GetActivity(const std::string& uid) const;
+        virtual TSP_Component* Get(const std::string& uid) const;
 
         /**
-        * Gets activity count
-        *@return activity count
+        * Gets count of type
+        *@return count of type
         */
-        virtual std::size_t GetActivityCount() const;
+        template <class T>
+        std::size_t GetCountOf() const;
 
         /**
         * Gets component count
         *@return component count
         */
-        virtual std::size_t GetComponentCount() const;
+        virtual std::size_t GetCount() const;
 
     protected:
-        TSP_Item* m_pOwner = nullptr;
+        /**
+        * Adds a component in page
+        *@param pComponent - component to add
+        *@return true on success, otherwise false
+        *@note The component lifetime will be managed internally, don't try to delete it from outside
+        */
+        virtual bool Add(TSP_Component* pComponent);
 
     private:
         typedef std::vector<TSP_Component*> IComponents;
 
+        TSP_Item*    m_pOwner = nullptr;
         IComponents  m_Components;
         std::wstring m_Name;
 };
 
 //---------------------------------------------------------------------------
 // TSP_Page
+//---------------------------------------------------------------------------
+TSP_Item* TSP_Page::GetOwner() const
+{
+    return m_pOwner;
+}
 //---------------------------------------------------------------------------
 std::wstring TSP_Page::GetName() const
 {
@@ -146,5 +164,17 @@ std::wstring TSP_Page::GetName() const
 void TSP_Page::SetName(const std::wstring& name)
 {
     m_Name = name;
+}
+//---------------------------------------------------------------------------
+template <class T>
+std::size_t TSP_Page::GetCountOf() const
+{
+    std::size_t count = 0;
+
+    for each (auto pComponent in m_Components)
+        if (dynamic_cast<T*>(pComponent))
+            ++count;
+
+    return count;
 }
 //---------------------------------------------------------------------------
