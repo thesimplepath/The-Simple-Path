@@ -105,7 +105,7 @@ T.Control
             const atlasView = slAtlasStack.children[slAtlasStack.currentIndex];
 
             // found it?
-            if (atlasView === null || atlasView === undefined)
+            if (!atlasView)
             {
                 m_Model.onSelectedAtlasChanged("");
                 return;
@@ -149,7 +149,7 @@ T.Control
         if (!uid.length)
         {
             console.error("Add atlas - FAILED - cannot create atlas if unique identifier is empty");
-            return null;
+            return undefined;
         }
 
         console.log("Add atlas - uid - " + uid);
@@ -161,7 +161,7 @@ T.Control
         if (component.status !== Component.Ready)
         {
             console.error("Add atlas - an error occurred while the item was created - " + component.errorString());
-            return null;
+            return undefined;
         }
 
         // build atlas identifier
@@ -175,7 +175,7 @@ T.Control
         if (!item)
         {
             console.error("Add atlas - an error occurred while the item was added to document");
-            return null;
+            return undefined;
         }
 
         // declare the unique identifier in the atlas proxy
@@ -223,7 +223,7 @@ T.Control
             }
 
         // log deleted atlas
-        if (atlasName !== undefined && atlasName.length)
+        if (atlasName && atlasName.length)
             console.log("Remove atlas - view was removed - name - " + atlasName);
 
         console.log("Remove atlas - succeeded");

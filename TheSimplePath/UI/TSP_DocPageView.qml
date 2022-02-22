@@ -189,7 +189,7 @@ TSP_PageView
                                !isProcess && isExit);
 
         if (!symbol)
-            return null;
+            return undefined;
 
         symbol.m_IsProcess = isProcess;
         symbol.m_IsExit    = isExit;

@@ -41,7 +41,7 @@ T.Control
             let page = addPage(uid);
 
             // notify if the page was added successfully
-            apAtlasProxy.onPageAdded(page !== null && page !== undefined);
+            apAtlasProxy.onPageAdded(page);
         }
 
         /// called when a page should be remove from the atlas view
@@ -101,7 +101,7 @@ T.Control
         if (!uid.length)
         {
             console.error("Add page - FAILED - cannot create page if unique identifier is empty");
-            return null;
+            return undefined;
         }
 
         console.log("Add page - uid - " + uid);
@@ -113,7 +113,7 @@ T.Control
         if (component.status !== Component.Ready)
         {
             console.error("Add page - an error occurred while the item was created - " + component.errorString());
-            return null;
+            return undefined;
         }
 
         // build page identifier
@@ -127,7 +127,7 @@ T.Control
         if (!item)
         {
             console.error("Add page - an error occurred while the item was added to atlas");
-            return null;
+            return undefined;
         }
 
         // declare the unique identifier in the page proxy
@@ -175,7 +175,7 @@ T.Control
             }
 
         // log deleted page
-        if (pageName !== undefined && pageName.length)
+        if (pageName && pageName.length)
             console.log("Remove page - view was removed - name - " + pageName);
 
         console.log("Remove page - succeeded");

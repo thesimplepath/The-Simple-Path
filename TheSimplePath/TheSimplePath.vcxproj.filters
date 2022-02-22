@@ -533,9 +533,6 @@
     <QtMoc Include="Classes\Qt\TSP_QmlBoxProxy.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
-    <QtMoc Include="Classes\Qt\TSP_QmlLinkProxy.h">
-      <Filter>Header Files\Qt</Filter>
-    </QtMoc>
     <QtMoc Include="Classes\Qt\TSP_QmlPageProxy.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
@@ -547,6 +544,9 @@
     </QtMoc>
     <QtMoc Include="TSP_PageListModel.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Classes\Qt\TSP_QmlLinkProxy.h">
+      <Filter>Header Files\Qt</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

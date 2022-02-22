@@ -57,12 +57,14 @@ TSP_Box* TSP_QmlPage::CreateAndAddBox(const std::wstring& name,
                                       const std::wstring& description,
                                       const std::wstring& comments,
                                             int           x,
-                                            int           y)
+                                            int           y,
+                                            int           width,
+                                            int           height)
 {
     std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
 
     // add a box on the page view
-    if (!CreateBoxView(pBox.get(), "box", x, y))
+    if (!CreateBoxView(pBox.get(), "box", x, y, width, height))
         return nullptr;
 
     // set the box data
@@ -77,24 +79,37 @@ TSP_Box* TSP_QmlPage::CreateAndAddBox(const std::wstring& name,
     return pBox.release();
 }
 //---------------------------------------------------------------------------
-TSP_Link* TSP_QmlPage::CreateAndAddLink(const std::wstring& name,
-                                        const std::wstring& description,
-                                        const std::wstring& comments,
-                                              int           x,
-                                              int           y)
+TSP_Link* TSP_QmlPage::CreateAndAddLink(const std::wstring&          name,
+                                        const std::wstring&          description,
+                                        const std::wstring&          comments,
+                                        const std::wstring&          startUID,
+                                              TSP_QmlBox::IEPosition startPos,
+                                        const std::wstring&          endUID,
+                                              TSP_QmlBox::IEPosition endPos,
+                                              int                    x,
+                                              int                    y,
+                                              int                    width,
+                                              int                    height)
 {
     std::unique_ptr<TSP_QmlLink> pLink = std::make_unique<TSP_QmlLink>(this);
 
-    /*FIXME finalize this code, and reenable when available
     // add a link on the page view
-    if (!CreateLinkView(pLink.get(), "link", x, y))
+    if (!CreateLinkView(pLink.get(),
+                        "link",
+                        QString::fromStdWString(startUID),
+                        startPos,
+                        QString::fromStdWString(endUID),
+                        endPos,
+                        x,
+                        y,
+                        width,
+                        height))
         return nullptr;
 
-    // set the box data
+    // set the link data
     pLink->GetProxy()->setTitle(QString::fromStdWString(name));
     pLink->GetProxy()->setDescription(QString::fromStdWString(description));
     pLink->GetProxy()->setComments(QString::fromStdWString(comments));
-    */
 
     // add newly created link to page
     if (!TSP_Page::Add(pLink.get()))

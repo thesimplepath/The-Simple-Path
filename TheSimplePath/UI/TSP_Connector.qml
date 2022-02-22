@@ -107,7 +107,7 @@ T.Control
                 return;
 
             let doRemoveMsg = false;
-            let targetConn  = null;
+            let targetConn  = undefined;
 
             try
             {
@@ -175,7 +175,7 @@ T.Control
                 m_Page.linkAdded(m_AddingLinkItem);
 
             // since now link is no longer adding
-            m_AddingLinkItem = null;
+            m_AddingLinkItem = undefined;
         }
 
         /// called when mouse moved on the x axis above the handle

@@ -53,7 +53,7 @@ function clamp01(value)
 */
 function sleep(milliseconds) {
     const date    = new Date();
-    var   curDate = null;
+    var   curDate = undefined;
 
     do
     {

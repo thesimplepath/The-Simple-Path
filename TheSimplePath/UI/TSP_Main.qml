@@ -236,7 +236,7 @@ ApplicationWindow
             const result = createDocumentView(name, openedCount);
 
             // succeeded?
-            if (result === null || result === undefined)
+            if (!result)
             {
                 // notify the model about the error
                 tspDocumentModel.docStatus = TSP_DocumentView.IEDocStatus.IE_DS_Error;
@@ -276,12 +276,12 @@ ApplicationWindow
         if (component.status !== Component.Ready)
         {
             console.error("Create new document view - an error occurred while the item was created - " + component.errorString());
-            return null;
+            return undefined;
         }
 
         // succeeded?
         if (!component)
-            return null;
+            return undefined;
 
         // create and show new item object
         let item = component.createObject(rcDocument, {"id":         "dvDocumentView_" + openedCount,

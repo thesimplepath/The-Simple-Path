@@ -73,18 +73,47 @@ void TSP_QmlPageProxy::SetPage(TSP_Page* pPage)
     m_pPage = pPage;
 }
 //---------------------------------------------------------------------------
-bool TSP_QmlPageProxy::AddBox(const QString& type, const QString& uid, IEBoxPosition position, int x, int y)
+bool TSP_QmlPageProxy::AddBox(const QString&      type,
+                              const QString&      uid,
+                                    IEBoxPosition position,
+                                    int           x,
+                                    int           y,
+                                    int           width,
+                                    int           height)
 {
     m_BoxAdded = false;
 
-    emit addBoxToView(type, uid, (int)position, x, y);
+    emit addBoxToView(type, uid, (int)position, x, y, width, height);
 
     return m_BoxAdded;
+}
+//---------------------------------------------------------------------------
+bool TSP_QmlPageProxy::AddLink(const QString&               type,
+                               const QString&               uid,
+                               const QString&               startUID,
+                                     TSP_QmlBox::IEPosition startPos,
+                               const QString&               endUID,
+                                     TSP_QmlBox::IEPosition endPos,
+                                     int                    x,
+                                     int                    y,
+                                     int                    width,
+                                     int                    height)
+{
+    m_LinkAdded = false;
+
+    emit addLinkToView(type, uid, startUID, (int)startPos, endUID, (int)endPos, x, y, width, height);
+
+    return m_LinkAdded;
 }
 //---------------------------------------------------------------------------
 void TSP_QmlPageProxy::onBoxAdded(bool success)
 {
     m_BoxAdded = success;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::onLinkAdded(bool success)
+{
+    m_LinkAdded = success;
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlPageProxy::onAddLinkStart(const QString& fromUID, int position)
@@ -99,8 +128,16 @@ QString TSP_QmlPageProxy::onAddLinkStart(const QString& fromUID, int position)
     if (!pQmlPage)
         return "";
 
-    // FIXME finalize parameters
-    TSP_Link* pLink = pQmlPage->CreateAndAddLink(L"ABCD");
+    //: New link title
+    //% "New link"
+    const QString defLinkTitle = qtTrId("id-new-link-title");
+
+    // create and add a new link in the page
+    TSP_Link* pLink = pQmlPage->CreateAndAddLink(defLinkTitle.toStdWString(),
+                                                 L"",
+                                                 L"",
+                                                 fromUID.toStdWString(),
+                                                 (TSP_QmlBox::IEPosition)position);
 
     // succeeded?
     if (!pLink)

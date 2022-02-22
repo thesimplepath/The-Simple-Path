@@ -35,6 +35,9 @@
 // qt
 #include <QObject>
 
+// class prototypes
+class TSP_Link;
+
 /**
 * Link proxy
 *@author Jean-Milost Reymond
@@ -50,38 +53,38 @@ class TSP_QmlLinkProxy : public TSP_QmlProxy
 
     public slots:
         /**
-        * Gets the box title
-        *@return the box title
+        * Gets the link title
+        *@return the link title
         */
         virtual QString getTitle() const;
 
         /**
-        * Gets the box description
-        *@return the box description
+        * Gets the link description
+        *@return the link description
         */
         virtual QString getDescription() const;
 
         /**
-        * Gets the box comments
-        *@return the box comments
+        * Gets the link comments
+        *@return the link comments
         */
         virtual QString getComments() const;
 
         /**
-        * Sets the box title
-        *@param title - the box title
+        * Sets the link title
+        *@param title - the link title
         */
         virtual void setTitle(const QString& title);
 
         /**
-        * Sets the box description
-        *@return the box description
+        * Sets the link description
+        *@return the link description
         */
         virtual void setDescription(const QString& description);
 
         /**
-        * Sets the box comments
-        *@return the box comments
+        * Sets the link comments
+        *@return the link comments
         */
         virtual void setComments(const QString& comments);
 
@@ -99,8 +102,18 @@ class TSP_QmlLinkProxy : public TSP_QmlProxy
 
         virtual ~TSP_QmlLinkProxy();
 
+        /**
+        * Gets the linked link component
+        *@return the linked link component, nullptr if no link
+        */
+        virtual TSP_Link* GetLink() const;
+
+        /**
+        * Sets the linked link component
+        *@param pLink - the linked link component
+        */
+        virtual void SetLink(TSP_Link* pLink);
+
     private:
-        QString m_Title;
-        QString m_Description;
-        QString m_Comments;
+        TSP_Link* m_pLink = nullptr;
 };

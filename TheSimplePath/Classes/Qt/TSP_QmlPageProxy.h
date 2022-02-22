@@ -31,6 +31,7 @@
 
 // qt classes
 #include "TSP_QmlProxy.h"
+#include "TSP_QmlBox.h"
 
 // qt
 #include <QObject>
@@ -77,7 +78,23 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
 
     signals:
         void nameChanged(const QString& name);
-        void addBoxToView(const QString& type, const QString& uid, int position, int x, int y);
+        void addBoxToView (const QString& type,
+                           const QString& uid,
+                                 int      position,
+                                 int      x,
+                                 int      y,
+                                 int      width,
+                                 int      height);
+        void addLinkToView(const QString& type,
+                           const QString& uid,
+                           const QString& startUID,
+                                 int      startPos,
+                           const QString& endUID,
+                                 int      endPos,
+                                 int      x,
+                                 int      y,
+                                 int      width,
+                                 int      height);
 
     public:
         /**
@@ -101,15 +118,48 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         virtual void SetPage(TSP_Page* pPage);
 
         /**
-        * Adds a box on the page
+        * Adds a box view on the page
         *@param type - box type
         *@param uid - box unique identifier
         *@param position - default position where the box will appear
         *@param x - box x position in pixels, if position is set to IE_BP_Custom, ignored otherwise
         *@param y - box y position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param width - link width in pixels
+        *@param height - link height in pixels
         *@return true on success, otherwise false
         */
-        virtual bool AddBox(const QString& type, const QString& uid, IEBoxPosition position, int x, int y);
+        virtual bool AddBox(const QString&      type,
+                            const QString&      uid,
+                                  IEBoxPosition position,
+                                  int           x,
+                                  int           y,
+                                  int           width,
+                                  int           height);
+
+        /**
+        * Adds a link view on the page
+        *@param type - link type
+        *@param uid - link unique identifier
+        *@param startUID - start box unique identifier from which the link is attached
+        *@param startPos - start box position from which the link is attached
+        *@param endUID - end box unique identifier to which the link is attached
+        *@param endPos - end box position from which the link is attached
+        *@param x - link x position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param y - link y position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param width - link width in pixels
+        *@param height - link height in pixels
+        *@return true on success, otherwise false
+        */
+        virtual bool AddLink(const QString&               type,
+                             const QString&               uid,
+                             const QString&               startUID,
+                                   TSP_QmlBox::IEPosition startPos,
+                             const QString&               endUID,
+                                   TSP_QmlBox::IEPosition endPos,
+                                   int                    x,
+                                   int                    y,
+                                   int                    width,
+                                   int                    height);
 
         /**
         * Notify that a box was added
@@ -125,7 +175,14 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         */
         virtual Q_INVOKABLE QString onAddLinkStart(const QString& fromUID, int position);
 
+        /**
+        * Notify that a link was added
+        *@param success - if true, the link was added successfully
+        */
+        virtual Q_INVOKABLE void onLinkAdded(bool success);
+
     private:
-        TSP_Page* m_pPage    = nullptr;
-        bool      m_BoxAdded = false;
+        TSP_Page* m_pPage     = nullptr;
+        bool      m_BoxAdded  = false;
+        bool      m_LinkAdded = false;
 };

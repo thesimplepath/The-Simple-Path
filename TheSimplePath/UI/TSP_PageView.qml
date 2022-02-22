@@ -46,7 +46,8 @@ T.Control
     property int    m_DefY:            10
 
     // signals
-    signal doAddBox(var type, var uid, var position, var x, var y)
+    signal doAddBox(var type, var uid, var position, var x, var y, var width, var height)
+    signal doAddLink(var type, var uid, var startUID, var startPos, var endUID, var endPos, var x, var y, var width, var height)
     signal linkAdded(var link)
     signal linkCanceled()
 
@@ -64,7 +65,7 @@ T.Control
         objectName: "ppPageProxy"
 
         /// called when a box should be added to the view
-        onAddBoxToView: function(type, uid, position, x, y)
+        onAddBoxToView: function(type, uid, position, x, y, width, height)
         {
             // search for box type to create
             switch (type)
@@ -72,10 +73,6 @@ T.Control
                 case "":
                 case "box":
                 {
-                    // calculate default position
-                    const width  = 144;
-                    const height = 93;
-
                     // calculate the box position
                     const [xPos, yPos] = getBoxPosition(position, x, y, width, height);
 
@@ -83,14 +80,103 @@ T.Control
                     let box = addBox(xPos, yPos, width, height, uid);
 
                     // notify if the box was added successfully
-                    onBoxAdded(box !== null && box !== undefined);
+                    onBoxAdded(box);
 
                     return;
                 }
 
                 default:
-                    ctPageView.doAddBox(type, uid, position, x, y);
-                    break;
+                    ctPageView.doAddBox(type, uid, position, x, y, width, height);
+                    return;
+            }
+        }
+
+        /// called when a link should be added to the view
+        onAddLinkToView: function(type, uid, startUID, startPos, endUID, endPos, x, y, width, height)
+        {
+            // search for link type to create
+            switch (type)
+            {
+                case "":
+                case "link":
+                {
+                    // no start box unique identifier?
+                    if (!startUID || !startUID.length)
+                    {
+                        console.log("onAddLinkToView - FAILED - start box is undefined");
+                        return;
+                    }
+
+                    // get the start box on the interface
+                    let startBox = getBoxOrLink(startUID);
+
+                    // found it?
+                    if (!startBox)
+                    {
+                        console.log("onAddLinkToView - FAILED - start box could not be retrieved");
+                        return;
+                    }
+
+                    let startConnector = undefined;
+
+                    // get the start connector
+                    switch (startPos)
+                    {
+                        case TSP_Connector.IEPosition.IE_P_Left:   startConnector = startBox.leftConnector;   break;
+                        case TSP_Connector.IEPosition.IE_P_Top:    startConnector = startBox.topConnector;    break;
+                        case TSP_Connector.IEPosition.IE_P_Right:  startConnector = startBox.rightConnector;  break;
+                        case TSP_Connector.IEPosition.IE_P_Bottom: startConnector = startBox.bottomConnector; break;
+
+                        default:
+                        {
+                            console.log("onAddLinkToView - FAILED - start connector could not be retrieved");
+                            return;
+                        }
+                    }
+
+                    let endConnector = undefined;
+
+                    // no end box unique identifier?
+                    if (endUID && endUID.length)
+                    {
+                        // get the end box on the interface
+                        let endBox = getBoxOrLink(endUID);
+
+                        // found it?
+                        if (!endBox)
+                        {
+                            console.log("onAddLinkToView - FAILED - end box could not be retrieved");
+                            return;
+                        }
+
+                        // get the end connector
+                        switch (endBox)
+                        {
+                            case TSP_Connector.IEPosition.IE_P_Left:   endConnector = endBox.leftConnector;   break;
+                            case TSP_Connector.IEPosition.IE_P_Top:    endConnector = endBox.topConnector;    break;
+                            case TSP_Connector.IEPosition.IE_P_Right:  endConnector = endBox.rightConnector;  break;
+                            case TSP_Connector.IEPosition.IE_P_Bottom: endConnector = endBox.bottomConnector; break;
+
+                            default:
+                            {
+                                console.log("onAddLinkToView - FAILED - end connector could not be retrieved");
+                                return;
+                            }
+                        }
+                    }
+
+                    // add the link on the interface
+                    let link = addLink(startConnector, endConnector, x, y, width, height, uid);
+
+                    // notify if the link was added successfully
+                    onLinkAdded(link);
+
+                    return;
+                }
+
+                default:
+                    ctPageView.doAddLink(type, uid, startUID, startPos, endUID, endPos, x, y, width, height);
+                    return;
             }
         }
     }
@@ -452,25 +538,28 @@ T.Control
     */
     function getBoxOrLink(uid)
     {
-        if (uid === undefined)
+        if (!uid || !uid.length)
         {
-            console.error("getComponent - FAILED - uid is undefined");
-            return null;
+            console.error("getBoxOrLink - FAILED - uid is undefined");
+            return undefined;
         }
 
         // iterate through page children
         for (var i = 0; i < rcPageContent.children.length; ++i)
-        {
             // is component a box or link?
-            if (!(rcPageContent.children[i] instanceof TSP_Box) && !(rcPageContent.children[i] instanceof TSP_Link))
-                continue;
+            if (rcPageContent.children[i] instanceof TSP_Box)
+            {
+                // found the matching component?
+                if (rcPageContent.children[i].boxProxy.uid === uid)
+                    return rcPageContent.children[i];
+            }
+            else
+            if (rcPageContent.children[i] instanceof TSP_Link)
+                // found the matching component?
+                if (rcPageContent.children[i].linkProxy.uid === uid)
+                    return rcPageContent.children[i];
 
-            // found the matching component?
-            if (rcPageContent.children[i].m_UID === uid)
-                return rcPageContent.children[i];
-        }
-
-        return null;
+        return undefined;
     }
 
     /**
@@ -491,7 +580,7 @@ T.Control
         if (component.status !== Component.Ready)
         {
             console.error("Add box - an error occurred while the item was created - " + component.errorString());
-            return null;
+            return undefined;
         }
 
         // build box identifier
@@ -506,6 +595,13 @@ T.Control
                                                           "height":        height,
                                                           "m_ScaleFactor": m_ScaleFactor});
 
+        // succeeded?
+        if (!item)
+        {
+            console.error("Add box - an error occurred while the item was added to page");
+            return undefined;
+        }
+
         // declare the unique identifier in the box proxy
         item.boxProxy.uid = uid;
 
@@ -518,9 +614,13 @@ T.Control
     * Adds a link component to the page
     *@param {TSP_Connector} from - connector belonging to box the link is attached from
     *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
+    *@param {number} x - label x position, in pixels
+    *@param {number} y - label y position, in pixels
+    *@param {number} width - label width, in pixels
+    *@param {number} height - label height, in pixels
     *@return {TSP_Link} added link, null on error
     */
-    function addLink(from, to, uid)
+    function addLink(from, to, x, y, width, height, uid)
     {
         // load the item component
         let component = Qt.createComponent('TSP_Link.qml');
@@ -534,7 +634,7 @@ T.Control
             if (to)
                 linkCanceled();
 
-            return null;
+            return undefined;
         }
 
         // build link identifier
@@ -546,6 +646,22 @@ T.Control
                                                           "m_From":        from,
                                                           "m_To":          to,
                                                           "m_ScaleFactor": m_ScaleFactor});
+
+        // succeeded?
+        if (!item)
+        {
+            console.error("Add link - an error occurred while the item was added to page");
+            return undefined;
+        }
+
+        // declare the unique identifier in the link proxy
+        item.linkProxy.uid = uid;
+
+        if (x >= 0 && y >= 0)
+            item.m_LabelPos = Qt.vector2d(x, y);
+
+        if (width >= 0 && height >= 0)
+            item.m_LabelSize = Qt.vector2d(width, height);
 
         // emit signal and log only if destination connector is defined
         if (to)
@@ -570,17 +686,30 @@ T.Control
         const linkUID = ppPageProxy.onAddLinkStart(from.m_Box.boxProxy.uid, from.m_Position);
 
         // failed?
-        if (linkUID === null || linkUID === undefined || !linkUID.length)
+        if (!linkUID || !linkUID.length)
         {
             console.log("Start add link - FAILED - link object could not be created");
 
             // emit signal that link adding was canceled
             linkCanceled();
 
-            return null;
+            return undefined;
         }
 
-        // add the link on the interface
-        return addLink(from, null, linkUID);
+        // get the link on the interface
+        let link = getBoxOrLink(linkUID)
+
+        // found it?
+        if (!link)
+        {
+            console.log("Start add link - FAILED - link object could not be retrieved on the interface");
+
+            // emit signal that link adding was canceled
+            linkCanceled();
+
+            return undefined;
+        }
+
+        return link;
     }
 }

@@ -29,6 +29,9 @@
 
 #include "TSP_QmlLinkProxy.h"
 
+ // core classes
+#include "Core/TSP_Link.h"
+
 //---------------------------------------------------------------------------
 // TSP_QmlLinkProxy
 //---------------------------------------------------------------------------
@@ -41,37 +44,65 @@ TSP_QmlLinkProxy::~TSP_QmlLinkProxy()
 //---------------------------------------------------------------------------
 QString TSP_QmlLinkProxy::getTitle() const
 {
-    return m_Title;
+    if (!m_pLink)
+        return "";
+
+    return QString::fromStdWString(m_pLink->GetTitle());
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlLinkProxy::getDescription() const
 {
-    return m_Description;
+    if (!m_pLink)
+        return "";
+
+    return QString::fromStdWString(m_pLink->GetDescription());
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlLinkProxy::getComments() const
 {
-    return m_Comments;
+    if (!m_pLink)
+        return "";
+
+    return QString::fromStdWString(m_pLink->GetComments());
 }
 //---------------------------------------------------------------------------
 void TSP_QmlLinkProxy::setTitle(const QString& title)
 {
-    m_Title = title;
+    if (!m_pLink)
+        return;
 
-    emit titleChanged(m_Title);
+    m_pLink->SetTitle(title.toStdWString());
+
+    emit titleChanged(title);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlLinkProxy::setDescription(const QString& description)
 {
-    m_Description = description;
+    if (!m_pLink)
+        return;
 
-    emit descriptionChanged(m_Description);
+    m_pLink->SetDescription(description.toStdWString());
+
+    emit descriptionChanged(description);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlLinkProxy::setComments(const QString& comments)
 {
-    m_Comments = comments;
+    if (!m_pLink)
+        return;
 
-    emit commentsChanged(m_Comments);
+    m_pLink->SetComments(comments.toStdWString());
+
+    emit commentsChanged(comments);
+}
+//---------------------------------------------------------------------------
+TSP_Link* TSP_QmlLinkProxy::GetLink() const
+{
+    return m_pLink;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlLinkProxy::SetLink(TSP_Link* pLink)
+{
+    m_pLink = pLink;
 }
 //---------------------------------------------------------------------------

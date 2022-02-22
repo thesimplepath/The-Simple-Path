@@ -14,6 +14,12 @@ import thesimplepath.proxys 1.0
 */
 Item
 {
+    // aliases
+    property alias linkProxy:       lpLinkProxy
+    property alias titleText:       txTitle
+    property alias descriptionText: txDescription
+    property alias commentsText:    txComments
+
     // advanced properties
     property var    m_From:        null // box start connector at which link is attached
     property var    m_To:          null // box end connector at which link is attached, if null link is dragging

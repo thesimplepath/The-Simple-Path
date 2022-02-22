@@ -79,30 +79,46 @@ class TSP_QmlPage : public TSP_Page
         *@param name - box name
         *@param description - box description
         *@param comments - box comments
-        *@param x - link x position in pixels, set to default position if -1
-        *@param y - link y position in pixels, set to default position if -1
+        *@param x - box x position in pixels, set to default position if -1
+        *@param y - box y position in pixels, set to default position if -1
+        *@param width - box width in pixels
+        *@param height - box height in pixels
         *@return newly created box
         */
         virtual TSP_Box* CreateAndAddBox(const std::wstring& name,
                                          const std::wstring& description =  L"",
                                          const std::wstring& comments    =  L"",
                                                int           x           = -1,
-                                               int           y           = -1);
+                                               int           y           = -1,
+                                               int           width       =  144,
+                                               int           height      =  93);
 
         /**
         * Creates a link and adds it in page
         *@param name - link name
         *@param description - link description
         *@param comments - link comments
+        *@param startUID - start box unique identifier from which the link is attached
+        *@param startPos - start box position from which the link is attached
+        *@param endUID - end box unique identifier to which the link is attached
+        *@param endPos - end box position from which the link is attached
         *@param x - link x position in pixels, set to default position if -1
         *@param y - link y position in pixels, set to default position if -1
+        *@param width - link width in pixels
+        *@param height - link height in pixels
         *@return newly created link
         */
-        virtual TSP_Link* CreateAndAddLink(const std::wstring& name,
-                                           const std::wstring& description =  L"",
-                                           const std::wstring& comments    =  L"",
-                                                 int           x           = -1,
-                                                 int           y           = -1);
+        virtual TSP_Link* CreateAndAddLink(const std::wstring&          name,
+                                           const std::wstring&          description =  L"",
+                                           const std::wstring&          comments    =  L"",
+                                           const std::wstring&          startUID    =  L"",
+                                                 TSP_QmlBox::IEPosition startPos    =  TSP_QmlBox::IEPosition::IE_P_None,
+                                           const std::wstring&          endUID      =  L"",
+                                                 TSP_QmlBox::IEPosition endPos      =  TSP_QmlBox::IEPosition::IE_P_None,
+                                                 int                    x           = -1,
+                                                 int                    y           = -1,
+                                                 int                    width       =  100,
+                                                 int                    height      =  50);
 
         /**
         * Removes a component
@@ -116,16 +132,43 @@ class TSP_QmlPage : public TSP_Page
         */
         virtual void Remove(TSP_Component* pComponent);
 
+    protected:
         /**
         * Creates a new box view and adds it to the user interface
         *@param pBox - box for which the view should be added
-        *@param pPageProxy - the page proxy in which the box view should be created
         *@param type - box type to create
         *@param x - box x position in pixels
         *@param y - box y position in pixels
+        *@param width - box width in pixels
+        *@param height - box height in pixels
         */
         template <class T>
-        bool CreateBoxView(T* pBox, const QString& type, int x, int y);
+        bool CreateBoxView(T* pBox, const QString& type, int x, int y, int width, int height);
+
+        /**
+        * Creates a new link view and adds it to the user interface
+        *@param pLink - link for which the view should be added
+        *@param type - link type to create
+        *@param startUID - start box unique identifier from which the link is attached
+        *@param startPos - start box position from which the link is attached
+        *@param endUID - end box unique identifier to which the link is attached
+        *@param endPos - end box position from which the link is attached
+        *@param x - link label x position in pixels
+        *@param y - link label y position in pixels
+        *@param width - link width in pixels
+        *@param height - link height in pixels
+        */
+        template <class T>
+        bool CreateLinkView(      T*                     pLink,
+                            const QString&               type,
+                            const QString&               startUID,
+                                  TSP_QmlBox::IEPosition startPos,
+                            const QString&               endUID,
+                                  TSP_QmlBox::IEPosition endPos,
+                                  int                    x,
+                                  int                    y,
+                                  int                    width,
+                                  int                    height);
 
     private:
         TSP_QmlPageProxy* m_pProxy = nullptr;
@@ -135,7 +178,7 @@ class TSP_QmlPage : public TSP_Page
 // TSP_QmlPage
 //---------------------------------------------------------------------------
 template <class T>
-bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y)
+bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y, int width, int height)
 {
     if (!pBox)
         return false;
@@ -154,7 +197,7 @@ bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y)
         boxPos = TSP_QmlPageProxy::IEBoxPosition::IE_BP_Custom;
 
     // notify page proxy that a new box should be added
-    if (!m_pProxy->AddBox(type, QString::fromStdString(pBox->GetUID()), boxPos, x, y))
+    if (!m_pProxy->AddBox(type, QString::fromStdString(pBox->GetUID()), boxPos, x, y, width, height))
         return false;
 
     // get the newly added component proxy
@@ -166,6 +209,53 @@ bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y)
     // link the box and its proxy
     pBox->SetProxy(pProxy);
     pProxy->SetBox(pBox);
+
+    return true;
+}
+//---------------------------------------------------------------------------
+template <class T>
+bool TSP_QmlPage::CreateLinkView(      T*                     pLink,
+                                 const QString&               type,
+                                 const QString&               startUID,
+                                       TSP_QmlBox::IEPosition startPos,
+                                 const QString&               endUID,
+                                       TSP_QmlBox::IEPosition endPos,
+                                       int                    x,
+                                       int                    y,
+                                       int                    width,
+                                       int                    height)
+{
+    if (!pLink)
+        return false;
+
+    if (!m_pProxy)
+        return false;
+
+    // get link unique identifier
+    const std::string uid = pLink->GetUID();
+
+    // notify page proxy that a new link should be added
+    if (!m_pProxy->AddLink(type,
+                           QString::fromStdString(pLink->GetUID()),
+                           startUID,
+                           startPos,
+                           endUID,
+                           endPos,
+                           x,
+                           y,
+                           width,
+                           height))
+        return false;
+
+    // get the newly added component proxy
+    TSP_QmlLinkProxy* pProxy = static_cast<TSP_QmlLinkProxy*>(TSP_QmlProxyDictionary::Instance()->GetProxy(uid));
+
+    if (!pProxy)
+        return false;
+
+    // link the link component and its proxy
+    pLink->SetProxy(pProxy);
+    pProxy->SetLink(pLink);
 
     return true;
 }
