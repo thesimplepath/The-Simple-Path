@@ -99,7 +99,7 @@ T.Control
                 return;
 
             // notify the page that the link is no longer dragging
-            if (m_Box && m_PageContent)
+            if (m_PageContent)
                 m_PageContent.m_DraggingMsg = false;
 
             // no document?

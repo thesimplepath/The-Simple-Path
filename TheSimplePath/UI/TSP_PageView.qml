@@ -476,25 +476,46 @@ T.Control
         let xPos;
         let yPos;
 
+        // get the x and y position on the page where the viewport is located
+        let xPage = (rcPageViewport.m_SbHorzPos * m_PageWidth);
+        let yPage = (rcPageViewport.m_SbVertPos * m_PageHeight);
+
+        // is x position out of bounds?
+        if (xPage < 0)
+            xPage = 0;
+
+        // is y position out of bounds?
+        if (yPage < 0)
+            yPage = 0;
+
         // search for position type to apply
         switch (position)
         {
             case TSP_PageView.IEBoxPosition.IE_BP_Default:
                 // default position, align to page viewport left and top
-                xPos = (rcPageViewport.m_SbHorzPos * m_PageWidth)  + m_DefX;
-                yPos = (rcPageViewport.m_SbVertPos * m_PageHeight) + m_DefY;
+                xPos = xPage + m_DefX;
+                yPos = yPage + m_DefY;
 
                 // update the default position offsets
                 calculateNextDefPos();
                 break;
 
             case TSP_PageView.IEBoxPosition.IE_BP_Centered:
+            {
+                // calculate the scaled page size and the total size
+                const scaledPageW = m_PageWidth  * m_ScaleFactor;
+                const scaledPageH = m_PageHeight * m_ScaleFactor;
+                const totalWidth  = (scaledPageW < rcPageViewport.width)  ? scaledPageW : rcPageViewport.width;
+                const totalHeight = (scaledPageH < rcPageViewport.height) ? scaledPageH : rcPageViewport.height;
+
                 // centered position, align to the center of the page viewport
-                xPos = (rcPageViewport.m_SbHorzPos * m_PageWidth)  + ((rcPageViewport.width  / 2) - (width  / 2));
-                yPos = (rcPageViewport.m_SbVertPos * m_PageHeight) + ((rcPageViewport.height / 2) - (height / 2));
+                xPos = xPage + (((totalWidth  / 2) - ((width  * m_ScaleFactor) / 2)) / m_ScaleFactor);
+                yPos = yPage + (((totalHeight / 2) - ((height * m_ScaleFactor) / 2)) / m_ScaleFactor);
                 break;
+            }
 
             case TSP_PageView.IEBoxPosition.IE_BP_Custom:
+            {
                 // custom position
                 xPos = x;
                 yPos = y;
@@ -504,14 +525,14 @@ T.Control
                 // if x is undefined (i.e -1), use the default one
                 if (xPos < 0)
                 {
-                    xPos        = m_DefX;
+                    xPos        = xPage + m_DefX;
                     doUseDefPos = true;
                 }
 
                 // if y is undefined (i.e -1), use the default one
                 if (yPos < 0)
                 {
-                    yPos        = m_DefY;
+                    yPos        = yPage + m_DefY;
                     doUseDefPos = true;
                 }
 
@@ -520,6 +541,7 @@ T.Control
                     calculateNextDefPos();
 
                 break;
+            }
 
             default:
                 // no position defined
@@ -527,6 +549,10 @@ T.Control
                 yPos = 0;
                 break;
         }
+
+        // limit the box position in the page bounds
+        xPos = JSHelper.clamp(xPos, 0, rcPageContent.width  - width);
+        yPos = JSHelper.clamp(yPos, 0, rcPageContent.height - height);
 
         return [xPos, yPos];
     }

@@ -213,6 +213,7 @@ Item
             radius:       3
             z:            rcBackground.activeFocus ? -1 : 0
             clip:         true
+            visible:      (m_To !== undefined)
 
             /**
             * Title
