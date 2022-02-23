@@ -85,8 +85,9 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Box:      rcConnectors.parent
-            m_Position: TSP_Connector.IEPosition.IE_P_Left
+            m_Box:         rcConnectors.parent
+            m_Position:    TSP_Connector.IEPosition.IE_P_Left
+            m_ScaleFactor: ctBox.m_ScaleFactor;
         }
 
         /**
@@ -102,8 +103,9 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Box:      rcConnectors.parent
-            m_Position: TSP_Connector.IEPosition.IE_P_Top
+            m_Box:         rcConnectors.parent
+            m_Position:    TSP_Connector.IEPosition.IE_P_Top
+            m_ScaleFactor: ctBox.m_ScaleFactor;
         }
 
         /**
@@ -119,8 +121,9 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Box:      rcConnectors.parent
-            m_Position: TSP_Connector.IEPosition.IE_P_Right
+            m_Box:         rcConnectors.parent
+            m_Position:    TSP_Connector.IEPosition.IE_P_Right
+            m_ScaleFactor: ctBox.m_ScaleFactor;
         }
 
         /**
@@ -136,8 +139,9 @@ T.Control
             visible: true
 
             // advanced properties
-            m_Box:      rcConnectors.parent
-            m_Position: TSP_Connector.IEPosition.IE_P_Bottom
+            m_Box:         rcConnectors.parent
+            m_Position:    TSP_Connector.IEPosition.IE_P_Bottom
+            m_ScaleFactor: ctBox.m_ScaleFactor;
         }
     }
 

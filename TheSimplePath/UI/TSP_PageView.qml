@@ -64,7 +64,7 @@ T.Control
         id: ppPageProxy
         objectName: "ppPageProxy"
 
-        /// called when a box should be added to the view
+        /// Called when a box should be added to the view
         onAddBoxToView: function(type, uid, position, x, y, width, height)
         {
             // search for box type to create
@@ -91,7 +91,7 @@ T.Control
             }
         }
 
-        /// called when a link should be added to the view
+        /// Called when a link should be added to the view
         onAddLinkToView: function(type, uid, startUID, startPos, endUID, endPos, x, y, width, height)
         {
             // search for link type to create
@@ -216,7 +216,7 @@ T.Control
             hoverEnabled: true
             cursorShape: rcPageContent.m_DraggingMsg ? Qt.CrossCursor : (m_Panning ? Qt.ClosedHandCursor : Qt.OpenHandCursor);
 
-            /// called when mouse is pressed above page
+            /// Called when mouse is pressed above page
             onPressed: function(mouseEvent)
             {
                 if (m_Target)
@@ -227,13 +227,13 @@ T.Control
                 m_Panning = true;
             }
 
-            /// called when mouse is released after been pressed above page
+            /// Called when mouse is released after been pressed above page
             onReleased: function(mouseEvent)
             {
                 m_Panning = false;
             }
 
-            /// called when mouse position changed above page
+            /// Called when mouse position changed above page
             onPositionChanged: function(mouseEvent)
             {
                 // do nothing if mouse button is not pressed
@@ -241,18 +241,18 @@ T.Control
                     return;
 
                 // calculate next horizontal scroll position, and apply it
-                let deltaX                 = (m_PrevX - mouseEvent.x) / rcPageContainer.width;
+                const deltaX               = (m_PrevX - mouseEvent.x) / rcPageContainer.width;
                 rcPageViewport.m_SbHorzPos = JSHelper.clamp(rcPageViewport.m_SbHorzPos + deltaX, 0.0, 1.0 - (rcPageViewport.m_SbHorzSize));
 
                 // calculate next vertical scroll position, and apply it
-                let deltaY                 = (m_PrevY - mouseEvent.y) / rcPageContainer.height;
+                const deltaY               = (m_PrevY - mouseEvent.y) / rcPageContainer.height;
                 rcPageViewport.m_SbVertPos = JSHelper.clamp(rcPageViewport.m_SbVertPos + deltaY, 0.0, 1.0 - (rcPageViewport.m_SbVertSize));
 
                 m_PrevX = mouseEvent.x;
                 m_PrevY = mouseEvent.y;
             }
 
-            /// called when mouse wheel was rolled above page
+            /// Called when mouse wheel was rolled above page
             onWheel: function(mouseWheel)
             {
                 // do change the zoom level?
@@ -331,7 +331,7 @@ T.Control
                     id: cvPageBackground
                     anchors.fill: parent
 
-                    /// called when canvas is painted
+                    /// Called when canvas is painted
                     onPaint:
                     {
                         // get drawing context
@@ -361,7 +361,7 @@ T.Control
                     }
                 }
 
-                /// called when auto-scroll should be applied
+                /// Called when auto-scroll should be applied
                 onDoAutoScroll: function(minX, maxX, minY, maxY)
                 {
                     // auto-scroll the page on x axis if the box exceeds its viewport limits
@@ -383,7 +383,7 @@ T.Control
                                 JSHelper.clamp(rcPageViewport.m_SbVertPos + m_AutoScrollSpeed, 0.0, 1.0 - rcPageViewport.m_SbVertSize);
                 }
 
-                /// called when page scale changed
+                /// Called when page scale changed
                 onPageScaleChanged:
                 {
                     // recalculate the scroll position and size
