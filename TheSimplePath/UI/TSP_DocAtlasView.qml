@@ -93,12 +93,12 @@ T.Control
     /**
     * Creates a new page and adds it to the atlas view
     *@param {string} uid - page unique identifier
-    *@return newly created page, null on error
+    *@return newly created page, undefined on error
     */
     function addPage(uid)
     {
         // cannot create a page if its uid is invalid
-        if (!uid.length)
+        if (!uid || !uid.length)
         {
             console.error("Add page - FAILED - cannot create page if unique identifier is empty");
             return undefined;
@@ -148,7 +148,7 @@ T.Control
     function removePage(uid)
     {
         // cannot remove a page if its uid is invalid
-        if (!uid.length)
+        if (!uid || !uid.length)
             return;
 
         console.log("Remove page - uid - " + uid);
@@ -157,7 +157,7 @@ T.Control
 
         // iterate through page view stack until find the view to delete, and deletes it
         for (var i = slPageStack.children.length - 1; i >= 0; --i)
-            // found the atlas to delete?
+            // found the page to delete?
             if (slPageStack.children[i].m_Type        === "TSP_DocPageView" &&
                !slPageStack.children[i].m_Deleted                           &&
                 slPageStack.children[i].pageProxy.uid === uid)

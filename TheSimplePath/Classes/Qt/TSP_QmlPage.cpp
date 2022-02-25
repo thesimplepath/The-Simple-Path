@@ -120,11 +120,31 @@ TSP_Link* TSP_QmlPage::CreateAndAddLink(const std::wstring&          name,
 //---------------------------------------------------------------------------
 void TSP_QmlPage::Remove(const std::string& uid)
 {
+    if (uid.empty())
+        return;
+
+    DeleteComponentView(QString::fromStdString(uid));
     TSP_Page::Remove(uid);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlPage::Remove(TSP_Component* pComponent)
 {
+    if (!pComponent)
+        return;
+
+    DeleteComponentView(QString::fromStdString(pComponent->GetUID()));
     TSP_Page::Remove(pComponent);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPage::DeleteComponentView(const QString& uid)
+{
+    if (uid.isEmpty())
+        return;
+
+    if (!m_pProxy)
+        return;
+
+    // notify page proxy that a component should be deleted
+    m_pProxy->DeleteComponent(uid);
 }
 //---------------------------------------------------------------------------

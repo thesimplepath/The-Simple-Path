@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.1
 import QtQuick.Templates 2.15 as T
 
 // javascript
@@ -54,6 +55,46 @@ T.Control
     // common properties
     id:         ctPageView
     objectName: "ctPageView"
+
+    /**
+    * Question message dialog asking to user if the associated links should be deleted with the box
+    */
+    MessageDialog
+    {
+        // properties
+        property var m_Box: undefined
+
+        // common properties
+        id: mdConfirmDelLinks
+        objectName: "mdConfirmDelLinks"
+        title: qsTrId("delete-attached-links-title")
+        text: qsTrId("delete-attached-links-text")
+        detailedText: qsTrId("delete-attached-links-detailed-text")
+        icon: StandardIcon.Question
+        standardButtons: StandardButton.Yes | StandardButton.No
+        visible: false
+
+        /// called when user clicked on the Yes button
+        onYes:
+        {
+            console.log("Delete selected component - box - user ACCEPTED to delete attached links");
+
+            // delete box and attached links
+            deleteBox(m_Box, true);
+
+            // close the dialog box
+            close();
+        }
+
+        /// called when user clicked on the No button
+        onNo:
+        {
+            console.log("Delete selected component - box - user REFUSED to delete attached links - CANCELED");
+
+            // close the dialog box
+            close();
+        }
+    }
 
     /**
     * Page proxy
@@ -178,6 +219,12 @@ T.Control
                     ctPageView.doAddLink(type, uid, startUID, startPos, endUID, endPos, x, y, width, height);
                     return;
             }
+        }
+
+        /// Called when a component should be deleted fro the page
+        onDeleteComponentView: function(uid)
+        {
+            deleteComponent(uid);
         }
     }
 
@@ -446,6 +493,49 @@ T.Control
         }
     }
 
+    /// called when the delete key is pressed
+    Keys.onDeletePressed: function(keyEvent)
+    {
+        console.log("GUI - delete selected component");
+
+        // get selected item
+        const selectedItem = getSelected();
+
+        // no selection?
+        if (!selectedItem)
+        {
+            console.log("Delete selected component - no selection");
+            return;
+        }
+
+        // is selection a box or a link?
+        if (selectedItem instanceof TSP_Box)
+        {
+            console.log("Delete selected component - box - " + selectedItem.boxProxy.uid);
+
+            // is box connected to something?
+            if (selectedItem.leftConnector.m_Links.length  ||
+                selectedItem.topConnector.m_Links.length   ||
+                selectedItem.rightConnector.m_Links.length ||
+                selectedItem.bottomConnector.m_Links.length)
+            {
+                console.log("Delete selected component - box - several links attached - confirm with user");
+
+                // show the "Do delete attached links?" dialog box
+                mdConfirmDelLinks.m_Box = selectedItem;
+                mdConfirmDelLinks.open();
+                return;
+            }
+
+            // delete box
+            deleteBox(selectedItem, false);
+        }
+        else
+        if (selectedItem instanceof TSP_Link)
+            // delete link
+            deleteLink(selectedItem);
+    }
+
     /**
     * Calculates the next available default position
     */
@@ -560,7 +650,7 @@ T.Control
     /**
     * Gets a box or a link by its unique identifier
     *@param {string} uid - unique identifier to search
-    *@return box or link, null if not found or on error
+    *@return box or link, undefined if not found or on error
     */
     function getBoxOrLink(uid)
     {
@@ -589,13 +679,37 @@ T.Control
     }
 
     /**
+    * Gets the currently selected item on page
+    *@return the currently selected item on page, undefined if no selection
+    */
+    function getSelected()
+    {
+        // iterate through page children
+        for (var i = 0; i < rcPageContent.children.length; ++i)
+            // is component a box or link?
+            if (rcPageContent.children[i] instanceof TSP_Box)
+            {
+                // found the active box?
+                if (rcPageContent.children[i].activeFocus)
+                    return rcPageContent.children[i];
+            }
+            else
+            if (rcPageContent.children[i] instanceof TSP_Link)
+                // found the active link?
+                if (rcPageContent.children[i].background.activeFocus)
+                    return rcPageContent.children[i];
+
+        return undefined;
+    }
+
+    /**
     * Adds a box component to the page
     *@param {number} x - component x position, in pixels
     *@param {number} y - component y position, in pixels
     *@param {number} width - component width, in pixels
     *@param {number} height - component height, in pixels
     *@param {string} uid - box unique identifier
-    *@return {TSP_Box} added box, null on error
+    *@return {TSP_Box} added box, undefined on error
     */
     function addBox(x, y, width, height, uid)
     {
@@ -639,12 +753,13 @@ T.Control
     /**
     * Adds a link component to the page
     *@param {TSP_Connector} from - connector belonging to box the link is attached from
-    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if null the link is dragging
+    *@param {TSP_Connector} to - connector belonging to box the link is attached to, if undefined the link is dragging
     *@param {number} x - label x position, in pixels
     *@param {number} y - label y position, in pixels
     *@param {number} width - label width, in pixels
     *@param {number} height - label height, in pixels
-    *@return {TSP_Link} added link, null on error
+    *@param {string} uid - link unique identifier
+    *@return {TSP_Link} added link, undefined on error
     */
     function addLink(from, to, x, y, width, height, uid)
     {
@@ -704,7 +819,7 @@ T.Control
     /**
     * Called when starting to add a link
     *@param {TSP_Connector} from - connector belonging to box the link starts from
-    *@return {TSP_Link} added link, null on error
+    *@return {TSP_Link} added link, undefined on error
     */
     function startAddLink(from)
     {
@@ -723,7 +838,7 @@ T.Control
         }
 
         // get the link on the interface
-        let link = getBoxOrLink(linkUID)
+        let link = getBoxOrLink(linkUID);
 
         // found it?
         if (!link)
@@ -737,5 +852,96 @@ T.Control
         }
 
         return link;
+    }
+
+    /**
+    * Deletes a box
+    *@param box - box to delete
+    *@param doDelAttachedLinks - if true, attached links will also be deleted
+    */
+    function deleteBox(box, doDelAttachedLinks)
+    {
+        if (!box)
+            return;
+
+        // do delete attached links?
+        if (doDelAttachedLinks)
+        {
+            // delete left links
+            for (let leftLink of box.leftConnector.m_Links)
+                deleteLink(leftLink);
+
+            // delete top links
+            for (let topLink of box.topConnector.m_Links)
+                deleteLink(topLink);
+
+            // delete right links
+            for (let rightLink of box.rightConnector.m_Links)
+                deleteLink(rightLink);
+
+            // delete bottom links
+            for (let bottomLink of box.bottomConnector.m_Links)
+                deleteLink(bottomLink);
+        }
+
+        // delete box
+        ppPageProxy.onDeleteBox(box.boxProxy.uid);
+    }
+
+    /**
+    * Deletes a link
+    *@param link - link to delete
+    */
+    function deleteLink(link)
+    {
+        if (!link)
+            return;
+
+        // unbind link from start box
+        if (link.m_From)
+            link.unbindMsgFromBox(link.m_From.m_Box);
+
+        // unbind link from end box
+        if (link.m_To)
+            link.unbindMsgFromBox(link.m_To.m_Box);
+
+        ppPageProxy.onDeleteLink(link.linkProxy.uid);
+    }
+
+    /**
+    * Deletes a component from the page
+    *@param {string} uid - component unique identifier to delete
+    */
+    function deleteComponent(uid)
+    {
+        // get the component to delete from the interface
+        let component = getBoxOrLink(uid);
+
+        // found it?
+        if (!component)
+            return;
+
+        console.log("Delete component - uid - " + uid);
+
+        // iterate through page view stack until find the view to delete, and deletes it
+        for (var i = rcPageContent.children.length - 1; i >= 0; --i)
+            // found the component to delete?
+            if ((rcPageContent.children[i] instanceof TSP_Box    &&
+                !rcPageContent.children[i].m_Deleted             &&
+                 rcPageContent.children[i].boxProxy.uid === uid) ||
+                (rcPageContent.children[i] instanceof TSP_Link   &&
+                !rcPageContent.children[i].m_Deleted             &&
+                 rcPageContent.children[i].linkProxy.uid === uid))
+                {
+                    // NOTE setting the deleted property just before destroying the component may seem incoherent,
+                    // however the destroyed item is kept in memory until the garbage collector deletes it, and may
+                    // be thus still found when the children are iterated. This may cause a deleting item to be
+                    // processed as a normal item in other situations where it shouldn't
+                    rcPageContent.children[i].m_Deleted = true;
+                    rcPageContent.children[i].destroy();
+                    break;
+                }
+
+        console.log("Delete component - succeeded");
     }
 }

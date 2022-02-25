@@ -19,10 +19,11 @@ Item
     property alias titleText:       txTitle
     property alias descriptionText: txDescription
     property alias commentsText:    txComments
+    property alias background:      rcBackground
 
     // advanced properties
-    property var    m_From:        null // box start connector at which link is attached
-    property var    m_To:          null // box end connector at which link is attached, if null link is dragging
+    property var    m_From:        undefined // box start connector at which link is attached
+    property var    m_To:          undefined // box end connector at which link is attached, if undefined link is dragging
     property var    m_PageContent: parent
     property var    m_StartPoint:  getStartPoint()
     property var    m_CenterPoint: getCenterPoint()
@@ -31,12 +32,12 @@ Item
                                                m_StartPoint.y + (((m_EndPoint.y - m_StartPoint.y) / 2.0) - (m_LabelSize.y / 2.0)))
     property var    m_LabelSize:   Qt.vector2d(100, 50)
     property var    m_ArrowSize:   Qt.vector2d(3,   10)
-    property string m_UID:         ""
     property string m_Color:       "#202020"
     property string m_BgColor:     "white"
     property string m_TextColor:   Styles.m_DarkTextColor
     property real   m_ScaleFactor: 1
     property int    m_TextMargin:  2
+    property bool   m_Deleted:     false
 
     // common properties
     id: itLink
@@ -171,7 +172,7 @@ Item
         width:      m_LabelSize.x
         height:     m_LabelSize.y
         color:      "transparent"
-        visible:    m_From !== null && m_To !== null
+        visible:    m_From !== undefined && m_To !== undefined
 
         // signals
         signal moveStart()
@@ -213,7 +214,6 @@ Item
             radius:       3
             z:            rcBackground.activeFocus ? -1 : 0
             clip:         true
-            visible:      (m_To !== undefined)
 
             /**
             * Title
@@ -491,20 +491,13 @@ Item
     */
     onBindTo: function(connector)
     {
-        //console.log("onBindTo - " + connector.objectName + " - " + connector.m_UID);
+        //console.log("onBindTo - " + connector.objectName + " - " + connector.m_Box.boxProxy.uid);
 
         if (!connector)
             return;
 
         // set the new connector
         m_To = connector;
-    }
-
-    /// called when component was fully created
-    Component.onCompleted:
-    {
-        // get and link the unique identifier created in the c++ proxy class
-        m_UID = lpLinkProxy.uid;
     }
 
     /**

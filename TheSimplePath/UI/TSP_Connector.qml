@@ -30,7 +30,7 @@ T.Control
     property alias connectorMouseArea: maConnector
 
     // advanced properties
-    property var  m_Box:         null
+    property var  m_Box:         undefined
     property var  m_Links:       []
     property real m_ScaleFactor: 1
     property int  m_Position:    TSP_Connector.IEPosition.IE_P_None
@@ -62,7 +62,7 @@ T.Control
     MouseArea
     {
         // advanced properties
-        property var  m_AddingLinkItem:  null
+        property var  m_AddingLinkItem:  undefined
         property real m_AutoScrollSpeed: 0.0025
 
         // common properties

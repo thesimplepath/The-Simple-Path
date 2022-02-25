@@ -170,6 +170,12 @@ class TSP_QmlPage : public TSP_Page
                                   int                    width,
                                   int                    height);
 
+        /**
+        * Deletes a component view from the user interface
+        *@param uid - box unique identifier to delete
+        */
+        void DeleteComponentView(const QString& uid);
+
     private:
         TSP_QmlPageProxy* m_pProxy = nullptr;
 };

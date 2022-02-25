@@ -29,6 +29,16 @@
 
 #include "TSP_QmlProxyDictionary.h"
 
+// common classes
+#ifdef _DEBUG
+    #include "Common/TSP_Logger.h"
+#endif
+
+// qt classes
+#ifdef _DEBUG
+    #include "Qt/TSP_QmlProxy.h"
+#endif
+
 //---------------------------------------------------------------------------
 // Static members
 //---------------------------------------------------------------------------
@@ -191,4 +201,21 @@ std::string TSP_QmlProxyDictionary::GetUID(void* pProxy) const
 
     return "";
 }
+//---------------------------------------------------------------------------
+#ifdef _DEBUG
+    void TSP_QmlProxyDictionary::Log() const
+    {
+        M_Log("Qml proxy dictionary - dictionary content");
+
+        for (IDictionary::const_iterator it = m_Dictionary.begin(); it != m_Dictionary.end(); ++it)
+            M_Log("Item - first - " << it->first << " - second (uid) - "
+                    << static_cast<TSP_QmlProxy*>(it->second)->getUID().toStdString());
+
+        M_Log("Qml proxy dictionary - reverse dictionary content");
+
+        for (IReverseDictionary::const_iterator it = m_ReverseDictionary.begin(); it != m_ReverseDictionary.end(); ++it)
+            M_Log("Item - first (uid) - " << static_cast<TSP_QmlProxy*>(it->first)->getUID().toStdString()
+                    << " - second - " << it->second);
+    }
+#endif
 //---------------------------------------------------------------------------

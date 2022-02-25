@@ -28,7 +28,7 @@ T.Control
     property alias handleRect: rcHandle
 
     // advanced properties
-    property var    m_Target:      null
+    property var    m_Target:      undefined
     property string m_Color:       "#c0c0c0"
     property string m_BorderColor: "black"
     property int    m_Direction:   IEDirection.IE_D_None

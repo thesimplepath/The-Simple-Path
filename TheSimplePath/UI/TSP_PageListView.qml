@@ -61,6 +61,8 @@ T.Frame
                 /// called when button is clicked
                 onClicked:
                 {
+                    console.log("GUI - Add page clicked");
+
                     if (tspPageListModel)
                         tspPageListModel.onAddPageClicked();
                 }
@@ -86,6 +88,8 @@ T.Frame
                 /// called when button is clicked
                 onClicked:
                 {
+                    console.log("GUI - Delete page clicked");
+
                     if (tspPageListModel)
                         tspPageListModel.onDeletePageClicked();
                 }

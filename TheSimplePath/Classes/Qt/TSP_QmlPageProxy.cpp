@@ -106,14 +106,14 @@ bool TSP_QmlPageProxy::AddLink(const QString&               type,
     return m_LinkAdded;
 }
 //---------------------------------------------------------------------------
+void TSP_QmlPageProxy::DeleteComponent(const QString& uid)
+{
+    emit deleteComponentView(uid);
+}
+//---------------------------------------------------------------------------
 void TSP_QmlPageProxy::onBoxAdded(bool success)
 {
     m_BoxAdded = success;
-}
-//---------------------------------------------------------------------------
-void TSP_QmlPageProxy::onLinkAdded(bool success)
-{
-    m_LinkAdded = success;
 }
 //---------------------------------------------------------------------------
 QString TSP_QmlPageProxy::onAddLinkStart(const QString& fromUID, int position)
@@ -145,5 +145,34 @@ QString TSP_QmlPageProxy::onAddLinkStart(const QString& fromUID, int position)
 
     // get newly added link unique identifier
     return QString::fromStdString(pLink->GetUID());
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::onLinkAdded(bool success)
+{
+    m_LinkAdded = success;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::onDeleteBox(const QString& uid)
+{
+    if (uid.isEmpty())
+        return;
+
+    if (!m_pPage)
+        return;
+
+    // remove the box from page
+    m_pPage->Remove(uid.toStdString());
+}
+//---------------------------------------------------------------------------
+void TSP_QmlPageProxy::onDeleteLink(const QString& uid)
+{
+    if (uid.isEmpty())
+        return;
+
+    if (!m_pPage)
+        return;
+
+    // remove the link from page
+    m_pPage->Remove(uid.toStdString());
 }
 //---------------------------------------------------------------------------

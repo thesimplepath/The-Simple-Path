@@ -95,6 +95,7 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                  int      y,
                                  int      width,
                                  int      height);
+        void deleteComponentView(const QString& uid);
 
     public:
         /**
@@ -162,6 +163,12 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                    int                    height);
 
         /**
+        * Deletes a component view from the page
+        *@param uid - page unique identifier to delete
+        */
+        virtual void DeleteComponent(const QString& uid);
+
+        /**
         * Notify that a box was added
         *@param success - if true, the box was added successfully
         */
@@ -180,6 +187,18 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         *@param success - if true, the link was added successfully
         */
         virtual Q_INVOKABLE void onLinkAdded(bool success);
+
+        /**
+        * Notify that a box should be deleted
+        *@param uid - box unique identifier to delete
+        */
+        virtual Q_INVOKABLE void onDeleteBox(const QString& uid);
+
+        /**
+        * Notify that a link should be deleted
+        *@param uid - link unique identifier to delete
+        */
+        virtual Q_INVOKABLE void onDeleteLink(const QString& uid);
 
     private:
         TSP_Page* m_pPage     = nullptr;

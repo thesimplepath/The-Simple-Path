@@ -26,7 +26,7 @@ ApplicationWindow
     visible: true
     width: 800
     height: 600
-    title: qsTr("The Simple Path")
+    title: qsTrId("app-name")
 
     /**
     * Error message dialog
@@ -70,11 +70,13 @@ ApplicationWindow
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            text: qsTr("New document")
+            text: qsTrId("new-document")
 
             /// called when button is clicked
             onClicked:
             {
+                console.log("GUI - New document clicked");
+
                 if (m_MainFormModel)
                     m_MainFormModel.onNewDocumentClicked();
             }
@@ -91,11 +93,13 @@ ApplicationWindow
             anchors.left: btNewDocument.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            text: qsTr("Close document")
+            text: qsTrId("close-document")
 
             /// called when button is clicked
             onClicked:
             {
+                console.log("GUI - Close document clicked");
+
                 if (m_MainFormModel)
                     m_MainFormModel.onCloseDocumentClicked();
             }
@@ -112,11 +116,13 @@ ApplicationWindow
             anchors.left: btCloseDocument.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            text: qsTr("Add process")
+            text: qsTrId("add-process")
 
             /// called when button is clicked
             onClicked:
             {
+                console.log("GUI - Add process clicked");
+
                 if (m_MainFormModel)
                     m_MainFormModel.onAddProcessClicked();
             }
@@ -244,7 +250,7 @@ ApplicationWindow
             }
 
             // update the form title
-            title = qsTr("The Simple Path") + " - " + name;
+            title = qsTrId("app-name") + " - " + name;
         }
 
         /**
@@ -255,7 +261,7 @@ ApplicationWindow
             deleteDocumentView();
 
             // update the form title
-            title = qsTr("The Simple Path");
+            title = qsTrId("app-name");
         }
     }
 
@@ -263,7 +269,7 @@ ApplicationWindow
     * Creates a new document view
     *@param {string} name - document name
     *@param {number} openedCount - document opened count
-    *@return newly created document, null on error
+    *@return newly created document, undefined on error
     */
     function createDocumentView(name, openedCount)
     {

@@ -85,6 +85,13 @@ class TSP_QmlProxyDictionary
         */
         std::string GetUID(void* pProxy) const;
 
+        /**
+        * Logs the proxy dictionary content
+        */
+        #ifdef _DEBUG
+            void Log() const;
+        #endif
+
     private:
         /**
         * Instance class, needed to allow unique_ptr usage despite of singleton privacy and without

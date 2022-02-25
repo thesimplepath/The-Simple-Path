@@ -282,7 +282,7 @@ TSP_PageView
     /**
     * Adds a message component to the document
     *@param {TSP_Connector} from - connector belonging to symbol the message is attached from
-    *@param {TSP_Connector} to - connector belonging to symbol the message is attached to, if null the message is dragging
+    *@param {TSP_Connector} to - connector belonging to symbol the message is attached to, if undefined the message is dragging
     */
     function addMessage(from, to)
     {
@@ -321,12 +321,12 @@ TSP_PageView
     /**
     * Called when starting to add a link
     *@param {TSP_Connector} from - connector belonging to box the link starts from
-    *@return {TSP_Link} added link, null on error
+    *@return {TSP_Link} added link, undefined on error
     */
     /*FIXME RE-ENABLE WHEN READY
     function startAddLink(from)
     {
-        return addMessage(from, null);
+        return addMessage(from, undefined);
     }
     */
 

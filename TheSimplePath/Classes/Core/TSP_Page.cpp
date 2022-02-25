@@ -72,7 +72,7 @@ TSP_Link* TSP_Page::CreateAndAddLink(const std::wstring& name,
 //---------------------------------------------------------------------------
 void TSP_Page::Remove(const std::string& uid)
 {
-    Remove(Get(uid));
+    TSP_Page::Remove(Get(uid));
 }
 //---------------------------------------------------------------------------
 void TSP_Page::Remove(TSP_Component* pComponent)

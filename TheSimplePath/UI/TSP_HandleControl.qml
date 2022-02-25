@@ -12,7 +12,7 @@ T.Control
     property alias handleBackground: rcHandleControl
 
     // advanced properties
-    property var    m_Target:            null
+    property var    m_Target:            undefined
     property string m_Color:             "transparent"
     property string m_BorderColor:       "#202020"
     property string m_HandleColor:       "#c0c0c0"

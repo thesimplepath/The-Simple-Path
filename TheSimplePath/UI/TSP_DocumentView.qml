@@ -141,7 +141,7 @@ T.Control
     /**
     * Creates a new atlas and adds it to the document view
     *@param {string} uid - atlas unique identifier
-    *@return newly created atlas, null on error
+    *@return newly created atlas, undefined on error
     */
     function addAtlas(uid)
     {

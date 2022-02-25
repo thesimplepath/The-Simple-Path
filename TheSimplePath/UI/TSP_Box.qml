@@ -39,6 +39,7 @@ T.Control
     property int    m_BorderWidth:       1
     property int    m_Radius:            3
     property int    m_TextMargin:        2
+    property bool   m_Deleted:           false
 
     // common properties
     id: ctBox
