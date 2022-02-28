@@ -18,6 +18,39 @@ TSP_PageView
     m_PageWidth:  m_MainFormModel.getPageWidth()
     m_PageHeight: m_MainFormModel.getPageHeight()
 
+    /// called when a new box view should be added to page
+    onDoAddBox: function(type, uid, position, x, y, width, height)
+    {
+        // search for symbol type to create
+        switch (type)
+        {
+            case "":
+            case "process":
+            {
+                // calculate the process position
+                const [xPos, yPos] = getBoxPosition(position, x, y, width, height);
+
+                let process;
+
+                // add a process to the page
+                if (width === -1 || height === -1)
+                    process = addProcessDefSize(xPos, yPos, uid);
+                else
+                    process = addProcess(xPos, yPos, width, height, uid);
+
+                // notify if the box was added successfully
+                pageProxy.onBoxAdded(process);
+
+                return;
+            }
+        }
+    }
+
+    /// called when a new link view should be added to page
+    onDoAddLink: function(type, uid, startUID, startPos, endUID, endPos, x, y, width, height)
+    {
+    }
+
     /**
     * Adds a start component to the document, with a default size
     *@param {number} x - component x position, in pixels
@@ -88,13 +121,15 @@ TSP_PageView
     * Adds a process component to the document, with a default size
     *@param {number} x - component x position, in pixels
     *@param {number} y - component y position, in pixels
+    *@param {string} uid - process unique identifier
     */
-    function addProcessDefSize(x, y)
+    function addProcessDefSize(x, y, uid)
     {
         return addProcess(x,
                           y,
                           m_PageWidth  * 0.18,
-                          m_PageHeight * 0.082);
+                          m_PageHeight * 0.082,
+                          uid);
     }
 
     /**
@@ -103,8 +138,9 @@ TSP_PageView
     *@param {number} y - component y position, in pixels
     *@param {number} width - component width, in pixels
     *@param {number} height - component height, in pixels
+    *@param {string} uid - process unique identifier
     */
-    function addProcess(x, y, width, height)
+    function addProcess(x, y, width, height, uid)
     {
         return addSymbol("process",
                          x,
@@ -114,7 +150,8 @@ TSP_PageView
                          false,
                          false,
                          false,
-                         false);
+                         false,
+                         uid);
     }
 
     /**
@@ -203,6 +240,11 @@ TSP_PageView
     *@param {number} y - component y position, in pixels
     *@param {number} width - component width, in pixels
     *@param {number} height - component height, in pixels
+    *@param {bool} leftConnVisible - if true, the left connector is visible on the symbol
+    *@param {bool} topConnVisible - if true, the top connector is visible on the symbol
+    *@param {bool} rightConnVisible - if true, the right connector is visible on the symbol
+    *@param {bool} bottomConnVisible - if true, the bottom connector is visible on the symbol
+    *@param {string} uid - process unique identifier
     */
     function addSymbol(name,
                        x,
@@ -212,7 +254,8 @@ TSP_PageView
                        leftConnVisible,
                        topConnVisible,
                        rightConnVisible,
-                       bottomConnVIsible)
+                       bottomConnVisible,
+                       uid)
     {
         let componentName;
 
@@ -246,12 +289,15 @@ TSP_PageView
             return;
         }
 
-        const connectorWidth  = 14;
-        const connectorHeight = 14;
+        const connectorWidth  = Styles.m_ConnectorWidth;
+        const connectorHeight = Styles.m_ConnectorHeight;
+
+        // build symbol identifier
+        const symbolId = "bxSymbol_" + uid;
 
         // create and show new item object
-        let item = component.createObject(pageContent, {"id":                      "bxSymbol" + m_GenIndex,
-                                                        "objectName":              "bxSymbol" + m_GenIndex,
+        let item = component.createObject(pageContent, {"id":                      symbolId,
+                                                        "objectName":              symbolId,
                                                         "x":                       x,
                                                         "y":                       y,
                                                         "width":                   width,
@@ -264,17 +310,19 @@ TSP_PageView
                                                         "leftConnector.visible":   leftConnVisible,
                                                         "topConnector.visible":    topConnVisible,
                                                         "rightConnector.visible":  rightConnVisible,
-                                                        "bottomConnector.visible": bottomConnVIsible});
+                                                        "bottomConnector.visible": bottomConnVisible});
+
+        // succeeded?
+        if (!item)
+        {
+            console.error("Add symbol - an error occurred while the symbol was added to page");
+            return undefined;
+        }
+
+        // declare the unique identifier in the symbol proxy
+        item.boxProxy.uid = uid;
 
         console.log("Add symbol - succeeded - name - " + name + " - id - " + item.objectName);
-
-        ++m_GenIndex; // REM FIXME
-
-        /*REM FIXME
-        // notify page model that a symbol was added
-        if (pvPageView.m_Model)
-            pvPageView.m_Model.onSymbolAdded(pvPageView.m_UID, item.m_UID);
-        */
 
         return item;
     }

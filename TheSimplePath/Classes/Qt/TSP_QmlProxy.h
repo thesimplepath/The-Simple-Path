@@ -57,6 +57,10 @@ class TSP_QmlProxy : public QObject
         void setUID(const QString& uid);
 
     signals:
+        /**
+        * Called when the unique identifier changed
+        *@param uid - unique identifier
+        */
         void uidChanged(const QString& uid);
 
     public:

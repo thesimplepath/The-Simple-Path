@@ -46,3 +46,13 @@ TSP_QmlProcess::TSP_QmlProcess(const std::wstring&     title,
 TSP_QmlProcess::~TSP_QmlProcess()
 {}
 //---------------------------------------------------------------------------
+TSP_QmlBoxProxy* TSP_QmlProcess::GetProxy() const
+{
+    return m_pProxy;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlProcess::SetProxy(TSP_QmlBoxProxy* pProxy)
+{
+    m_pProxy = pProxy;
+}
+//---------------------------------------------------------------------------

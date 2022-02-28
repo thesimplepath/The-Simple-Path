@@ -47,39 +47,11 @@ class TSP_PageListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    /*REM
-    public:
-        Q_PROPERTY(QString itemName READ getItemName WRITE setItemName NOTIFY itemNameChanged);
-        Q_PROPERTY(QString selectedAtlasUID READ getSelectedAtlasUID WRITE setSelectedAtlasUID NOTIFY selectedAtlasUIDChanged);
-    */
-
-    //REM
-    //public slots:
-    //    /**
-    //    * Gets the document status
-    //    *@return the document status
-    //    */
-    //    int getDocStatus() const;
-
-    //    /**
-    //    * Sets the document status
-    //    *@param status - the document status
-    //    */
-    //    void setDocStatus(int status);
-
-    //    /**
-    //    * Gets the selected atlas unique identifier
-    //    *@return the selected atlas unique identifier
-    //    */
-    //    QString getSelectedAtlasUID() const;
-
-    //    /**
-    //    * Sets the selected atlas unique identifier
-    //    *@param uid - the selected atlas unique identifier
-    //    */
-    //    void setSelectedAtlasUID(QString uid);
-
     signals:
+        /**
+        * Called when the selected page should be shown
+        *@param index - page index
+        */
         void showSelectedPage(int index);
 
     public:

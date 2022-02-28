@@ -127,6 +127,30 @@ ApplicationWindow
                     m_MainFormModel.onAddProcessClicked();
             }
         }
+
+        /**
+        * Add box button
+        */
+        // FIXME for Jean: remove when useless
+        Button
+        {
+            // common properties
+            id: btAddbox
+            objectName: "btAddBox"
+            anchors.left: btAddProcess.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            text: qsTrId("add-box")
+
+            /// called when button is clicked
+            onClicked:
+            {
+                console.log("GUI - Add box clicked");
+
+                if (m_MainFormModel)
+                    m_MainFormModel.onAddBoxClicked();
+            }
+        }
     }
 
     /**

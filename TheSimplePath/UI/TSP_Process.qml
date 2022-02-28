@@ -8,11 +8,11 @@ import QtQuick.Controls 2.15
 TSP_Box
 {
     // common properties
-    m_Color:       "#202020"
-    m_BgColor:     "#009ed6"
+    m_Color:       Styles.m_ProcessOutlineColor
+    m_BgColor:     Styles.m_ProcessFillColor
     m_TextColor:   Styles.m_LightTextColor
-    m_Radius:      10
-    m_BorderWidth: 2
+    m_Radius:      Styles.m_ProcessRadius
+    m_BorderWidth: Styles.m_ProcessOutlineWidth
 
     // child components
     titleText.anchors.bottom:      rectContents.bottom
@@ -24,8 +24,8 @@ TSP_Box
     /// called when process should be resized
     onResize: function(direction, deltaX, deltaY)
     {
-        const connectorWidth  = 14;
-        const connectorHeight = 14;
+        const connectorWidth  = Styles.m_ConnectorWidth;
+        const connectorHeight = Styles.m_ConnectorHeight;
 
         // update connectors positions
         leftConnector.x   =  -((connectorWidth  / 2) + 2);

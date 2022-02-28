@@ -65,5 +65,18 @@ class TSP_QmlProcess : public TSP_Process
 
         virtual ~TSP_QmlProcess();
 
+        /**
+        * Gets the box proxy
+        *@return the box proxy, nullptr if no proxy
+        */
+        TSP_QmlBoxProxy* GetProxy() const;
+
+        /**
+        * Sets the box proxy
+        *@param pProxy - the box proxy
+        */
+        void SetProxy(TSP_QmlBoxProxy* pProxy);
+
     private:
+        TSP_QmlBoxProxy* m_pProxy = nullptr;
 };

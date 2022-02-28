@@ -35,8 +35,11 @@
 #include <QObject>
 #include <QPageSize>
 
-// class prototype
+// class prototypes
 class TSP_Application;
+class TSP_QmlDocument;
+class TSP_QmlAtlas;
+class TSP_QmlPage;
 
 /**
 * Main form model
@@ -47,6 +50,12 @@ class TSP_MainFormModel : public QObject
     Q_OBJECT
 
     signals:
+        /**
+        * Called when an error should be shown to the user
+        *@param title - error title
+        *@param msg - error message
+        *@param detailedMsg - error detailed message
+        */
         void showErrorDialog(const QString& title, const QString& msg, const QString& detailedMsg);
 
     public:
@@ -92,9 +101,20 @@ class TSP_MainFormModel : public QObject
         /**
         * Called when the add process button was clicked on the user interface
         */
+        virtual Q_INVOKABLE void onAddBoxClicked();
+
+        /**
+        * Called when the add process button was clicked on the user interface
+        */
         virtual Q_INVOKABLE void onAddProcessClicked();
 
     private:
         TSP_Application* m_pApp      = nullptr;
         QPageSize        m_PageSize;
+
+        TSP_QmlDocument* GetDocument() const;
+
+        TSP_QmlAtlas* GetSelectedAtlas() const;
+
+        TSP_QmlPage* GetSelectedPage() const;
 };

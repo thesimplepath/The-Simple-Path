@@ -64,9 +64,27 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         virtual void setName(const QString& name);
 
     signals:
+        /**
+        * Called when the name changed
+        *@param name - name
+        */
         void nameChanged(const QString& name);
+
+        /**
+        * Called when a page is added to the view
+        *@param uid - page unique identifier
+        */
         void addPageToView(const QString& uid);
+
+        /**
+        * Called when a page is removed from the view
+        *@param uid - page unique identifier
+        */
         void removePageFromView(const QString& uid);
+
+        /**
+        * Called when the page index is queried
+        */
         void queryPageIndex();
 
     public:

@@ -77,7 +77,22 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         virtual void setName(const QString& name);
 
     signals:
+        /**
+        * Called when the page name changed
+        *@param name - page name
+        */
         void nameChanged(const QString& name);
+
+        /**
+        * Called when a box is added to the page
+        *@param type - box type
+        *@param uid - box unique identifier
+        *@param position - default position where the box will appear
+        *@param x - box x position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param y - box y position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param width - link width in pixels
+        *@param height - link height in pixels
+        */
         void addBoxToView (const QString& type,
                            const QString& uid,
                                  int      position,
@@ -85,6 +100,21 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                  int      y,
                                  int      width,
                                  int      height);
+
+        /**
+        * Called when a link is added to the page
+        *@param type - link type
+        *@param uid - link unique identifier
+        *@param startUID - start box unique identifier from which the link is attached
+        *@param startPos - start box position from which the link is attached
+        *@param endUID - end box unique identifier to which the link is attached
+        *@param endPos - end box position from which the link is attached
+        *@param x - link x position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param y - link y position in pixels, if position is set to IE_BP_Custom, ignored otherwise
+        *@param width - link width in pixels
+        *@param height - link height in pixels
+        *@return true on success, otherwise false
+        */
         void addLinkToView(const QString& type,
                            const QString& uid,
                            const QString& startUID,
@@ -95,6 +125,11 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                  int      y,
                                  int      width,
                                  int      height);
+
+        /**
+        * Called when a component view should be deleted on the page
+        *@param uid - component view unique identifier to delete
+        */
         void deleteComponentView(const QString& uid);
 
     public:

@@ -77,12 +77,45 @@ class TSP_QmlDocumentModel : public QAbstractListModel
         void setSelectedAtlasUID(QString uid);
 
     signals:
+        /**
+        * Called when the document view should be created
+        *@param document name - name
+        *@param openedCount - opened document count
+        */
         void createDocumentView(const QString& name, int openedCount);
+
+        /**
+        * Called when the document view should be deleted
+        */
         void deleteDocumentView();
+
+        /**
+        * Called when an atlas should be added to the document view
+        *@param uid - atlas unique identifier
+        */
         void addAtlasToView(const QString& uid);
+
+        /**
+        * Called when an atlas should be removed from the document view
+        *@param uid - atlas unique identifier
+        */
         void removeAtlasFromView(const QString& uid);
+
+        /**
+        * Called when the selected atlas unique identifier is queried
+        */
         void queryAtlasUID();
+
+        /**
+        * Called when the document status changed
+        *@param status - document status
+        */
         void docStatusChanged(int status);
+
+        /**
+        * Called when the selected atlas changed
+        *@param uid - newly selected atlas unique identifier
+        */
         void selectedAtlasUIDChanged(const QString& uid);
 
     public:

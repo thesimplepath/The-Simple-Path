@@ -89,8 +89,22 @@ class TSP_QmlLinkProxy : public TSP_QmlProxy
         virtual void setComments(const QString& comments);
 
     signals:
+        /**
+        * Called when the title changed
+        *@param title - title
+        */
         void titleChanged(const QString& title);
+
+        /**
+        * Called when the description changed
+        *@param description - description
+        */
         void descriptionChanged(const QString& description);
+
+        /**
+        * Called when the comments changed
+        *@param comments - comments
+        */
         void commentsChanged(const QString& comments);
 
     public:

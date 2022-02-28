@@ -104,22 +104,18 @@ void TSP_MainFormModel::onNewDocumentClicked()
 {
     M_TRY
     {
-        // no application?
-        if (!m_pApp)
-        {
-            M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
-            return;
-        }
+        // get document
+        TSP_QmlDocument* pDoc = GetDocument();
 
         // no document?
-        if (!m_pApp->GetDocument())
+        if (!pDoc)
         {
             M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
             return;
         }
 
         // create the document
-        if (!m_pApp->GetDocument()->Create())
+        if (!pDoc->Create())
         {
             //: Create document error dialog title
             //% "Create new document"
@@ -139,22 +135,53 @@ void TSP_MainFormModel::onCloseDocumentClicked()
 {
     M_TRY
     {
-        // no application?
-        if (!m_pApp)
-        {
-            M_LogErrorT("onNewDocumentClicked - FAILED - no application defined");
-            return;
-        }
+        // get document
+        TSP_QmlDocument* pDoc = GetDocument();
 
         // no document?
-        if (!m_pApp->GetDocument())
+        if (!pDoc)
         {
-            M_LogErrorT("onNewDocumentClicked - FAILED - no document defined");
+            M_LogErrorT("onCloseDocumentClicked - FAILED - no document defined");
             return;
         }
 
         // close the document
-        m_pApp->GetDocument()->Close();
+        pDoc->Close();
+    }
+    M_CATCH_QT_MSG
+}
+//---------------------------------------------------------------------------
+void TSP_MainFormModel::onAddBoxClicked()
+{
+    M_TRY
+    {
+        // get selected page
+        TSP_QmlAtlasPage* pSelectedPage = static_cast<TSP_QmlAtlasPage*>(GetSelectedPage());
+
+        // no selected page?
+        if (!pSelectedPage)
+        {
+            M_LogWarnT("onAddBoxClicked - no selected page");
+            return;
+        }
+
+        //: New box title
+        //% "New box"
+        const QString defProcessTitle = qtTrId("id-new-box-title");
+
+        // add box
+        if (!pSelectedPage->CreateAndAddBox(defProcessTitle.toStdWString()))
+        {
+            //: Create box error dialog title
+            //% "Create new box"
+            const QString title = qtTrId("id-error-create-box-title");
+
+            //: Create box error dialog message
+            //% "Failed to create the new box."
+            const QString msg = qtTrId("id-error-create-box-msg");
+
+            showError(title, msg);
+        }
     }
     M_CATCH_QT_MSG
 }
@@ -163,36 +190,9 @@ void TSP_MainFormModel::onAddProcessClicked()
 {
     M_TRY
     {
-        // FIXME create a generic function in document to get selected atlas and page
-        // no application?
-        if (!m_pApp)
-        {
-            M_LogErrorT("onAddProcessClicked - FAILED - no application defined");
-            return;
-        }
-
-        // get document
-        TSP_QmlDocument* pDoc = m_pApp->GetDocument();
-
-        // no document?
-        if (!pDoc)
-        {
-            M_LogErrorT("onAddProcessClicked - FAILED - no document defined");
-            return;
-        }
-
-        // get selected atlas
-        TSP_QmlAtlas* pSelectedAtlas = static_cast<TSP_QmlAtlas*>(pDoc->GetSelectedAtlas());
-
-        // no selected atlas?
-        if (!pSelectedAtlas)
-        {
-            M_LogWarnT("onAddProcessClicked - no selected atlas");
-            return;
-        }
-
+        // FIXME for Jean: Find a better way to determine if page is an atlas page or a process page
         // get selected page
-        TSP_QmlAtlasPage* pSelectedPage = static_cast<TSP_QmlAtlasPage*>(pSelectedAtlas->GetSelectedPage());
+        TSP_QmlAtlasPage* pSelectedPage = dynamic_cast<TSP_QmlAtlasPage*>(GetSelectedPage());
 
         // no selected page?
         if (!pSelectedPage)
@@ -205,9 +205,8 @@ void TSP_MainFormModel::onAddProcessClicked()
         //% "New process"
         const QString defProcessTitle = qtTrId("id-new-process-title");
 
-        // FIXME use add process instead (when created)
         // add process
-        if (!pSelectedPage->CreateAndAddBox(defProcessTitle.toStdWString()))
+        if (!pSelectedPage->CreateAndAddProcess(defProcessTitle.toStdWString()))
         {
             //: Create process error dialog title
             //% "Create new process"
@@ -221,5 +220,42 @@ void TSP_MainFormModel::onAddProcessClicked()
         }
     }
     M_CATCH_QT_MSG
+}
+//---------------------------------------------------------------------------
+TSP_QmlDocument* TSP_MainFormModel::GetDocument() const
+{
+    // no application?
+    if (!m_pApp)
+        return nullptr;
+
+    // get document
+    return m_pApp->GetDocument();
+}
+//---------------------------------------------------------------------------
+TSP_QmlAtlas* TSP_MainFormModel::GetSelectedAtlas() const
+{
+    // get document
+    TSP_QmlDocument* pDoc = GetDocument();
+
+    // no document?
+    if (!pDoc)
+        return nullptr;
+
+    // get selected atlas
+    return static_cast<TSP_QmlAtlas*>(pDoc->GetSelectedAtlas());
+}
+//---------------------------------------------------------------------------
+TSP_QmlPage* TSP_MainFormModel::GetSelectedPage() const
+{
+    // get selected atlas
+    TSP_QmlAtlas* pSelectedAtlas = GetSelectedAtlas();
+
+    // no selected atlas?
+    if (!pSelectedAtlas)
+        return nullptr;
+
+    // FIXME for Jean: Need a way to retrieve the REAL selected page, may be an atlas page, or a process page
+    // get selected page
+    return static_cast<TSP_QmlPage*>(pSelectedAtlas->GetSelectedPage());
 }
 //---------------------------------------------------------------------------

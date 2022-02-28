@@ -29,6 +29,9 @@
 
 #include "TSP_QmlAtlasPage.h"
 
+// qt classes
+#include "TSP_QmlProcess.h"
+
 //---------------------------------------------------------------------------
 // TSP_QmlAtlasPage
 //---------------------------------------------------------------------------
@@ -43,75 +46,29 @@ TSP_QmlAtlasPage::TSP_QmlAtlasPage(const std::wstring& name, TSP_QmlAtlas* pOwne
 TSP_QmlAtlasPage::~TSP_QmlAtlasPage()
 {}
 //---------------------------------------------------------------------------
-/*REM
-TSP_Box* TSP_QmlAtlasPage::CreateAndAddBox(const std::wstring& name,
-                                           const std::wstring& description,
-                                           const std::wstring& comments,
-                                                 int           x,
-                                                 int           y)
+TSP_Process* TSP_QmlAtlasPage::CreateAndAddProcess(const std::wstring& name,
+                                                   const std::wstring& description,
+                                                   const std::wstring& comments,
+                                                         int           x,
+                                                         int           y,
+                                                         int           width,
+                                                         int           height)
 {
-    std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
+    std::unique_ptr<TSP_QmlProcess> pProcess = std::make_unique<TSP_QmlProcess>(this);
 
-    // add a box on the page view
-    if (!CreateBoxView(pBox.get(), "box", x, y))
+    // add a process on the page view
+    if (!CreateBoxView(pProcess.get(), "process", x, y, width, height))
         return nullptr;
 
-    // set the box data
-    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
-    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
-    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
+    // set the process data
+    pProcess->GetProxy()->setTitle(QString::fromStdWString(name));
+    pProcess->GetProxy()->setDescription(QString::fromStdWString(description));
+    pProcess->GetProxy()->setComments(QString::fromStdWString(comments));
 
-    // add newly created box to page
-    if (!TSP_Page::Add(pBox.get()))
+    // add newly created process to page
+    if (!TSP_Page::Add(pProcess.get()))
         return nullptr;
 
-    return pBox.release();
+    return pProcess.release();
 }
-*/
-//---------------------------------------------------------------------------
-/*REM
-TSP_Link* TSP_QmlAtlasPage::CreateAndAddLink(const std::wstring& name,
-                                             const std::wstring& description,
-                                             const std::wstring& comments,
-                                                   int           x,
-                                                   int           y)
-{
-*/
-    /*FIXME
-    std::unique_ptr<TSP_QmlBox> pBox = std::make_unique<TSP_QmlBox>(this);
-
-    if (!TSP_Page::Add(pBox.get()))
-        return nullptr;
-
-    if (!CreateBoxView(pBox.get(), "box"))
-    {
-        TSP_Page::Remove(pBox.get());
-        return nullptr;
-    }
-
-    // set the box data
-    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
-    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
-    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
-
-    return pBox.release();
-    */
-/*REM
-    return nullptr;
-}
-*/
-//---------------------------------------------------------------------------
-/*REM
-void TSP_QmlAtlasPage::Remove(const std::string& uid)
-{
-    TSP_Page::Remove(uid);
-}
-*/
-//---------------------------------------------------------------------------
-/*REM
-void TSP_QmlAtlasPage::Remove(TSP_Component* pComponent)
-{
-    TSP_Page::Remove(pComponent);
-}
-*/
 //---------------------------------------------------------------------------

@@ -32,10 +32,16 @@
 // std
 #include <vector>
 
+// core classes
+#include "Core/TSP_Process.h"
+
 // qt classes
 #include "TSP_QmlAtlas.h"
 #include "TSP_QmlPage.h"
 #include "TSP_QmlPageProxy.h"
+
+// class prototype
+class TSP_QmlProcess;
 
 /**
 * Qt document page owned by an atlas
@@ -60,48 +66,21 @@ class TSP_QmlAtlasPage : public TSP_QmlPage
         virtual ~TSP_QmlAtlasPage();
 
         /**
-        * Creates a box and adds it in page
-        *@param name - box name
-        *@param description - box description
-        *@param comments - box comments
-        *@param x - link x position in pixels, set to default position if -1
-        *@param y - link y position in pixels, set to default position if -1
-        *@return newly created box
+        * Creates a process and adds it in page
+        *@param name - process name
+        *@param description - process description
+        *@param comments - process comments
+        *@param x - process x position in pixels, set to default position if -1
+        *@param y - process y position in pixels, set to default position if -1
+        *@param width - process width in pixels, set to default width if -1
+        *@param height - process height in pixels, set to default width if -1
+        *@return newly created process
         */
-        /*REM
-        virtual TSP_Box* CreateAndAddBox(const std::wstring& name,
-                                         const std::wstring& description = L"",
-                                         const std::wstring& comments    = L"",
-                                               int           x           =  -1,
-                                               int           y           =  -1);
-        */
-
-        /**
-        * Creates a link and adds it in page
-        *@param name - link name
-        *@param description - link description
-        *@param comments - link comments
-        *@param x - link x position in pixels, set to default position if -1
-        *@param y - link y position in pixels, set to default position if -1
-        *@return newly created link
-        */
-        /*REM
-        virtual TSP_Link* CreateAndAddLink(const std::wstring& name,
-                                           const std::wstring& description = L"",
-                                           const std::wstring& comments    = L"",
-                                                 int           x           =  -1,
-                                                 int           y           =  -1);
-        */
-
-        /**
-        * Removes a component
-        *@param uid - component unique identifier to remove
-        */
-        //REM virtual void Remove(const std::string& uid);
-
-        /**
-        * Removes a component
-        *@param pComponent - component to remove
-        */
-        //REM virtual void Remove(TSP_Component* pComponent);
+        virtual TSP_Process* CreateAndAddProcess(const std::wstring& name,
+                                                 const std::wstring& description =  L"",
+                                                 const std::wstring& comments    =  L"",
+                                                       int           x           = -1,
+                                                       int           y           = -1,
+                                                       int           width       = -1,
+                                                       int           height      = -1);
 };

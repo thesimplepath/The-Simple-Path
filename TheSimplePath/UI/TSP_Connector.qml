@@ -38,8 +38,8 @@ T.Control
     // common properties
     id: ctConnector
     objectName: "ctConnector"
-    width: 14
-    height: 14
+    width: Styles.m_ConnectorWidth
+    height: Styles.m_ConnectorHeight
 
     /**
     * Connector rectangle
