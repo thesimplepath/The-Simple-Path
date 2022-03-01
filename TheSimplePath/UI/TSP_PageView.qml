@@ -868,20 +868,20 @@ T.Control
         if (doDelAttachedLinks)
         {
             // delete left links
-            for (let leftLink of box.leftConnector.m_Links)
-                deleteLink(leftLink);
+            for (let i = box.leftConnector.m_Links.length - 1; i >= 0; --i)
+                deleteLink(box.leftConnector.m_Links[i]);
 
             // delete top links
-            for (let topLink of box.topConnector.m_Links)
-                deleteLink(topLink);
+            for (let i = box.topConnector.m_Links.length - 1; i >= 0; --i)
+                deleteLink(box.topConnector.m_Links[i]);
 
             // delete right links
-            for (let rightLink of box.rightConnector.m_Links)
-                deleteLink(rightLink);
+            for (let i = box.rightConnector.m_Links.length - 1; i >= 0; --i)
+                deleteLink(box.rightConnector.m_Links[i]);
 
             // delete bottom links
-            for (let bottomLink of box.bottomConnector.m_Links)
-                deleteLink(bottomLink);
+            for (let i = box.bottomConnector.m_Links.length - 1; i >= 0; --i)
+                deleteLink(box.bottomConnector.m_Links[i]);
         }
 
         // delete box

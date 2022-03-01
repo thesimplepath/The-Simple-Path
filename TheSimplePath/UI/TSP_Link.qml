@@ -538,22 +538,22 @@ Item
             return 0;
 
         // remove all existing link instance from left connector
-        for (var i = box.leftConnector.m_Links.length - 1; i >= 0; --i)
+        for (let i = box.leftConnector.m_Links.length - 1; i >= 0; --i)
             if (box.leftConnector.m_Links[i] === this)
                 box.leftConnector.m_Links.splice(i, 1);
 
         // remove all existing link instance from top connector
-        for (var i = box.topConnector.m_Links.length - 1; i >= 0; --i)
+        for (let i = box.topConnector.m_Links.length - 1; i >= 0; --i)
             if (box.topConnector.m_Links[i] === this)
                 box.topConnector.m_Links.splice(i, 1);
 
         // remove all existing link instance from right connector
-        for (var i = box.rightConnector.m_Links.length - 1; i >= 0; --i)
+        for (let i = box.rightConnector.m_Links.length - 1; i >= 0; --i)
             if (box.rightConnector.m_Links[i] === this)
                 box.rightConnector.m_Links.splice(i, 1);
 
         // remove all existing link instance from bottom connector
-        for (var i = box.bottomConnector.m_Links.length - 1; i >= 0; --i)
+        for (let i = box.bottomConnector.m_Links.length - 1; i >= 0; --i)
             if (box.bottomConnector.m_Links[i] === this)
                 box.bottomConnector.m_Links.splice(i, 1);
     }
@@ -584,7 +584,7 @@ Item
             if (m_From)
             {
                 // get the delta between the connector and its parent box
-                let startDelta = getStartDelta(m_From);
+                const startDelta = getStartDelta(m_From);
 
                 return Qt.vector2d(m_From.m_Box.x + m_From.connectorMouseArea.mouseX + startDelta.x,
                                    m_From.m_Box.y + m_From.connectorMouseArea.mouseY + startDelta.y);
@@ -618,7 +618,7 @@ Item
             return Qt.vector2d(0.0, 0.0);
 
         // get the connector parent box
-        let box = connector.m_Box;
+        const box = connector.m_Box;
 
         // parent box should always be defined in the connector
         if (!box)
@@ -661,7 +661,7 @@ Item
             return Qt.vector2d(0.0, 0.0);
 
         // get the connector parent box
-        let box = connector.m_Box;
+        const box = connector.m_Box;
 
         // parent box should always be defined in the connector
         if (!box)

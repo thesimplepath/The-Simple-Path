@@ -203,7 +203,7 @@ bool TSP_QmlPage::CreateBoxView(T* pBox, const QString& type, int x, int y, int 
         boxPos = TSP_QmlPageProxy::IEBoxPosition::IE_BP_Custom;
 
     // notify page proxy that a new box should be added
-    if (!m_pProxy->AddBox(type, QString::fromStdString(pBox->GetUID()), boxPos, x, y, width, height))
+    if (!m_pProxy->AddBox(type, QString::fromStdString(uid), boxPos, x, y, width, height))
         return false;
 
     // get the newly added component proxy
