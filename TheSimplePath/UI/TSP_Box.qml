@@ -46,10 +46,13 @@ T.Control
     objectName: "ctBox"
 
     // signals
+    signal doAddItem(var type, var uid)
+    signal doRemoveItem(var uid)
     signal moveStart()
     signal move(int deltaX, int deltaY)
     signal moveEnd()
     signal resize(int direction, int deltaX, int deltaY)
+    signal dblClick()
 
     /**
     * Box proxy
@@ -59,6 +62,18 @@ T.Control
     {
         id: bpBoxProxy
         objectName: "bpBoxProxy"
+
+        /// Called when a custom item should be added to the box
+        onAddItemToBox: function(type, uid)
+        {
+            ctBox.doAddItem(type, uid);
+        }
+
+        /// Called when an item should be removed from the box
+        onRemoveItemFromBox: function(type, uid)
+        {
+            ctBox.doRemoveItem(type, uid);
+        }
     }
 
     /**
@@ -263,14 +278,14 @@ T.Control
         }
     }
 
-    /// called when box starts to move
+    /// Called when box starts to move
     onMoveStart: function()
     {
         m_MouseStartX = x;
         m_MouseStartY = y;
     }
 
-    /// called when box is moving
+    /// Called when box is moving
     onMove: function(deltaX, deltaY)
     {
         if (!m_PageContent)
@@ -291,7 +306,7 @@ T.Control
         m_PageContent.doAutoScroll(boxX, boxX + boxWidth, boxY, boxY + boxHeight);
     }
 
-    /// called when box ends to move
+    /// Called when box ends to move
     onMoveEnd: function()
     {
         // was control dragged?
@@ -302,7 +317,7 @@ T.Control
             m_PageContent.doDisableMoveSize(this);
     }
 
-    /// called when box should be resized
+    /// Called when box should be resized
     onResize: function(direction, deltaX, deltaY)
     {
         // resize box width
@@ -363,6 +378,10 @@ T.Control
                     break;
             }
     }
+
+    /// Called when box is double clicked
+    onDblClick: function()
+    {}
 
     /**
     * Page content signal connections

@@ -49,7 +49,7 @@ Item
 
     /**
     * Link proxy
-    *@note This component will auto-create a new c++ TSP_LinkProxy instance
+    *@note This component will auto-create a new c++ TSP_QmlLinkProxy instance
     */
     LinkProxy
     {

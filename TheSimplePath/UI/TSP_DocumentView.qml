@@ -26,8 +26,6 @@ T.Control
     property var    m_Document: this
     property var    m_Model:    tspDocumentModel
     property string m_Name:     ""
-    property string m_Type:     "TSP_DocumentView"
-    property bool   m_Deleted:  false
 
     // common properties
     id: ctDocumentView
@@ -43,7 +41,17 @@ T.Control
         id: rcDocumentView
         objectName: "rcDocumentView"
         anchors.fill: parent
-        color: "white"
+        color: Styles.m_DocumentBackground
+
+        /**
+        * Atlas stack model
+        */
+        ListModel
+        {
+            // common properties
+            id: lmAtlasStack
+            objectName: "lmAtlasStack"
+        }
 
         /**
         * Atlas view stack
@@ -55,6 +63,28 @@ T.Control
             objectName: "slAtlasStack"
             anchors.fill: parent
             clip: true
+
+            /**
+            * Atlas repeater
+            */
+            Repeater
+            {
+                // common properties
+                id: rpAtlasStack
+                objectName: "rpAtlasStack"
+                model: lmAtlasStack
+
+                /**
+                * Atlas view template
+                */
+                TSP_AtlasView
+                {
+                    // advanced properties
+                    id:             atlasID
+                    objectName:     atlasObjName
+                    atlasProxy.uid: uid
+                }
+            }
         }
     }
 
@@ -83,7 +113,7 @@ T.Control
         */
         function onRemoveAtlasFromView(uid)
         {
-            removeAtlas(uid);
+            removeAtlas(uid, true);
         }
 
         /**
@@ -145,87 +175,104 @@ T.Control
     */
     function addAtlas(uid)
     {
-        // cannot create an atlas if its uid is invalid
-        if (!uid.length)
+        try
         {
-            console.error("Add atlas - FAILED - cannot create atlas if unique identifier is empty");
-            return undefined;
+            // cannot create an atlas if its uid is invalid
+            if (!uid.length)
+            {
+                console.error("Add atlas - FAILED - cannot create atlas if unique identifier is empty");
+                return undefined;
+            }
+
+            console.log("Add atlas - uid - " + uid);
+
+            // build atlas identifier
+            const atlasId = "atAtlas_" + uid;
+
+            // add a new atlas on the stack end
+            lmAtlasStack.append({"uid": uid, "atlasID": atlasId, "atlasObjName": atlasId});
+
+            // get the newly added atlas
+            let item = slAtlasStack.children[slAtlasStack.count - 1];
+
+            // found it?
+            if (!item || item.atlasProxy.uid !== uid)
+            {
+                console.error("Add atlas - an error occurred while the view was created");
+                return undefined;
+            }
+
+            console.log("Add atlas - succeeded - view name - " + item.objectName);
+
+            return item;
+        }
+        catch (e)
+        {
+            console.exception("Add atlas - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        console.log("Add atlas - uid - " + uid);
+        // remove the partially added atlas, if any
+        removeAtlas(uid, false);
 
-        // load the item component
-        let component = Qt.createComponent('TSP_DocAtlasView.qml');
-
-        // succeeded?
-        if (component.status !== Component.Ready)
-        {
-            console.error("Add atlas - an error occurred while the item was created - " + component.errorString());
-            return undefined;
-        }
-
-        // build atlas identifier
-        const atlasId = "atAtlas_" + uid;
-
-        // create and show new item object
-        let item = component.createObject(slAtlasStack, {"id":         atlasId,
-                                                         "objectName": atlasId});
-
-        // succeeded?
-        if (!item)
-        {
-            console.error("Add atlas - an error occurred while the item was added to document");
-            return undefined;
-        }
-
-        // declare the unique identifier in the atlas proxy
-        item.atlasProxy.uid = uid;
-
-        // show the newly added atlas onto the document view
-        slAtlasStack.currentIndex = slAtlasStack.count - 1;
-
-        console.log("Add atlas - succeeded - new item - object name - " + item.objectName);
-
-        return item;
+        return undefined;
     }
 
     /**
     * Removes an atlas from the document view
     *@param {string} uid - atlas unique identifier
+    *@param {bool} verbose - if true, the error and success messages will be logged
     */
-    function removeAtlas(uid)
+    function removeAtlas(uid, verbose)
     {
-        // cannot remove an atlas if its uid is invalid
-        if (!uid.length)
-            return;
+        try
+        {
+            // cannot remove an atlas if its uid is invalid
+            if (!uid.length)
+                return;
 
-        console.log("Remove atlas - uid - " + uid);
+            if (verbose)
+                console.log("Remove atlas - uid - " + uid);
 
-        let atlasName;
+            let atlasName;
+            let index = -1;
 
-        // iterate through atlas view stack until find the view to delete, and deletes it
-        for (let i = slAtlasStack.children.length - 1; i >= 0; --i)
+            // iterate through atlas views
+            for (var i = 0; i < slAtlasStack.children.length; ++i)
+                // found the atlas to delete?
+                if (slAtlasStack.children[i].m_Type         === "TSP_AtlasView" &&
+                    slAtlasStack.children[i].atlasProxy.uid === uid)
+                {
+                    // keep the atlas name for logging
+                    atlasName = slAtlasStack.children[i].objectName;
+
+                    // get the atlas index to delete
+                    index = i;
+
+                    break;
+                }
+
             // found the atlas to delete?
-            if (slAtlasStack.children[i].m_Type         === "TSP_DocAtlasView" &&
-               !slAtlasStack.children[i].m_Deleted                             &&
-                slAtlasStack.children[i].atlasProxy.uid === uid)
+            if (index < 0)
             {
-                // keep the atlas name for logging
-                atlasName = slAtlasStack.children[i].objectName;
+                if (verbose)
+                    console.log("Remove atlas - FAILED - view not found");
 
-                // NOTE setting the deleted property just before destroying the component may seem incoherent,
-                // however the destroyed item is kept in memory until the garbage collector deletes it, and may
-                // be thus still found when the children are iterated. This may cause a deleting item to be
-                // processed as a normal item in other situations where it shouldn't
-                slAtlasStack.children[i].m_Deleted = true;
-                slAtlasStack.children[i].destroy();
-                break;
+                return;
             }
 
-        // log deleted atlas
-        if (atlasName && atlasName.length)
-            console.log("Remove atlas - view was removed - name - " + atlasName);
+            // delete atlas
+            lmAtlasStack.remove(index);
 
-        console.log("Remove atlas - succeeded");
+            // log deleted atlas
+            if (verbose && atlasName && atlasName.length)
+                console.log("Remove atlas - view was removed - view name - " + atlasName);
+
+            if (verbose)
+                console.log("Remove atlas - succeeded");
+        }
+        catch (e)
+        {
+            console.exception("Remove atlas - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
+        }
     }
 }

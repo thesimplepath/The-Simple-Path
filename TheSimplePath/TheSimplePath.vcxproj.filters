@@ -78,6 +78,9 @@
     <Filter Include="Source Files\Qt">
       <UniqueIdentifier>{9ec4a115-c428-4b63-aa1f-b6c1c7f8a015}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Resources\Icons">
+      <UniqueIdentifier>{424a438f-fd55-402c-a6c7-d8504dd42893}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -197,9 +200,6 @@
     <ClCompile Include="Classes\Qt\TSP_QmlBox.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\Qt\TSP_QmlAtlasPage.cpp">
-      <Filter>Source Files\Qt</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\Qt\TSP_QmlPage.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
@@ -212,6 +212,9 @@
     <ClCompile Include="Classes\Qt\TSP_QmlLink.cpp">
       <Filter>Source Files\Qt</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Core\TSP_PageContainer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -220,11 +223,6 @@
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="qml.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h">
@@ -431,9 +429,6 @@
     <ClInclude Include="Classes\Qt\TSP_QmlBox.h">
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Qt\TSP_QmlAtlasPage.h">
-      <Filter>Header Files\Qt</Filter>
-    </ClInclude>
     <ClInclude Include="Classes\Qt\TSP_QmlPage.h">
       <Filter>Header Files\Qt</Filter>
     </ClInclude>
@@ -445,6 +440,12 @@
     </ClInclude>
     <ClInclude Include="Classes\Qt\TSP_QmlLink.h">
       <Filter>Header Files\Qt</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Core\TSP_PageContainer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -492,9 +493,6 @@
     <None Include="UI\TSP_PageBreak.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_PageView.qml">
-      <Filter>Resource Files\UI</Filter>
-    </None>
     <None Include="UI\TSP_Process.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
@@ -516,10 +514,16 @@
     <None Include="UI\TSP_PageListView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_DocAtlasView.qml">
+    <None Include="UI\TSP_PagesView.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
-    <None Include="UI\TSP_DocPageView.qml">
+    <None Include="UI\TSP_AtlasView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_PageView.qml">
+      <Filter>Resource Files\UI</Filter>
+    </None>
+    <None Include="UI\TSP_Page.qml">
       <Filter>Resource Files\UI</Filter>
     </None>
   </ItemGroup>
@@ -548,5 +552,20 @@
     <QtMoc Include="Classes\Qt\TSP_QmlLinkProxy.h">
       <Filter>Header Files\Qt</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="qml.qrc">
+      <Filter>Resource Files\Resources</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TheSimplePath.rc">
+      <Filter>Resource Files\Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="TheSimplePath.ico">
+      <Filter>Resource Files\Resources\Icons</Filter>
+    </Image>
   </ItemGroup>
 </Project>

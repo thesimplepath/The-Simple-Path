@@ -39,6 +39,9 @@
     #include "Qt/TSP_QmlProxyDictionary.h"
 #endif
 
+// application
+#include "resource.h"
+
 // qt
 #include <QDir>
 
@@ -87,7 +90,7 @@ int main(int argc, char *argv[])
     try
     {
         // create and run the application
-        auto pApplication = std::make_unique<TSP_Application>(argc, argv, L"UI/TSP_Main.qml");
+        auto pApplication = std::make_unique<TSP_Application>(argc, argv, IDI_SIMPLE_PATH_ICON, L"UI/TSP_Main.qml");
              result       = pApplication->Execute();
     }
     catch (...)

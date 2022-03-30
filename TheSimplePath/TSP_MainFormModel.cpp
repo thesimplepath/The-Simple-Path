@@ -34,7 +34,7 @@
 // qt classes
 #include "Qt/TSP_QmlDocument.h"
 #include "Qt/TSP_QmlAtlas.h"
-#include "Qt/TSP_QmlAtlasPage.h"
+#include "Qt/TSP_QmlPage.h"
 #include "Qt/TSP_QtGlobalMacros.h"
 
 // application
@@ -156,7 +156,7 @@ void TSP_MainFormModel::onAddBoxClicked()
     M_TRY
     {
         // get selected page
-        TSP_QmlAtlasPage* pSelectedPage = static_cast<TSP_QmlAtlasPage*>(GetSelectedPage());
+        TSP_QmlPage* pSelectedPage = static_cast<TSP_QmlPage*>(GetSelectedPage());
 
         // no selected page?
         if (!pSelectedPage)
@@ -192,7 +192,7 @@ void TSP_MainFormModel::onAddProcessClicked()
     {
         // FIXME for Jean: Find a better way to determine if page is an atlas page or a process page
         // get selected page
-        TSP_QmlAtlasPage* pSelectedPage = dynamic_cast<TSP_QmlAtlasPage*>(GetSelectedPage());
+        TSP_QmlPage* pSelectedPage = dynamic_cast<TSP_QmlPage*>(GetSelectedPage());
 
         // no selected page?
         if (!pSelectedPage)

@@ -93,13 +93,13 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
         *@param width - link width in pixels
         *@param height - link height in pixels
         */
-        void addBoxToView (const QString& type,
-                           const QString& uid,
-                                 int      position,
-                                 int      x,
-                                 int      y,
-                                 int      width,
-                                 int      height);
+        void addBoxToView(const QString& type,
+                          const QString& uid,
+                                int      position,
+                                int      x,
+                                int      y,
+                                int      width,
+                                int      height);
 
         /**
         * Called when a link is added to the page
@@ -127,10 +127,10 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                  int      height);
 
         /**
-        * Called when a component view should be deleted on the page
-        *@param uid - component view unique identifier to delete
+        * Called when a component view should be removed from the page
+        *@param uid - component view unique identifier to remove
         */
-        void deleteComponentView(const QString& uid);
+        void removeComponentView(const QString& uid);
 
     public:
         /**
@@ -198,10 +198,10 @@ class TSP_QmlPageProxy : public TSP_QmlProxy
                                    int                    height);
 
         /**
-        * Deletes a component view from the page
-        *@param uid - page unique identifier to delete
+        * Removes a component view from the page
+        *@param uid - component unique identifier to remove
         */
-        virtual void DeleteComponent(const QString& uid);
+        virtual void RemoveComponent(const QString& uid);
 
         /**
         * Notify that a box was added

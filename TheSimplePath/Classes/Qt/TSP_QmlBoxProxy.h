@@ -107,6 +107,20 @@ class TSP_QmlBoxProxy : public TSP_QmlProxy
         */
         void commentsChanged(const QString& comments);
 
+        /**
+        * Called when an item is added to the box
+        *@param type - item type
+        *@param uid - item unique identifier
+        */
+        void addItemToBox(const QString& type, const QString& uid);
+
+        /**
+        * Called when an item should be removed from the box
+        *@param type - item type
+        *@param uid - item unique identifier to remove
+        */
+        void removeItemFromBox(const QString& type, const QString& uid);
+
     public:
         /**
         * Constructor
@@ -128,6 +142,28 @@ class TSP_QmlBoxProxy : public TSP_QmlProxy
         */
         virtual void SetBox(TSP_Box* pBox);
 
+        /**
+        * Adds an item to the box
+        *@param type - item type
+        *@param uid - item unique identifier
+        *@return true on success, otherwise false
+        */
+        virtual bool AddItem(const QString& type, const QString& uid);
+
+        /**
+        * Removes an item from the box
+        *@param type - item type
+        *@param uid - item unique identifier to remove
+        */
+        virtual void RemoveItem(const QString& type, const QString& uid);
+
+        /**
+        * Notify that an item was added
+        *@param success - if true, the item was added successfully
+        */
+        virtual Q_INVOKABLE void onItemAdded(bool success);
+
     private:
-        TSP_Box* m_pBox = nullptr;
+        TSP_Box* m_pBox      = nullptr;
+        bool     m_ItemAdded = false;
 };

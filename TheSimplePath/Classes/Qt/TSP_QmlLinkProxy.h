@@ -29,7 +29,7 @@
 
 #pragma once
 
- // component classes
+ // qt classes
 #include "TSP_QmlProxy.h"
 
 // qt

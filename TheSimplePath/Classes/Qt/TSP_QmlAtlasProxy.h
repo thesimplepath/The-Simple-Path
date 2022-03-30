@@ -83,9 +83,14 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         void removePageFromView(const QString& uid);
 
         /**
-        * Called when the page index is queried
+        * Called when the selected page unique identifier is queried
         */
-        void queryPageIndex();
+        void querySelectedPageUID();
+
+        /**
+        * Called when the selected page owner unique identifier is queried
+        */
+        void querySelectedPageOwnerUID();
 
     public:
         /**
@@ -122,10 +127,16 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         virtual void RemovePage(const QString& uid);
 
         /**
-        * Queries the selected page index
+        * Queries the selected page unique identifier
+        *@return the selected page unique identifier
+        */
+        virtual QString QuerySelectedPageUID();
+
+        /**
+        * Queries the page owner unique identifier currently selected on the interface
         *@return the selected page index
         */
-        virtual int QuerySelectedPageIndex();
+        virtual QString QuerySelectedPageOwnerUID();
 
         /**
         * Notify that a page was added
@@ -134,13 +145,20 @@ class TSP_QmlAtlasProxy : public TSP_QmlProxy
         virtual Q_INVOKABLE void onPageAdded(bool success);
 
         /**
-        * Notify that a the selected page index was queried
-        *@param index - selected page index, -1 if no page selected
+        * Notify that a the selected page unique identifier was queried
+        *@param uid - the selected page unique identifier, empty string if no page selected
         */
-        virtual Q_INVOKABLE void onSelectedPageIndexQueried(int index);
+        virtual Q_INVOKABLE void onSelectedPageUIDQueried(const QString& uid);
+
+        /**
+        * Notify that the selected page owner unique identifier was queried
+        *@param uid - the selected page owner unique identifier, empty string if no page owner currently selected on the interface
+        */
+        virtual Q_INVOKABLE void onSelectedPageOwnerUIDQueried(const QString& uid);
 
     private:
-        TSP_QmlAtlas* m_pAtlas       =  nullptr;
-        int           m_SelectedPage = -1;
-        bool          m_PageAdded    =  false;
+        TSP_QmlAtlas* m_pAtlas               = nullptr;
+        QString       m_SelectedPageUID;
+        QString       m_SelectedPageOwnerUID;
+        bool          m_PageAdded            = false;
 };

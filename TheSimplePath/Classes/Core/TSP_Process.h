@@ -31,13 +31,16 @@
 
 // core classes
 #include "TSP_Box.h"
+#include "TSP_Page.h"
 #include "TSP_Attribute.h"
+#include "TSP_PageContainer.h"
 
 /**
 * Process component
 *@author Jean-Milost Reymond
 */
-class TSP_Process : public TSP_Box
+class TSP_Process : public TSP_Box,
+                    public TSP_PageContainer
 {
     public:
         /**
@@ -60,5 +63,16 @@ class TSP_Process : public TSP_Box
 
         virtual ~TSP_Process();
 
-    private:
+        /**
+        * Creates a page
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage();
+
+        /**
+        * Creates a page
+        *@param name - page name
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage(const std::wstring& name);
 };

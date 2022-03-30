@@ -34,6 +34,7 @@
 
 // core classes
 #include "TSP_Item.h"
+#include "TSP_PageContainer.h"
 #include "TSP_Page.h"
 
 // class prototypes
@@ -43,7 +44,8 @@ class TSP_Document;
 * Document atlas
 *@author Jean-Milost Reymond
 */
-class TSP_Atlas : public TSP_Item
+class TSP_Atlas : public TSP_Item,
+                  public TSP_PageContainer
 {
     public:
         /**
@@ -87,44 +89,6 @@ class TSP_Atlas : public TSP_Item
         virtual TSP_Page* CreatePage(const std::wstring& name);
 
         /**
-        * Creates a new page and adds it in atlas
-        *@return newly added page
-        */
-        virtual TSP_Page* CreateAndAddPage();
-
-        /**
-        * Creates a new page and adds it in atlas
-        *@param name - page name
-        *@return newly added page
-        */
-        virtual TSP_Page* CreateAndAddPage(const std::wstring& name);
-
-        /**
-        * Removes a page
-        *@param index - page index to remove
-        */
-        virtual void RemovePage(std::size_t index);
-
-        /**
-        * Removes a page
-        *@param pPage - page to remove
-        */
-        virtual void RemovePage(TSP_Page* pPage);
-
-        /**
-        * Gets page at index
-        *@param index - page index to get
-        *@return page, nullptr if not found or on error
-        */
-        virtual TSP_Page* GetPage(std::size_t index) const;
-
-        /**
-        * Gets page count
-        *@return page count
-        */
-        virtual std::size_t GetPageCount() const;
-
-        /**
         * Loads a model from a file
         *@return true on success, otherwise false
         */
@@ -140,9 +104,6 @@ class TSP_Atlas : public TSP_Item
         TSP_Document* m_pOwner = nullptr;
 
     private:
-        typedef std::vector<TSP_Page*> IPages;
-
-        IPages       m_Pages;
         std::wstring m_Name;
 };
 

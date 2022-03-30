@@ -53,9 +53,10 @@ class TSP_Application
         * Constructor
         *@param argc - argument count contained in argv
         *@param argv - argument vector passed by the user
+        *@param iconID - application icon identifier in resources
         *@param url - qml resources url to load
         */
-        TSP_Application(int argc, char* argv[], const std::wstring& url);
+        TSP_Application(int argc, char* argv[], int iconID, const std::wstring& url);
 
         virtual ~TSP_Application();
 
@@ -101,12 +102,13 @@ class TSP_Application
         virtual int Execute();
 
     private:
-        std::wstring           m_URL;
         QGuiApplication*       m_pApp           = nullptr;
         QQmlApplicationEngine* m_pEngine        = nullptr;
         TSP_QmlDocument*       m_pDocument      = nullptr;
         TSP_MainFormModel*     m_pMainFormModel = nullptr;
         TSP_PageListModel*     m_pPageListModel = nullptr;
+        std::wstring           m_URL;
+        int                    m_IconID         = 0;
 
         /**
         * Initializes the qt application

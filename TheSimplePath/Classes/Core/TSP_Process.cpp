@@ -33,16 +33,28 @@
 // TSP_Process
 //---------------------------------------------------------------------------
 TSP_Process::TSP_Process(TSP_Page* pOwner) :
-    TSP_Box(pOwner)
+    TSP_Box(pOwner),
+    TSP_PageContainer()
 {}
 //---------------------------------------------------------------------------
 TSP_Process::TSP_Process(const std::wstring& title,
                          const std::wstring& description,
                          const std::wstring& comments,
                                TSP_Page*     pOwner) :
-    TSP_Box(title, description, comments, pOwner)
+    TSP_Box(title, description, comments, pOwner),
+    TSP_PageContainer()
 {}
 //---------------------------------------------------------------------------
 TSP_Process::~TSP_Process()
 {}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Process::CreatePage()
+{
+    return new TSP_Page(this);
+}
+//---------------------------------------------------------------------------
+TSP_Page* TSP_Process::CreatePage(const std::wstring& name)
+{
+    return new TSP_Page(name, this);
+}
 //---------------------------------------------------------------------------

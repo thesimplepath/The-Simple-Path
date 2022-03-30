@@ -36,8 +36,9 @@
 #include "Common/TSP_GlobalMacros.h"
 
 // qt classes
+#include "Qt/TSP_QmlDocument.h"
 #include "Qt/TSP_QmlAtlas.h"
-#include "Qt/TSP_QmlAtlasPage.h"
+#include "Qt/TSP_QmlPage.h"
 #include "Qt/TSP_QtGlobalMacros.h"
 
 // qt
@@ -64,6 +65,14 @@ void TSP_PageListModel::SetPageOwner(TSP_Item* pPageOwner)
     m_pPageOwner = pPageOwner;
 }
 //---------------------------------------------------------------------------
+QString TSP_PageListModel::queryPageOwnerUID() const
+{
+    if (!m_pPageOwner)
+        return QString();
+
+    return QString::fromStdString(m_pPageOwner->GetUID());
+}
+//---------------------------------------------------------------------------
 void TSP_PageListModel::onAddPageClicked()
 {
     M_TRY
@@ -78,7 +87,7 @@ void TSP_PageListModel::onAddPageClicked()
             //% "Failed to add the page."
             const QString msg = qtTrId("id-error-add-page-msg");
 
-            m_pApp->GetMainFormModel()->showError(title, msg);
+            ShowError(title, msg);
         }
     }
     M_CATCH_QT_MSG
@@ -98,8 +107,16 @@ void TSP_PageListModel::onDeletePageClicked()
             //% "Failed to delete the page."
             const QString msg = qtTrId("id-error-delete-page-msg");
 
-            m_pApp->GetMainFormModel()->showError(title, msg);
+            ShowError(title, msg);
         }
+    }
+    M_CATCH_QT_MSG
+}
+//---------------------------------------------------------------------------
+void TSP_PageListModel::onProcessDblClicked(const QString& uid)
+{
+    M_TRY
+    {
     }
     M_CATCH_QT_MSG
 }
@@ -110,7 +127,7 @@ void TSP_PageListModel::clear()
     m_SelectedPageItem = -1;
 
     // notify the view that no page is selected
-    emit showSelectedPage(m_SelectedPageItem);
+    emit showSelectedPage(m_SelectedPageItem, QString());
 
     // clear the model
     beginResetModel();
@@ -120,22 +137,18 @@ void TSP_PageListModel::clear()
 //---------------------------------------------------------------------------
 bool TSP_PageListModel::addPage()
 {
-    // application defined?
-    if (!m_pApp)
-    {
-        M_LogErrorT("addPage - FAILED - no application defined");
-        return false;
-    }
+    // get the document
+    TSP_QmlDocument* pDocument = GetDocument();
 
     // document exists?
-    if (!m_pApp->GetDocument())
+    if (!pDocument)
     {
         M_LogErrorT("addPage - FAILED - no document defined");
         return false;
     }
 
     // is document opened?
-    if (m_pApp->GetDocument()->GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
+    if (pDocument->GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
     {
         M_LogErrorT("addPage - FAILED - cannot add a page in a closed document");
         return false;
@@ -158,9 +171,8 @@ bool TSP_PageListModel::addPage()
 
         beginInsertRows(QModelIndex(), count, count);
 
-        // FIXME this code is unsafe, test if the selected items exist
         // add a page to the selected atlas
-        TSP_QmlAtlasPage* pQmlPage = static_cast<TSP_QmlAtlasPage*>(m_pApp->GetDocument()->GetSelectedAtlas()->CreateAndAddPage());
+        TSP_QmlPage* pQmlPage = static_cast<TSP_QmlPage*>(pQmlAtlas->CreateAndAddPage());
 
         if (!pQmlPage)
         {
@@ -182,22 +194,18 @@ bool TSP_PageListModel::addPage()
 //---------------------------------------------------------------------------
 bool TSP_PageListModel::deletePage()
 {
-    // application defined?
-    if (!m_pApp)
-    {
-        M_LogErrorT("deletePage - FAILED - no application defined");
-        return false;
-    }
+    // get the document
+    TSP_QmlDocument* pDocument = GetDocument();
 
     // document exists?
-    if (!m_pApp->GetDocument())
+    if (!pDocument)
     {
         M_LogErrorT("deletePage - FAILED - no document defined");
         return false;
     }
 
     // is document opened?
-    if (m_pApp->GetDocument()->GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
+    if (pDocument->GetStatus() == TSP_Document::IEDocStatus::IE_DS_Closed)
     {
         M_LogErrorT("deletePage - FAILED - cannot add a page in a closed document");
         return false;
@@ -225,7 +233,7 @@ bool TSP_PageListModel::deletePage()
         beginRemoveRows(QModelIndex(), m_SelectedPageItem, m_SelectedPageItem);
 
         // remove the selected page from the selected atlas
-        m_pApp->GetDocument()->GetSelectedAtlas()->RemovePage(m_SelectedPageItem);
+        pQmlAtlas->RemovePage(m_SelectedPageItem);
 
         endRemoveRows();
 
@@ -240,7 +248,7 @@ bool TSP_PageListModel::deletePage()
             m_SelectedPageItem = -1;
 
         // change the page on the user interface
-        emit showSelectedPage(m_SelectedPageItem);
+        emit showSelectedPage(m_SelectedPageItem, m_SelectedPageItem >= 0 ? GetSelectedPageUID() : QString());
 
         return true;
     }
@@ -251,47 +259,9 @@ bool TSP_PageListModel::deletePage()
     return false;
 }
 //---------------------------------------------------------------------------
-QString TSP_PageListModel::getPageName(int index) const
-{
-    //: Error to show when the page name could not be get
-    //% "<#Error>"
-    const QString errorName = qtTrId("id-page-name-error");
-
-    if (!m_pPageOwner)
-        return errorName;
-
-    // get page owner as atlas
-    TSP_QmlAtlas* pQmlAtlas = dynamic_cast<TSP_QmlAtlas*>(m_pPageOwner);
-
-    // found it?
-    if (pQmlAtlas)
-    {
-        // get selected page
-        TSP_QmlAtlasPage* pPage = static_cast<TSP_QmlAtlasPage*>(pQmlAtlas->GetPage(index));
-
-        // found it?
-        if (!pPage)
-        {
-            M_LogErrorT("getPageName - FAILED - page not found - index - " << index);
-            return errorName;
-        }
-
-        // get page name
-        return QString::fromStdWString(pPage->GetName());
-    }
-
-    // FIXME test if page owner is a process and add page on it if yes
-
-    M_LogErrorT("getPageName - FAILED - unknown page owner - id - " << m_pPageOwner->GetUID());
-    return errorName;
-}
-//---------------------------------------------------------------------------
 TSP_Page* TSP_PageListModel::GetPage(int index) const
 {
     if (!m_pPageOwner)
-        return nullptr;
-
-    if (!index)
         return nullptr;
 
     // is index out of bounds?
@@ -304,12 +274,28 @@ TSP_Page* TSP_PageListModel::GetPage(int index) const
     // found it?
     if (pQmlAtlas)
         // get page
-        return static_cast<TSP_QmlAtlasPage*>(pQmlAtlas->GetPage(index));
+        return static_cast<TSP_QmlPage*>(pQmlAtlas->GetPage(index));
 
     // FIXME test if page owner is a process and add page on it if yes
 
     M_LogErrorT("GetSelectedPage - FAILED - unknown page owner - id - " << m_pPageOwner->GetUID());
     return nullptr;
+}
+//---------------------------------------------------------------------------
+QString TSP_PageListModel::getPageName(int index) const
+{
+    // get page matching with index
+    TSP_Page* pPage = GetPage(index);
+
+    // found it?
+    if (!pPage)
+    {
+        M_LogErrorT("getPageName - FAILED - page not found - index - " << index);
+        return QString();
+    }
+
+    // get page name
+    return QString::fromStdWString(pPage->GetName());
 }
 //---------------------------------------------------------------------------
 TSP_Page* TSP_PageListModel::GetSelectedPage() const
@@ -320,6 +306,19 @@ TSP_Page* TSP_PageListModel::GetSelectedPage() const
 int TSP_PageListModel::getSelectedPageIndex() const
 {
     return m_SelectedPageItem;
+}
+//---------------------------------------------------------------------------
+QString TSP_PageListModel::GetSelectedPageUID() const
+{
+    // get the selected page
+    TSP_Page* pPage = GetSelectedPage();
+
+    // found it?
+    if (!pPage)
+        return QString();
+
+    // return page unique identifier
+    return QString::fromStdString(pPage->GetUID());
 }
 //---------------------------------------------------------------------------
 void TSP_PageListModel::onPageSelected(int index)
@@ -344,7 +343,7 @@ void TSP_PageListModel::onPageSelected(int index)
         m_SelectedPageItem = index;
 
     // change the page on the user interface
-    emit showSelectedPage(m_SelectedPageItem);
+    emit showSelectedPage(m_SelectedPageItem, m_SelectedPageItem >= 0 ? GetSelectedPageUID() : QString());
 }
 //---------------------------------------------------------------------------
 int TSP_PageListModel::rowCount(const QModelIndex& pParent) const
@@ -383,5 +382,30 @@ QHash<int, QByteArray> TSP_PageListModel::roleNames() const
     roles[(int)TSP_PageListModel::IEDataRole::IE_DR_PageName] = "pageName";
 
     return roles;
+}
+//---------------------------------------------------------------------------
+TSP_QmlDocument* TSP_PageListModel::GetDocument() const
+{
+    // no application?
+    if (!m_pApp)
+        return nullptr;
+
+    // get document
+    return m_pApp->GetDocument();
+}
+//---------------------------------------------------------------------------
+void TSP_PageListModel::ShowError(const QString& title, const QString& msg)
+{
+    // no application?
+    if (!m_pApp)
+        return;
+
+    TSP_MainFormModel* pMainFormModel = m_pApp->GetMainFormModel();
+
+    // no main form model?
+    if (!pMainFormModel)
+        return;
+
+    pMainFormModel->showError(title, msg);
 }
 //---------------------------------------------------------------------------

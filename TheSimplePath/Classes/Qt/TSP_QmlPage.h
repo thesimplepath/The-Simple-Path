@@ -37,6 +37,7 @@
 #include "TSP_QmlBoxProxy.h"
 #include "TSP_QmlLink.h"
 #include "TSP_QmlLinkProxy.h"
+#include "TSP_QmlProcess.h"
 #include "TSP_QmlPageProxy.h"
 #include "TSP_QmlProxyDictionary.h"
 
@@ -73,6 +74,37 @@ class TSP_QmlPage : public TSP_Page
         *@param pProxy - the page proxy
         */
         virtual void SetProxy(TSP_QmlPageProxy* pProxy);
+
+        /**
+        * Gets if this page belongs to an atlas
+        *@return true if this page belongs to an atlas, otherwise false
+        */
+        virtual bool IsAtlasPage() const;
+
+        /**
+        * Gets if this page belongs to a process
+        *@return true if this page belongs to a process, otherwise false
+        */
+        virtual bool IsProcessPage() const;
+
+        /**
+        * Creates a process and adds it in page
+        *@param name - process name
+        *@param description - process description
+        *@param comments - process comments
+        *@param x - process x position in pixels, set to default position if -1
+        *@param y - process y position in pixels, set to default position if -1
+        *@param width - process width in pixels, set to default width if -1
+        *@param height - process height in pixels, set to default width if -1
+        *@return newly created process
+        */
+        virtual TSP_Process* CreateAndAddProcess(const std::wstring& name,
+                                                 const std::wstring& description =  L"",
+                                                 const std::wstring& comments    =  L"",
+                                                       int           x           = -1,
+                                                       int           y           = -1,
+                                                       int           width       = -1,
+                                                       int           height      = -1);
 
         /**
         * Creates a box and adds it in page
@@ -171,10 +203,10 @@ class TSP_QmlPage : public TSP_Page
                                   int                    height);
 
         /**
-        * Deletes a component view from the user interface
-        *@param uid - box unique identifier to delete
+        * Removes a component view from the user interface
+        *@param uid - component unique identifier to remove
         */
-        void DeleteComponentView(const QString& uid);
+        void RemoveComponentView(const QString& uid);
 
     private:
         TSP_QmlPageProxy* m_pProxy = nullptr;

@@ -57,7 +57,14 @@ T.Control
             hoverEnabled: true
             visible: ctHandleControl.m_HandleVisible
 
-            /// called when mouse is pressed above the control
+            /// Called when mouse is double-clicked onto the control
+            onDoubleClicked: function(mouseEvent)
+            {
+                if (m_Target)
+                    m_Target.dblClick();
+            }
+
+            /// Called when mouse is pressed above the control
             onPressed: function(mouseEvent)
             {
                 if (m_Target)
@@ -67,14 +74,14 @@ T.Control
                 m_MouseDeltaY = mouseEvent.y - parent.y;
             }
 
-            /// called when mouse is released after pressed above the control
+            /// Called when mouse is released after pressed above the control
             onReleased: function(mouseEvent)
             {
                 if (m_Target)
                     m_Target.moveEnd();
             }
 
-            /// called when mouse moved on the x axis above the handle
+            /// Called when mouse moved on the x axis above the handle
             onMouseXChanged: function(mouseEvent)
             {
                 if (!pressed)
@@ -84,7 +91,7 @@ T.Control
                     m_Target.move(mouseX - m_MouseDeltaX, 0);
             }
 
-            /// called when mouse moved on the y axis above the handle
+            /// Called when mouse moved on the y axis above the handle
             onMouseYChanged: function(mouseEvent)
             {
                 if (!pressed)

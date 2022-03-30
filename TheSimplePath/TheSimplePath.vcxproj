@@ -108,19 +108,19 @@
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <QtInstall>Qt 5.15.2 32bit</QtInstall>
-    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;winextras;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtInstall>Qt 5.15.2 64bit</QtInstall>
-    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;winextras;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>Qt 5.15.2 32bit</QtInstall>
-    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;winextras;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="QtSettings">
     <QtInstall>Qt 5.15.2 64bit</QtInstall>
-    <QtModules>core;network;gui;svg;widgets;qml;quickwidgets;quick</QtModules>
+    <QtModules>core;network;gui;svg;widgets;qml;winextras;quickwidgets;quick</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -348,10 +348,10 @@
     <ClCompile Include="Classes\Core\TSP_Link.cpp" />
     <ClCompile Include="Classes\Core\TSP_Message.cpp" />
     <ClCompile Include="Classes\Core\TSP_Page.cpp" />
+    <ClCompile Include="Classes\Core\TSP_PageContainer.cpp" />
     <ClCompile Include="Classes\Core\TSP_Process.cpp" />
     <ClCompile Include="Classes\QT\TSP_QmlActivity.cpp" />
     <ClCompile Include="Classes\QT\TSP_QmlAtlas.cpp" />
-    <ClCompile Include="Classes\Qt\TSP_QmlAtlasPage.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlAtlasProxy.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlBox.cpp" />
     <ClCompile Include="Classes\Qt\TSP_QmlBoxProxy.cpp" />
@@ -428,12 +428,12 @@
     <ClInclude Include="Classes\Core\TSP_Page.h" />
     <QtMoc Include="TSP_PageListModel.h" />
     <QtMoc Include="TSP_MainFormModel.h" />
+    <ClInclude Include="Classes\Core\TSP_PageContainer.h" />
     <ClInclude Include="Classes\Core\TSP_Process.h" />
     <ClInclude Include="Classes\QT\TSP_QmlActivity.h" />
     <ClInclude Include="Classes\QT\TSP_QmlAtlas.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlBoxProxy.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlAtlasProxy.h" />
-    <ClInclude Include="Classes\Qt\TSP_QmlAtlasPage.h" />
     <ClInclude Include="Classes\Qt\TSP_QmlBox.h" />
     <ClInclude Include="Classes\QT\TSP_QmlDocument.h" />
     <QtMoc Include="Classes\Qt\TSP_QmlDocumentModel.h" />
@@ -445,6 +445,7 @@
     <ClInclude Include="Classes\Qt\TSP_QmlProcess.h" />
     <ClInclude Include="Classes\Qt\TSP_QmlProxyDictionary.h" />
     <ClInclude Include="Classes\Qt\TSP_QtGlobalMacros.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\allocators.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\cursorstreamwrapper.h" />
     <ClInclude Include="Third-Party\RapidJSON\include\rapidjson\document.h" />
@@ -496,10 +497,9 @@
     <None Include="UI\js\TSP_JSHelper.js" />
     <None Include="UI\qmldir" />
     <None Include="UI\TSP_Activity.qml" />
+    <None Include="UI\TSP_AtlasView.qml" />
     <None Include="UI\TSP_Box.qml" />
     <None Include="UI\TSP_Connector.qml" />
-    <None Include="UI\TSP_DocAtlasView.qml" />
-    <None Include="UI\TSP_DocPageView.qml" />
     <None Include="UI\TSP_DocumentView.qml" />
     <None Include="UI\TSP_End.qml" />
     <None Include="UI\TSP_Handle.qml" />
@@ -507,12 +507,20 @@
     <None Include="UI\TSP_Link.qml" />
     <None Include="UI\TSP_Main.qml" />
     <None Include="UI\TSP_Message.qml" />
+    <None Include="UI\TSP_Page.qml" />
     <None Include="UI\TSP_PageBreak.qml" />
     <None Include="UI\TSP_PageListView.qml" />
+    <None Include="UI\TSP_PagesView.qml" />
     <None Include="UI\TSP_PageView.qml" />
     <None Include="UI\TSP_Process.qml" />
     <None Include="UI\TSP_Start.qml" />
     <None Include="UI\TSP_Styles.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TheSimplePath.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="TheSimplePath.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

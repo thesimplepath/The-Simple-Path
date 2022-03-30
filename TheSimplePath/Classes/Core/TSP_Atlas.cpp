@@ -40,20 +40,19 @@
 //---------------------------------------------------------------------------
 TSP_Atlas::TSP_Atlas(TSP_Document* pOwner) :
     TSP_Item(),
+    TSP_PageContainer(),
     m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
 TSP_Atlas::TSP_Atlas(const std::wstring& name, TSP_Document* pOwner) :
     TSP_Item(),
+    TSP_PageContainer(),
     m_Name(name),
     m_pOwner(pOwner)
 {}
 //---------------------------------------------------------------------------
 TSP_Atlas::~TSP_Atlas()
-{
-    for each (auto pPage in m_Pages)
-        delete pPage;
-}
+{}
 //---------------------------------------------------------------------------
 TSP_Page* TSP_Atlas::CreatePage()
 {
@@ -63,57 +62,6 @@ TSP_Page* TSP_Atlas::CreatePage()
 TSP_Page* TSP_Atlas::CreatePage(const std::wstring& name)
 {
     return new TSP_Page(name, this);
-}
-//---------------------------------------------------------------------------
-TSP_Page* TSP_Atlas::CreateAndAddPage()
-{
-    std::unique_ptr<TSP_Page> pPage(CreatePage());
-    m_Pages.push_back(pPage.get());
-    return pPage.release();
-}
-//---------------------------------------------------------------------------
-TSP_Page* TSP_Atlas::CreateAndAddPage(const std::wstring& name)
-{
-    std::unique_ptr<TSP_Page> pPage(CreatePage(name));
-    m_Pages.push_back(pPage.get());
-    return pPage.release();
-}
-//---------------------------------------------------------------------------
-void TSP_Atlas::RemovePage(std::size_t index)
-{
-    // is index out of bounds?
-    if (index >= m_Pages.size())
-        return;
-
-    // delete the page
-    delete m_Pages[index];
-    m_Pages.erase(m_Pages.begin() + index);
-}
-//---------------------------------------------------------------------------
-void TSP_Atlas::RemovePage(TSP_Page* pPage)
-{
-    // search for page to remove
-    for (std::size_t i = 0; i < m_Pages.size(); ++i)
-        // found it?
-        if (m_Pages[i] == pPage)
-        {
-            // remove the page and exit
-            RemovePage(i);
-            return;
-        }
-}
-//---------------------------------------------------------------------------
-TSP_Page* TSP_Atlas::GetPage(std::size_t index) const
-{
-    if (index >= m_Pages.size())
-        return nullptr;
-
-    return m_Pages[index];
-}
-//---------------------------------------------------------------------------
-std::size_t TSP_Atlas::GetPageCount() const
-{
-    return m_Pages.size();
 }
 //---------------------------------------------------------------------------
 bool TSP_Atlas::Load()

@@ -112,9 +112,21 @@ class TSP_MainFormModel : public QObject
         TSP_Application* m_pApp      = nullptr;
         QPageSize        m_PageSize;
 
+        /**
+        * Get document
+        *@return document, nullptr if not found or on error
+        */
         TSP_QmlDocument* GetDocument() const;
 
+        /**
+        * Get selected atlas
+        *@return selected atlas, nullptr if no selection or on error
+        */
         TSP_QmlAtlas* GetSelectedAtlas() const;
 
+        /**
+        * Get selected page
+        *@return selected page, nullptr if no selection or on error
+        */
         TSP_QmlPage* GetSelectedPage() const;
 };

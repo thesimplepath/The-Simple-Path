@@ -106,3 +106,22 @@ void TSP_QmlBoxProxy::SetBox(TSP_Box* pBox)
     m_pBox = pBox;
 }
 //---------------------------------------------------------------------------
+bool TSP_QmlBoxProxy::AddItem(const QString& type, const QString& uid)
+{
+    m_ItemAdded = false;
+
+    emit addItemToBox(type, uid);
+
+    return m_ItemAdded;
+}
+//---------------------------------------------------------------------------
+void TSP_QmlBoxProxy::RemoveItem(const QString& type, const QString& uid)
+{
+    emit removeItemFromBox(type, uid);
+}
+//---------------------------------------------------------------------------
+void TSP_QmlBoxProxy::onItemAdded(bool success)
+{
+    m_ItemAdded = success;
+}
+//---------------------------------------------------------------------------

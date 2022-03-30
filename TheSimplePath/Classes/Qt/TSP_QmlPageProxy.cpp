@@ -106,9 +106,9 @@ bool TSP_QmlPageProxy::AddLink(const QString&               type,
     return m_LinkAdded;
 }
 //---------------------------------------------------------------------------
-void TSP_QmlPageProxy::DeleteComponent(const QString& uid)
+void TSP_QmlPageProxy::RemoveComponent(const QString& uid)
 {
-    emit deleteComponentView(uid);
+    emit removeComponentView(uid);
 }
 //---------------------------------------------------------------------------
 void TSP_QmlPageProxy::onBoxAdded(bool success)

@@ -215,6 +215,17 @@ ApplicationWindow
                 objectName: "rcDocument"
                 color: "#808080"
                 anchors.fill: parent
+
+                /**
+                * Document loader
+                */
+                Loader
+                {
+                    // common properties
+                    id: ldDocument
+                    objectName: "ldDocument"
+                    anchors.fill: parent
+                }
             }
         }
     }
@@ -297,30 +308,38 @@ ApplicationWindow
     */
     function createDocumentView(name, openedCount)
     {
-        console.log("Create new document view - " + name);
-
-        // load the item component
-        let component = Qt.createComponent('TSP_DocumentView.qml');
-
-        // succeeded?
-        if (component.status !== Component.Ready)
+        try
         {
-            console.error("Create new document view - an error occurred while the item was created - " + component.errorString());
-            return undefined;
+            console.log("Create document - name - " + name);
+
+            // build document identifier
+            const docId = "dvDocumentView_" + openedCount;
+
+            // create a new document view
+            ldDocument.setSource("TSP_DocumentView.qml", {"id":         docId,
+                                                          "objectName": docId,
+                                                          "m_Name":     name});
+
+            // succeeded?
+            if (!ldDocument.item)
+            {
+                console.error("Create document - FAILED - an error occurred while the view was created");
+                return undefined;
+            }
+
+            console.log("Create document - succeeded - view name - " + ldDocument.item.objectName);
+
+            return ldDocument.item;
+        }
+        catch (e)
+        {
+            console.exception("Create document - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        // succeeded?
-        if (!component)
-            return undefined;
+        // delete the document, if previously created
+        ldDocument.source = "";
 
-        // create and show new item object
-        let item = component.createObject(rcDocument, {"id":         "dvDocumentView_" + openedCount,
-                                                       "objectName": "dvDocumentView_" + openedCount,
-                                                       "m_Name":                         name});
-
-        console.log("Create new document view - succeeded - view name - " + item.objectName);
-
-        return item;
+        return undefined;
     }
 
     /**
@@ -328,32 +347,22 @@ ApplicationWindow
     */
     function deleteDocumentView()
     {
-        var docName;
-        var deleted = false;
+        try
+        {
+            // no document opened?
+            if (!ldDocument.item)
+                return;
 
-        // iterate through document view container until find the view to delete, and deletes it
-        for (var i = rcDocument.children.length - 1; i >= 0; --i)
-            // is component a document view?
-            if (rcDocument.children[i].m_Type === "TSP_DocumentView" && !rcDocument.children[i].m_Deleted)
-            {
-                // keep the document name for logging
-                docName = rcDocument.children[i].objectName;
+            console.log("Delete document - view name - " + ldDocument.item.objectName);
 
-                // NOTE setting the deleted property just before destroying the component may seem incoherent,
-                // however the destroyed item is kept in memory until the garbage collector deletes it, and may
-                // be thus still found when the children are iterated. This may cause a deleting item to be
-                // processed as a normal item in other situations where it shouldn't
-                rcDocument.children[i].m_Deleted = true;
-                rcDocument.children[i].destroy();
+            // delete the document
+            ldDocument.source = "";
 
-                deleted = true;
-                break;
-            }
-
-        // log success or failure
-        if (deleted)
-            console.log("Delete document view - succeeded - view name - " + docName);
-        else
-            console.error("Delete document view - FAILED");
+            console.log("Delete document - succeeded");
+        }
+        catch (e)
+        {
+            console.exception("Delete document - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
+        }
     }
 }

@@ -9,6 +9,7 @@ import QtQuick 2.15
 QtObject
 {
     // color properties
+    readonly property string m_DocumentBackground:  "white"
     readonly property string m_ProcessFillColor:    "#009ed6"
     readonly property string m_ProcessOutlineColor: "#202020"
     readonly property string m_DarkTextColor:       "#202020"

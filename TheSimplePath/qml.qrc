@@ -2,10 +2,9 @@
     <qresource prefix="/">
         <file>UI/js/TSP_JSHelper.js</file>
         <file>UI/TSP_Activity.qml</file>
+        <file>UI/TSP_AtlasView.qml</file>
         <file>UI/TSP_Box.qml</file>
         <file>UI/TSP_Connector.qml</file>
-        <file>UI/TSP_DocAtlasView.qml</file>
-        <file>UI/TSP_DocPageView.qml</file>
         <file>UI/TSP_DocumentView.qml</file>
         <file>UI/TSP_End.qml</file>
         <file>UI/TSP_Handle.qml</file>
@@ -13,8 +12,10 @@
         <file>UI/TSP_Link.qml</file>
         <file>UI/TSP_Main.qml</file>
         <file>UI/TSP_Message.qml</file>
+        <file>UI/TSP_Page.qml</file>
         <file>UI/TSP_PageBreak.qml</file>
         <file>UI/TSP_PageListView.qml</file>
+        <file>UI/TSP_PagesView.qml</file>
         <file>UI/TSP_PageView.qml</file>
         <file>UI/TSP_Process.qml</file>
         <file>UI/TSP_Start.qml</file>

@@ -29,6 +29,16 @@
 
 #include "TSP_QmlPage.h"
 
+// std
+#include <sstream>
+
+// common classes
+#include "Common/TSP_Exception.h"
+#include "Common/TSP_GlobalMacros.h"
+
+// qt classes
+#include "TSP_QmlAtlas.h"
+
  //---------------------------------------------------------------------------
  // TSP_QmlPage
  //---------------------------------------------------------------------------
@@ -53,6 +63,69 @@ void TSP_QmlPage::SetProxy(TSP_QmlPageProxy* pProxy)
     m_pProxy = pProxy;
 }
 //---------------------------------------------------------------------------
+bool TSP_QmlPage::IsAtlasPage() const
+{
+    return dynamic_cast<TSP_Atlas*>(GetOwner());
+}
+//---------------------------------------------------------------------------
+bool TSP_QmlPage::IsProcessPage() const
+{
+    return dynamic_cast<TSP_Process*>(GetOwner());
+}
+//---------------------------------------------------------------------------
+TSP_Process* TSP_QmlPage::CreateAndAddProcess(const std::wstring& name,
+                                              const std::wstring& description,
+                                              const std::wstring& comments,
+                                                    int           x,
+                                                    int           y,
+                                                    int           width,
+                                                    int           height)
+{
+    // only an atlas page can contain a process, don't allow to create it in a process page
+    if (IsProcessPage())
+        return nullptr;
+
+    std::unique_ptr<TSP_QmlProcess> pProcess = std::make_unique<TSP_QmlProcess>(this);
+
+    // add a process on the page view
+    if (!CreateBoxView(pProcess.get(), "process", x, y, width, height))
+        return nullptr;
+
+    // get process proxy
+    TSP_QmlBoxProxy* pProcessProxy = pProcess->GetProxy();
+
+    // found it?
+    if (!pProcessProxy)
+    {
+        RemoveComponentView(QString::fromStdString(pProcess->GetUID()));
+        return nullptr;
+    }
+
+    // set the process data
+    pProcessProxy->setTitle(QString::fromStdWString(name));
+    pProcessProxy->setDescription(QString::fromStdWString(description));
+    pProcessProxy->setComments(QString::fromStdWString(comments));
+
+    // create a page for this process
+    TSP_QmlPage* pProcessPage = static_cast<TSP_QmlPage*>(pProcess->CreateAndAddPage());
+
+    // succeeded?
+    if (!pProcessPage)
+    {
+        RemoveComponentView(QString::fromStdString(pProcess->GetUID()));
+        return nullptr;
+    }
+
+    // add newly created process to page
+    if (!TSP_Page::Add(pProcess.get()))
+    {
+        RemoveComponentView(QString::fromStdString(pProcess->GetUID()));
+        return nullptr;
+    }
+
+    return pProcess.release();
+}
+//---------------------------------------------------------------------------
 TSP_Box* TSP_QmlPage::CreateAndAddBox(const std::wstring& name,
                                       const std::wstring& description,
                                       const std::wstring& comments,
@@ -67,14 +140,27 @@ TSP_Box* TSP_QmlPage::CreateAndAddBox(const std::wstring& name,
     if (!CreateBoxView(pBox.get(), "box", x, y, width, height))
         return nullptr;
 
+    // get box proxy
+    TSP_QmlBoxProxy* pBoxProxy = pBox->GetProxy();
+
+    // found it?
+    if (!pBoxProxy)
+    {
+        RemoveComponentView(QString::fromStdString(pBox->GetUID()));
+        return nullptr;
+    }
+
     // set the box data
-    pBox->GetProxy()->setTitle(QString::fromStdWString(name));
-    pBox->GetProxy()->setDescription(QString::fromStdWString(description));
-    pBox->GetProxy()->setComments(QString::fromStdWString(comments));
+    pBoxProxy->setTitle(QString::fromStdWString(name));
+    pBoxProxy->setDescription(QString::fromStdWString(description));
+    pBoxProxy->setComments(QString::fromStdWString(comments));
 
     // add newly created box to page
     if (!TSP_Page::Add(pBox.get()))
+    {
+        RemoveComponentView(QString::fromStdString(pBox->GetUID()));
         return nullptr;
+    }
 
     return pBox.release();
 }
@@ -106,14 +192,27 @@ TSP_Link* TSP_QmlPage::CreateAndAddLink(const std::wstring&          name,
                         height))
         return nullptr;
 
+    // get box proxy
+    TSP_QmlLinkProxy* pLinkProxy = pLink->GetProxy();
+
+    // found it?
+    if (!pLinkProxy)
+    {
+        RemoveComponentView(QString::fromStdString(pLink->GetUID()));
+        return nullptr;
+    }
+
     // set the link data
-    pLink->GetProxy()->setTitle(QString::fromStdWString(name));
-    pLink->GetProxy()->setDescription(QString::fromStdWString(description));
-    pLink->GetProxy()->setComments(QString::fromStdWString(comments));
+    pLinkProxy->setTitle(QString::fromStdWString(name));
+    pLinkProxy->setDescription(QString::fromStdWString(description));
+    pLinkProxy->setComments(QString::fromStdWString(comments));
 
     // add newly created link to page
     if (!TSP_Page::Add(pLink.get()))
+    {
+        RemoveComponentView(QString::fromStdString(pLink->GetUID()));
         return nullptr;
+    }
 
     return pLink.release();
 }
@@ -123,7 +222,7 @@ void TSP_QmlPage::Remove(const std::string& uid)
     if (uid.empty())
         return;
 
-    DeleteComponentView(QString::fromStdString(uid));
+    RemoveComponentView(QString::fromStdString(uid));
     TSP_Page::Remove(uid);
 }
 //---------------------------------------------------------------------------
@@ -132,11 +231,11 @@ void TSP_QmlPage::Remove(TSP_Component* pComponent)
     if (!pComponent)
         return;
 
-    DeleteComponentView(QString::fromStdString(pComponent->GetUID()));
+    RemoveComponentView(QString::fromStdString(pComponent->GetUID()));
     TSP_Page::Remove(pComponent);
 }
 //---------------------------------------------------------------------------
-void TSP_QmlPage::DeleteComponentView(const QString& uid)
+void TSP_QmlPage::RemoveComponentView(const QString& uid)
 {
     if (uid.isEmpty())
         return;
@@ -144,7 +243,7 @@ void TSP_QmlPage::DeleteComponentView(const QString& uid)
     if (!m_pProxy)
         return;
 
-    // notify page proxy that a component should be deleted
-    m_pProxy->DeleteComponent(uid);
+    // notify page proxy that a component should be removed
+    m_pProxy->RemoveComponent(uid);
 }
 //---------------------------------------------------------------------------

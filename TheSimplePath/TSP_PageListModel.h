@@ -38,6 +38,7 @@
 
 // class prototype
 class TSP_Application;
+class TSP_QmlDocument;
 
 /**
 * Page list model
@@ -51,8 +52,9 @@ class TSP_PageListModel : public QAbstractListModel
         /**
         * Called when the selected page should be shown
         *@param index - page index
+        *@param uid - page unique identifier
         */
-        void showSelectedPage(int index);
+        void showSelectedPage(int index, const QString& uid);
 
     public:
         /**
@@ -85,6 +87,12 @@ class TSP_PageListModel : public QAbstractListModel
         virtual void SetPageOwner(TSP_Item* pPageOwner);
 
         /**
+        * Queries the page owner unique identifier
+        *@return the page owner unique identifier, empty string if no page owner defined
+        */
+        virtual Q_INVOKABLE QString queryPageOwnerUID() const;
+
+        /**
         * Called when the add page button was clicked on the page list view
         */
         virtual Q_INVOKABLE void onAddPageClicked();
@@ -93,6 +101,12 @@ class TSP_PageListModel : public QAbstractListModel
         * Called when the delete page button was clicked on the page list view
         */
         virtual Q_INVOKABLE void onDeletePageClicked();
+
+        /**
+        * Called when a process is double-clicked
+        *@param uid - process unique identifier
+        */
+        virtual Q_INVOKABLE void onProcessDblClicked(const QString& uid);
 
         /**
         * Clears the view content
@@ -112,24 +126,32 @@ class TSP_PageListModel : public QAbstractListModel
         virtual Q_INVOKABLE bool deletePage();
 
         /**
-        * Gets the page name at index
-        */
-        virtual Q_INVOKABLE QString getPageName(int index) const;
-
-        /**
-        * Get page at index
+        * Gets page at index
         *@return page, nullptr if not found or on error
         */
         virtual TSP_Page* GetPage(int index) const;
 
         /**
-        * Get currently selected page
+        * Gets the page name at index
+        *@param index - page index for which the name should be get
+        *@return the page name, empty string if not found or on error
+        */
+        virtual Q_INVOKABLE QString getPageName(int index) const;
+
+        /**
+        * Gets currently selected page
         *@return selected page, nullptr if not found or on error
         */
         virtual TSP_Page* GetSelectedPage() const;
 
         /**
-        * Get currently selected page index
+        * Gets the selected page unique identifier
+        *@return the selected page unique identifier, empty string if no selection or on error
+        */
+        virtual QString GetSelectedPageUID() const;
+
+        /**
+        * Gets currently selected page index
         *@return selected index, or -1 if no page selected
         */
         virtual Q_INVOKABLE int getSelectedPageIndex() const;
@@ -141,14 +163,14 @@ class TSP_PageListModel : public QAbstractListModel
         virtual Q_INVOKABLE void onPageSelected(int index);
 
         /**
-        * Get row count
+        * Gets row count
         *@param parent - the parent row index from which the count should be performed
         *@return the row count
         */
         virtual Q_INVOKABLE int rowCount(const QModelIndex& pParent = QModelIndex()) const;
 
         /**
-        * Get data at row index
+        * Gets data at row index
         *@param index - row index
         *@param role - data role
         *@return the data, empty value if not found or on error
@@ -156,7 +178,7 @@ class TSP_PageListModel : public QAbstractListModel
         virtual Q_INVOKABLE QVariant data(const QModelIndex& index, int role) const;
 
         /**
-        * Get role names
+        * Gets role names
         *@return the role names
         */
         virtual QHash<int, QByteArray> roleNames() const;
@@ -165,4 +187,17 @@ class TSP_PageListModel : public QAbstractListModel
         TSP_Application* m_pApp             =  nullptr;
         TSP_Item*        m_pPageOwner       =  nullptr;
         int              m_SelectedPageItem = -1;
+
+        /**
+        * Gets document
+        *@return document, nullptr if not found or on error
+        */
+        TSP_QmlDocument* GetDocument() const;
+
+        /**
+        * Shows an error message to user
+        *@param title - error title
+        *@param msg - error message
+        */
+        void ShowError(const QString& title, const QString& msg);
 };

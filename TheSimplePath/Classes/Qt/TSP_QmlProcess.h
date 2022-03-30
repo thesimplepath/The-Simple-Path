@@ -36,7 +36,10 @@
 #include "Core\TSP_Process.h"
 
 // qt classes
-#include "TSP_QmlAtlasPage.h"
+#include "TSP_QmlBoxProxy.h"
+
+// classes prototypes
+class TSP_QmlPage;
 
 /**
 * Qt process component
@@ -47,21 +50,21 @@ class TSP_QmlProcess : public TSP_Process
     public:
         /**
         * Constructor
-        *@param pOwner - the page owner
+        *@param pOwner - page owner
         */
-        TSP_QmlProcess(TSP_QmlAtlasPage* pOwner);
+        TSP_QmlProcess(TSP_QmlPage* pOwner);
 
         /**
         * Constructor
         *@param title - component title
         *@param description - component description
         *@param comments - component comments
-        *@param pOwner - component owner
+        *@param pOwner - page owner
         */
-        TSP_QmlProcess(const std::wstring&     title,
-                       const std::wstring&     description,
-                       const std::wstring&     comments,
-                             TSP_QmlAtlasPage* pOwner);
+        TSP_QmlProcess(const std::wstring& title,
+                       const std::wstring& description,
+                       const std::wstring& comments,
+                             TSP_QmlPage*  pOwner);
 
         virtual ~TSP_QmlProcess();
 
@@ -77,6 +80,50 @@ class TSP_QmlProcess : public TSP_Process
         */
         void SetProxy(TSP_QmlBoxProxy* pProxy);
 
+        /**
+        * Creates a page
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage();
+
+        /**
+        * Creates a page
+        *@param name - page name
+        *@return newly created page
+        */
+        virtual TSP_Page* CreatePage(const std::wstring& name);
+
+        /**
+        * Creates a new child page and adds it in this page
+        *@return newly added page
+        */
+        virtual TSP_Page* CreateAndAddPage();
+
+        /**
+        * Creates a new child page and adds it in this page
+        *@param name - page name
+        *@return newly added page
+        */
+        virtual TSP_Page* CreateAndAddPage(const std::wstring& name);
+
+        /**
+        * Removes a page
+        *@param index - page index to remove
+        */
+        virtual void RemovePage(std::size_t index);
+
+        /**
+        * Removes a page
+        *@param pPage - page to remove
+        */
+        virtual void RemovePage(TSP_Page* pPage);
+
     private:
         TSP_QmlBoxProxy* m_pProxy = nullptr;
+
+        /**
+        * Creates a new page view and adds it to the user interface
+        *@param pPage - page for which the view should be added
+        */
+        bool CreatePageView(TSP_Page* pPage);
 };

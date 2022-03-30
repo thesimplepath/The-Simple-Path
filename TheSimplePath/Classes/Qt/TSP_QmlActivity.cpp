@@ -32,14 +32,14 @@
 //---------------------------------------------------------------------------
 // TSP_QmlActivity
 //---------------------------------------------------------------------------
-TSP_QmlActivity::TSP_QmlActivity(TSP_QmlProcessPage* pOwner) :
+TSP_QmlActivity::TSP_QmlActivity(TSP_QmlPage* pOwner) :
     TSP_Activity(pOwner)
 {}
 //---------------------------------------------------------------------------
-TSP_QmlActivity::TSP_QmlActivity(const std::wstring&       title,
-                                 const std::wstring&       description,
-                                 const std::wstring&       comments,
-                                       TSP_QmlProcessPage* pOwner) :
+TSP_QmlActivity::TSP_QmlActivity(const std::wstring& title,
+                                 const std::wstring& description,
+                                 const std::wstring& comments,
+                                       TSP_QmlPage*  pOwner) :
     TSP_Activity(title, description, comments, pOwner)
 {}
 //---------------------------------------------------------------------------

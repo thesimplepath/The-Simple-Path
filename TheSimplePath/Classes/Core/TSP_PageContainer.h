@@ -1,8 +1,8 @@
 /****************************************************************************
- * ==> TSP_QmlAtlas --------------------------------------------------------*
+ * ==> TSP_PageContainer ---------------------------------------------------*
  ****************************************************************************
- * Description:  Qt document atlas                                          *
- * Contained in: Qt                                                         *
+ * Description:  Container which may contain pages                          *
+ * Contained in: Core                                                       *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *
@@ -29,71 +29,44 @@
 
 #pragma once
 
-// std
+ // std
+#include <string>
 #include <vector>
 
-// core classes
-#include "Core\TSP_Atlas.h"
-
-// qt classes
-#include "TSP_QmlDocument.h"
-#include "TSP_QmlAtlasProxy.h"
+// core class
+#include "TSP_Page.h"
 
 /**
-* Qt document atlas
+* Container which may contain pages
 *@author Jean-Milost Reymond
 */
-class TSP_QmlAtlas : public TSP_Atlas
+class TSP_PageContainer
 {
     public:
-        /**
-        * Constructor
-        *@param pOwner - the atlas owner
-        */
-        TSP_QmlAtlas(TSP_QmlDocument* pOwner);
-
-        /**
-        * Constructor
-        *@param name - the atlas name
-        *@param pOwner - the atlas owner
-        */
-        TSP_QmlAtlas(const std::wstring& name, TSP_QmlDocument* pOwner);
-
-        virtual ~TSP_QmlAtlas();
-
-        /**
-        * Gets the atlas proxy
-        *@return the atlas proxy, nullptr if no proxy
-        */
-        TSP_QmlAtlasProxy* GetProxy() const;
-
-        /**
-        * Sets the atlas proxy
-        *@param pProxy - the atlas proxy
-        */
-        void SetProxy(TSP_QmlAtlasProxy* pProxy);
+        TSP_PageContainer();
+        virtual ~TSP_PageContainer();
 
         /**
         * Creates a page
         *@return newly created page
         */
-        virtual TSP_Page* CreatePage();
+        virtual TSP_Page* CreatePage() = 0;
 
         /**
         * Creates a page
         *@param name - page name
         *@return newly created page
         */
-        virtual TSP_Page* CreatePage(const std::wstring& name);
+        virtual TSP_Page* CreatePage(const std::wstring& name) = 0;
 
         /**
-        * Creates a new page and adds it in atlas
+        * Creates a new page and adds it in container
         *@return newly added page
         */
         virtual TSP_Page* CreateAndAddPage();
 
         /**
-        * Creates a new page and adds it in atlas
+        * Creates a new page and adds it in container
         *@param name - page name
         *@return newly added page
         */
@@ -112,19 +85,40 @@ class TSP_QmlAtlas : public TSP_Atlas
         virtual void RemovePage(TSP_Page* pPage);
 
         /**
-        * Gets the currently selected page on this atlas
-        *@return the currently selected page, nullptr if no page selected, if selected page
-        *        is not part of this atlas, or on error
+        * Gets page at index
+        *@param index - page index to get
+        *@return page, nullptr if not found or on error
         */
-        virtual TSP_Page* GetSelectedPage();
-
-    private:
-        TSP_QmlAtlasProxy* m_pProxy = nullptr;
-        std::string        m_SelectedPageUID;
+        virtual TSP_Page* GetPage(std::size_t index) const;
 
         /**
-        * Creates a new page view and adds it to the user interface
-        *@param pPage - page for which the view should be added
+        * Gets page matching with unique identifier
+        *@param uid - page unique identifier to get
+        *@return page, nullptr if not found or on error
         */
-        bool CreatePageView(TSP_Page* pPage);
+        virtual TSP_Page* GetPage(const std::string& uid) const;
+
+        /**
+        * Gets page count
+        *@return page count
+        */
+        virtual std::size_t GetPageCount() const;
+
+        /**
+        * Loads a model from a file
+        *@return true on success, otherwise false
+        */
+        virtual bool Load();
+
+        /**
+        * Saves a model to a file
+        *@return true on success, otherwise false
+        */
+        virtual bool Save() const;
+
+    protected:
+        typedef std::vector<TSP_Page*> IPages;
+
+        IPages      m_Pages;
+        std::size_t m_NewPageNbGen =  0;
 };

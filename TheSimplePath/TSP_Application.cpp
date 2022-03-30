@@ -32,13 +32,18 @@
 #include "Common\TSP_Logger.h"
 
 // qt classes
-#include "QT\TSP_QmlBoxProxy.h"
-#include "QT\TSP_QmlLinkProxy.h"
-#include "QT\TSP_QmlPageProxy.h"
-#include "QT\TSP_QmlAtlasProxy.h"
+#include "Qt\TSP_QmlBoxProxy.h"
+#include "Qt\TSP_QmlLinkProxy.h"
+#include "Qt\TSP_QmlPageProxy.h"
+#include "Qt\TSP_QmlAtlasProxy.h"
 
 // qt
+#include <QIcon>
 #include <QQmlContext>
+#include <qwinfunctions.h>
+
+// windows
+#include <Windows.h>
 
 #ifndef _DEBUG
     #define REDIRECT_QML_LOGS_TO_LOGGER
@@ -47,7 +52,8 @@
 //---------------------------------------------------------------------------
 // TSP_Application
 //---------------------------------------------------------------------------
-TSP_Application::TSP_Application(int argc, char* argv[], const std::wstring& url) :
+TSP_Application::TSP_Application(int argc, char* argv[], int iconID, const std::wstring& url) :
+    m_IconID(iconID),
     m_URL(url)
 {
     InitializeQt(argc, argv);
@@ -163,6 +169,29 @@ void TSP_Application::InitializeQt(int argc, char* argv[])
     m_pMainFormModel = new TSP_MainFormModel(this);
     m_pPageListModel = new TSP_PageListModel(this);
     m_pDocument      = new TSP_QmlDocument(this);
+
+    #ifdef _WIN32
+        // was an application icon defined?
+        if (m_IconID)
+        {
+            // load icon
+            HICON hIcon = (HICON)::LoadImage(::GetModuleHandle(nullptr),
+                                             MAKEINTRESOURCE(m_IconID),
+                                             IMAGE_ICON,
+                                             0,
+                                             0,
+                                             LR_DEFAULTSIZE | LR_LOADTRANSPARENT);
+
+            // set it in application
+            if (hIcon)
+            {
+                m_pApp->setWindowIcon(QIcon(QtWin::fromHICON(hIcon)));
+                ::DestroyIcon(hIcon);
+            }
+        }
+    #else
+        #error "Application icon initialization code is missing for this platform"
+    #endif
 }
 //---------------------------------------------------------------------------
 void TSP_Application::RedirectQmlLogs(QtMsgType type, const QMessageLogContext& context, const QString& msg)
