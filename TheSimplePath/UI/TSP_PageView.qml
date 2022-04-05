@@ -7,9 +7,6 @@ import QtQuick.Controls 2.15
 */
 TSP_Page
 {
-    // properties
-    property string m_Type: "TSP_PageView"
-
     // advanced properties
     m_PageWidth:  m_MainFormModel.getPageWidth()
     m_PageHeight: m_MainFormModel.getPageHeight()

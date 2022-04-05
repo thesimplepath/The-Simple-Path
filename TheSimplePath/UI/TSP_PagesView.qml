@@ -91,14 +91,24 @@ T.Control
                 }
 
                 // iterate through page view stack until find the matching page unique identifier
-                for (var i = 0; i < slPageStack.children.length; ++i)
+                for (var i = 0; i < rpPageStack.count; ++i)
+                {
+                    // get child
+                    let child = rpPageStack.itemAt(i);
+
+                    if (!child)
+                    {
+                        console.warn("On show selected page - invalid child - index - " + i + " - count - " + rpAtlasStack.count);
+                        continue;
+                    }
+
                     // found page to show?
-                    if (slPageStack.children[i].m_Type        === "TSP_PageView" &&
-                        slPageStack.children[i].pageProxy.uid === uid)
+                    if (child instanceof TSP_PageView && child.pageProxy.uid === uid)
                     {
                         slPageStack.currentIndex = i;
                         break;
                     }
+                }
             }
             catch (e)
             {
@@ -134,7 +144,7 @@ T.Control
             lmPageStack.append({"uid": uid, "pageID": pageId, "pageObjName": pageId});
 
             // get the newly added page
-            let item = slPageStack.children[slPageStack.count - 1];
+            let item = rpPageStack.itemAt(rpPageStack.count - 1);
 
             // found it?
             if (!item || item.pageProxy.uid !== uid)
@@ -182,19 +192,29 @@ T.Control
             let index = -1;
 
             // iterate through page views
-            for (var i = 0; i < slPageStack.children.length; ++i)
+            for (var i = 0; i < rpPageStack.count; ++i)
+            {
+                // get child
+                let child = rpPageStack.itemAt(i);
+
+                if (!child)
+                {
+                    console.warn("Remove page - invalid child - index - " + i + " - count - " + rpAtlasStack.count);
+                    continue;
+                }
+
                 // found the page to delete?
-                if (slPageStack.children[i].m_Type        === "TSP_PageView" &&
-                    slPageStack.children[i].pageProxy.uid === uid)
+                if (child instanceof TSP_PageView && child.pageProxy.uid === uid)
                 {
                     // keep the page name for logging
-                    pageName = slPageStack.children[i].objectName;
+                    pageName = child.objectName;
 
                     // get the page index to delete
                     index = i;
 
                     break;
                 }
+            }
 
             // found the page to delete?
             if (index < 0)
@@ -230,10 +250,10 @@ T.Control
         try
         {
             // no selected page?
-            if (slPageStack.currentIndex < 0 || slPageStack.currentIndex >= slPageStack.children.length)
+            if (slPageStack.currentIndex < 0 || slPageStack.currentIndex >= rpPageStack.count)
                 return "";
 
-            return slPageStack.children[slPageStack.currentIndex].pageProxy.uid;
+            return rpPageStack.itemAt(slPageStack.currentIndex).pageProxy.uid;
         }
         catch (e)
         {

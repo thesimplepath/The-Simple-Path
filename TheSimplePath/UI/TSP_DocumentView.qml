@@ -132,7 +132,7 @@ T.Control
             }
 
             // get the selected atlas view
-            const atlasView = slAtlasStack.children[slAtlasStack.currentIndex];
+            const atlasView = rpAtlasStack.itemAt(slAtlasStack.currentIndex);
 
             // found it?
             if (!atlasView)
@@ -193,7 +193,7 @@ T.Control
             lmAtlasStack.append({"uid": uid, "atlasID": atlasId, "atlasObjName": atlasId});
 
             // get the newly added atlas
-            let item = slAtlasStack.children[slAtlasStack.count - 1];
+            let item = rpAtlasStack.itemAt(slAtlasStack.count - 1);
 
             // found it?
             if (!item || item.atlasProxy.uid !== uid)
@@ -237,10 +237,19 @@ T.Control
             let index = -1;
 
             // iterate through atlas views
-            for (var i = 0; i < slAtlasStack.children.length; ++i)
+            for (var i = 0; i < rpAtlasStack.count; ++i)
+            {
+                // get child
+                let child = rpAtlasStack.itemAt(i);
+
+                if (!child)
+                {
+                    console.warn("Remove atlas - invalid child - index - " + i + " - count - " + rpAtlasStack.count);
+                    continue;
+                }
+
                 // found the atlas to delete?
-                if (slAtlasStack.children[i].m_Type         === "TSP_AtlasView" &&
-                    slAtlasStack.children[i].atlasProxy.uid === uid)
+                if (child instanceof TSP_AtlasView && child.atlasProxy.uid === uid)
                 {
                     // keep the atlas name for logging
                     atlasName = slAtlasStack.children[i].objectName;
@@ -250,6 +259,7 @@ T.Control
 
                     break;
                 }
+            }
 
             // found the atlas to delete?
             if (index < 0)

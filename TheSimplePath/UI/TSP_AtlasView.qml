@@ -16,8 +16,7 @@ T.Control
     property alias atlasProxy: apAtlasProxy
 
     // advanced properties
-    property var    m_Atlas: this
-    property string m_Type:  "TSP_AtlasView"
+    property var m_Atlas: this
 
     // common properties
     id: ctAtlasView
