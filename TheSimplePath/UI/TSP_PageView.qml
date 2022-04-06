@@ -228,6 +228,7 @@ TSP_Page
 
     /**
     * Adds a symbol component to the document
+    *@param {string} name - symbol file name to load
     *@param {number} x - component x position, in pixels
     *@param {number} y - component y position, in pixels
     *@param {number} width - component width, in pixels
@@ -249,113 +250,180 @@ TSP_Page
                        bottomConnVisible,
                        uid)
     {
-        let componentName;
-
-        // get component name to load
-        switch (name)
+        try
         {
-            case "start":     componentName = "TSP_Start.qml";     break;
-            case "end":       componentName = "TSP_End.qml";       break;
-            case "procedure": componentName = "TSP_Procedure.qml"; break;
-            case "process":   componentName = "TSP_Process.qml";   break;
-            case "activity":  componentName = "TSP_Activity.qml";  break;
-            case "pageBreak": componentName = "TSP_PageBreak.qml"; break;
+            let componentName;
 
-            default:
+            // get component name to load
+            switch (name)
             {
-                console.error("Add symbol - unknown component name - " + name);
-                return;
+                case "start":     componentName = "TSP_Start.qml";     break;
+                case "end":       componentName = "TSP_End.qml";       break;
+                case "procedure": componentName = "TSP_Procedure.qml"; break;
+                case "process":   componentName = "TSP_Process.qml";   break;
+                case "activity":  componentName = "TSP_Activity.qml";  break;
+                case "pageBreak": componentName = "TSP_PageBreak.qml"; break;
+
+                default:
+                {
+                    console.error("Add symbol - unknown component name - " + name);
+                    return;
+                }
             }
+
+            // build symbol loader identifier
+            const loaderId = "ldSymbol_" + uid;
+
+            // create a loader to load the symbol
+            pageContentModel.append({"id": loaderId, "loaderId": loaderId, "isBox": true});
+
+            // get the newly added loader
+            let loader = pageContentRepeater.itemAt(pageContentRepeater.count - 1);
+
+            // found it?
+            if (!loader)
+            {
+                console.error("Add symbol - an error occurred while the loader was created");
+                return undefined;
+            }
+
+            const connectorWidth  = Styles.m_ConnectorWidth;
+            const connectorHeight = Styles.m_ConnectorHeight;
+
+            // build symbol identifier
+            const symbolId = "bxSymbol_" + uid;
+
+            // load the symbol
+            loader.setSource(componentName, {
+                "id":                      symbolId,
+                "objectName":              symbolId,
+                "x":                       x,
+                "y":                       y,
+                "width":                   width,
+                "height":                  height,
+                "m_ScaleFactor":           m_ScaleFactor,
+                "leftConnector.x":        -((connectorWidth  / 2) + 2),
+                "topConnector.y":         -((connectorHeight / 2) + 2),
+                "rightConnector.x":        width  + 2 - (connectorWidth  / 2),
+                "bottomConnector.y":       height + 2 - (connectorHeight / 2),
+                "leftConnector.visible":   leftConnVisible,
+                "topConnector.visible":    topConnVisible,
+                "rightConnector.visible":  rightConnVisible,
+                "bottomConnector.visible": bottomConnVisible,
+                "m_PageContent":           pageContent,
+                "boxProxy.uid":            uid
+            });
+
+            // get the loaded symbol
+            let symbol = loader.item;
+
+            // found it?
+            if (!symbol || symbol.boxProxy.uid !== uid)
+            {
+                console.error("Add symbol - an error occurred while the item was created");
+                return undefined;
+            }
+
+            console.log("Add symbol - succeeded - name - " + name + " - id - " + symbol.objectName);
+
+            return symbol;
         }
-
-        // load the component
-        let component = Qt.createComponent(componentName);
-
-        // succeeded?
-        if (component.status !== Component.Ready)
+        catch (e)
         {
-            console.error("Add symbol - an error occurred while the component was created - name - " +
-                          name                                                                       +
-                          " - "                                                                      +
-                          component.errorString());
-            return;
+            console.exception("Add symbol - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        const connectorWidth  = Styles.m_ConnectorWidth;
-        const connectorHeight = Styles.m_ConnectorHeight;
+        // remove the partially added symbol, if any
+        removeComponent(uid);
 
-        // build symbol identifier
-        const symbolId = "bxSymbol_" + uid;
-
-        // create and show new item object
-        let item = component.createObject(pageContent, {"id":                      symbolId,
-                                                        "objectName":              symbolId,
-                                                        "x":                       x,
-                                                        "y":                       y,
-                                                        "width":                   width,
-                                                        "height":                  height,
-                                                        "m_ScaleFactor":           m_ScaleFactor,
-                                                        "leftConnector.x":        -((connectorWidth  / 2) + 2),
-                                                        "topConnector.y":         -((connectorHeight / 2) + 2),
-                                                        "rightConnector.x":        width  + 2 - (connectorWidth  / 2),
-                                                        "bottomConnector.y":       height + 2 - (connectorHeight / 2),
-                                                        "leftConnector.visible":   leftConnVisible,
-                                                        "topConnector.visible":    topConnVisible,
-                                                        "rightConnector.visible":  rightConnVisible,
-                                                        "bottomConnector.visible": bottomConnVisible});
-
-        // succeeded?
-        if (!item)
-        {
-            console.error("Add symbol - an error occurred while the symbol was added to page");
-            return undefined;
-        }
-
-        // declare the unique identifier in the symbol proxy
-        item.boxProxy.uid = uid;
-
-        console.log("Add symbol - succeeded - name - " + name + " - id - " + item.objectName);
-
-        return item;
+        return undefined;
     }
 
     /**
     * Adds a message component to the document
     *@param {TSP_Connector} from - connector belonging to symbol the message is attached from
     *@param {TSP_Connector} to - connector belonging to symbol the message is attached to, if undefined the message is dragging
+    *@param {number} x - label x position, in pixels
+    *@param {number} y - label y position, in pixels
+    *@param {number} width - label width, in pixels
+    *@param {number} height - label height, in pixels
+    *@param {string} uid - link unique identifier
+    *@return {TSP_Message} added message, undefined on error
     */
-    function addMessage(from, to)
+    function addMessage(from, to, x, y, width, height, uid)
     {
-        // load the item component
-        let component = Qt.createComponent('TSP_Message.qml');
-
-        // succeeded?
-        if (component.status !== Component.Ready)
+        try
         {
-            console.error("Add message - an error occurred while the component was created - " + component.errorString());
-            return;
+            // build message loader identifier
+            const loaderId = "ldMessage_" + uid;
+
+            // create a loader to load the message
+            pageContentModel.append({"id": loaderId, "loaderId": loaderId, "isBox": false});
+
+            // get the newly added loader
+            let loader = pageContentRepeater.itemAt(pageContentRepeater.count - 1);
+
+            // found it?
+            if (!loader)
+            {
+                console.error("Add message - an error occurred while the loader was created");
+                return undefined;
+            }
+
+            // build message identifier
+            const messageId = "mgMessage_" + uid;
+
+            // load the message
+            loader.setSource("TSP_Message.qml", {
+                "id":            messageId,
+                "objectName":    messageId,
+                "m_From":        from,
+                "m_To":          to,
+                "m_ScaleFactor": m_ScaleFactor,
+                "m_LabelSize.x": m_PageWidth  * 0.17,
+                "m_LabelSize.y": m_PageHeight * 0.067,
+                "m_PageContent": pageContent,
+                "linkProxy.uid": uid
+            });
+
+            // get the loaded link
+            let message = loader.item;
+
+            // found it?
+            if (!message || message.linkProxy.uid !== uid)
+            {
+                console.error("Add message - an error occurred while the item was created");
+                return undefined;
+            }
+
+            // set the label position, if defined
+            if (x >= 0 && y >= 0)
+                message.m_LabelPos = Qt.vector2d(x, y);
+
+            // set the label size, if defined
+            if (width >= 0 && height >= 0)
+                message.m_LabelSize = Qt.vector2d(width, height);
+
+            // emit signal and log only if destination connector is defined
+            if (to)
+            {
+                // emit signal that message was added
+                linkAdded(message);
+
+                console.log("Add message - succeeded - new item - " + message.objectName);
+            }
+
+            return message;
+        }
+        catch (e)
+        {
+            console.exception("Add message - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        // create and show new item object
-        let item = component.createObject(pageContent, {"id":            "mgMessage" + m_GenIndex,
-                                                        "objectName":    "mgMessage" + m_GenIndex,
-                                                        "m_From":        from,
-                                                        "m_To":          to,
-                                                        "m_ScaleFactor": m_ScaleFactor,
-                                                        "m_LabelSize.x": m_PageWidth  * 0.17,
-                                                        "m_LabelSize.y": m_PageHeight * 0.067});
+        // remove the partially added message, if any
+        removeComponent(uid);
 
-        console.log("Add message - succeeded - new item - " + item.objectName);
-
-        ++m_GenIndex; // REM FIXME
-
-        /*REM FIXME
-        // notify page model that a message was added
-        if (pvPageView.m_Model)
-            pvPageView.m_Model.onMessageAdded(pvPageView.m_UID, item.m_UID);
-        */
-
-        return item;
+        return undefined;
     }
 
     /**

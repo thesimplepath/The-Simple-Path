@@ -28,12 +28,14 @@ T.Control
     }
 
     // aliases
-    property alias pageProxy:     ppPageProxy
-    property alias pageViewport:  rcPageViewport
-    property alias pageContainer: rcPageContainer
-    property alias pageContent:   rcPageContent
-    property alias horzScrollBar: sbHorz
-    property alias vertScrollBar: sbVert
+    property alias pageProxy:           ppPageProxy
+    property alias pageViewport:        rcPageViewport
+    property alias pageContainer:       rcPageContainer
+    property alias pageContent:         rcPageContent
+    property alias pageContentModel:    lmPageContent
+    property alias pageContentRepeater: rpPageContent
+    property alias horzScrollBar:       sbHorz
+    property alias vertScrollBar:       sbVert
 
     // advanced properties
     property var    m_Page:            this
@@ -340,6 +342,16 @@ T.Control
             height: m_PageHeight * m_ScaleFactor
 
             /**
+            * Page content model
+            */
+            ListModel
+            {
+                // common properties
+                id: lmPageContent
+                objectName: "lmPageContent"
+            }
+
+            /**
             * Page content
             */
             Rectangle
@@ -404,6 +416,34 @@ T.Control
                             context.moveTo(0,         (i * step) + 1);
                             context.lineTo(width - 1, (i * step) + 1);
                             context.stroke();
+                        }
+                    }
+                }
+
+                /**
+                * Page content repeater
+                */
+                Repeater
+                {
+                    // common properties
+                    id: rpPageContent
+                    objectName: "rpPageContent"
+                    anchors.fill: parent
+                    model: lmPageContent
+
+                    /**
+                    * Component loader
+                    */
+                    Loader
+                    {
+                        // common properties
+                        objectName: loaderId
+
+                        /// Called when component is loaded
+                        Component.onCompleted:
+                        {
+                            if (!isBox)
+                                anchors.fill = parent;
                         }
                     }
                 }
@@ -654,26 +694,50 @@ T.Control
     */
     function getBoxOrLink(uid)
     {
-        if (!uid || !uid.length)
+        try
         {
-            console.error("getBoxOrLink - FAILED - uid is undefined");
-            return undefined;
-        }
-
-        // iterate through page children
-        for (var i = 0; i < rcPageContent.children.length; ++i)
-            // is component a box or link?
-            if (rcPageContent.children[i] instanceof TSP_Box)
+            if (!uid || !uid.length)
             {
-                // found the matching component?
-                if (rcPageContent.children[i].boxProxy.uid === uid)
-                    return rcPageContent.children[i];
+                console.error("getBoxOrLink - FAILED - uid is undefined");
+                return undefined;
             }
-            else
-            if (rcPageContent.children[i] instanceof TSP_Link)
-                // found the matching component?
-                if (rcPageContent.children[i].linkProxy.uid === uid)
-                    return rcPageContent.children[i];
+
+            // iterate through page children
+            for (var i = 0; i < rpPageContent.count; ++i)
+            {
+                // get child
+                let child = rpPageContent.itemAt(i);
+
+                if (!child)
+                {
+                    console.warn("Get box or link - invalid child - index - " + i + " - count - " + rpPageContent.count);
+                    continue;
+                }
+
+                // get child item
+                let childItem = child.item;
+
+                if (!childItem)
+                    continue;
+
+                // is component a box or link?
+                if (childItem instanceof TSP_Box)
+                {
+                    // found the matching component?
+                    if (childItem.boxProxy.uid === uid)
+                        return childItem;
+                }
+                else
+                if (childItem instanceof TSP_Link)
+                    // found the matching component?
+                    if (childItem.linkProxy.uid === uid)
+                        return childItem;
+            }
+        }
+        catch (e)
+        {
+            console.exception("Get box or link - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
+        }
 
         return undefined;
     }
@@ -684,20 +748,44 @@ T.Control
     */
     function getSelected()
     {
-        // iterate through page children
-        for (var i = 0; i < rcPageContent.children.length; ++i)
-            // is component a box or link?
-            if (rcPageContent.children[i] instanceof TSP_Box)
+        try
+        {
+            // iterate through page children
+            for (var i = 0; i < rpPageContent.count; ++i)
             {
-                // found the active box?
-                if (rcPageContent.children[i].activeFocus)
-                    return rcPageContent.children[i];
+                // get child
+                let child = rpPageContent.itemAt(i);
+
+                if (!child)
+                {
+                    console.warn("Get selected - invalid child - index - " + i + " - count - " + rpPageContent.count);
+                    continue;
+                }
+
+                // get child item
+                let childItem = child.item;
+
+                if (!childItem)
+                    continue;
+
+                // is component a box or link?
+                if (childItem instanceof TSP_Box)
+                {
+                    // found the active box?
+                    if (childItem.activeFocus)
+                        return childItem;
+                }
+                else
+                if (childItem instanceof TSP_Link)
+                    // found the active link?
+                    if (childItem.background.activeFocus)
+                        return childItem;
             }
-            else
-            if (rcPageContent.children[i] instanceof TSP_Link)
-                // found the active link?
-                if (rcPageContent.children[i].background.activeFocus)
-                    return rcPageContent.children[i];
+        }
+        catch (e)
+        {
+            console.exception("Get selected - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
+        }
 
         return undefined;
     }
@@ -713,41 +801,63 @@ T.Control
     */
     function addBox(x, y, width, height, uid)
     {
-        // load the item component
-        let component = Qt.createComponent('TSP_Box.qml');
-
-        // succeeded?
-        if (component.status !== Component.Ready)
+        try
         {
-            console.error("Add box - an error occurred while the item was created - " + component.errorString());
-            return undefined;
+            // build box loader identifier
+            const loaderId = "ldBox_" + uid;
+
+            // create a loader to load the box
+            lmPageContent.append({"id": loaderId, "loaderId": loaderId, "isBox": true});
+
+            // get the newly added loader
+            let loader = rpPageContent.itemAt(rpPageContent.count - 1);
+
+            // found it?
+            if (!loader)
+            {
+                console.error("Add box - an error occurred while the loader was created");
+                return undefined;
+            }
+
+            // build box identifier
+            const boxId = "bxBox_" + uid;
+
+            // load the box
+            loader.setSource("TSP_Box.qml", {
+                "id":            boxId,
+                "objectName":    boxId,
+                "x":             x,
+                "y":             y,
+                "width":         width,
+                "height":        height,
+                "m_ScaleFactor": m_ScaleFactor,
+                "m_PageContent": rcPageContent,
+                "boxProxy.uid":  uid
+            });
+
+            // get the loaded box
+            let item = loader.item;
+
+            // found it?
+            if (!item || item.boxProxy.uid !== uid)
+            {
+                console.error("Add box - an error occurred while the item was created");
+                return undefined;
+            }
+
+            console.log("Add box - succeeded - new item - " + item.objectName);
+
+            return item;
+        }
+        catch (e)
+        {
+            console.exception("Add box - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        // build box identifier
-        const boxId = "bxBox_" + uid;
+        // remove the partially added box, if any
+        removeComponent(uid);
 
-        // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":            boxId,
-                                                          "objectName":    boxId,
-                                                          "x":             x,
-                                                          "y":             y,
-                                                          "width":         width,
-                                                          "height":        height,
-                                                          "m_ScaleFactor": m_ScaleFactor});
-
-        // succeeded?
-        if (!item)
-        {
-            console.error("Add box - an error occurred while the item was added to page");
-            return undefined;
-        }
-
-        // declare the unique identifier in the box proxy
-        item.boxProxy.uid = uid;
-
-        console.log("Add box - succeeded - new item - " + item.objectName);
-
-        return item;
+        return undefined;
     }
 
     /**
@@ -763,57 +873,76 @@ T.Control
     */
     function addLink(from, to, x, y, width, height, uid)
     {
-        // load the item component
-        let component = Qt.createComponent('TSP_Link.qml');
-
-        // succeeded?
-        if (component.status !== Component.Ready)
+        try
         {
-            console.error("Add link - an error occurred while the item was created - " + component.errorString());
+            // build link loader identifier
+            const loaderId = "ldLink_" + uid;
 
-            // emit signal that link adding was canceled
+            // create a loader to load the link
+            lmPageContent.append({"id": loaderId, "loaderId": loaderId, "isBox": false});
+
+            // get the newly added loader
+            let loader = rpPageContent.itemAt(rpPageContent.count - 1);
+
+            // found it?
+            if (!loader)
+            {
+                console.error("Add link - an error occurred while the loader was created");
+                return undefined;
+            }
+
+            // build link identifier
+            const linkId = "lkLink_" + uid;
+
+            // load the link
+            loader.setSource("TSP_Link.qml", {
+                "id":            linkId,
+                "objectName":    linkId,
+                "m_From":        from,
+                "m_To":          to,
+                "m_ScaleFactor": m_ScaleFactor,
+                "m_PageContent": rcPageContent,
+                "linkProxy.uid": uid
+            });
+
+            // get the loaded link
+            let item = loader.item;
+
+            // found it?
+            if (!item || item.linkProxy.uid !== uid)
+            {
+                console.error("Add link - an error occurred while the item was created");
+                return undefined;
+            }
+
+            // set the label position, if defined
+            if (x >= 0 && y >= 0)
+                item.m_LabelPos = Qt.vector2d(x, y);
+
+            // set the label size, if defined
+            if (width >= 0 && height >= 0)
+                item.m_LabelSize = Qt.vector2d(width, height);
+
+            // emit signal and log only if destination connector is defined
             if (to)
-                linkCanceled();
+            {
+                // emit signal that link was added
+                linkAdded(item);
 
-            return undefined;
+                console.log("Add link - succeeded - new item - " + item.objectName);
+            }
+
+            return item;
         }
-
-        // build link identifier
-        const linkId = "lkLink_" + uid;
-
-        // create and show new item object
-        let item = component.createObject(rcPageContent, {"id":            linkId,
-                                                          "objectName":    linkId,
-                                                          "m_From":        from,
-                                                          "m_To":          to,
-                                                          "m_ScaleFactor": m_ScaleFactor});
-
-        // succeeded?
-        if (!item)
+        catch (e)
         {
-            console.error("Add link - an error occurred while the item was added to page");
-            return undefined;
+            console.exception("Add link - exception caught - " + e.message + "\ncall stack:\n" + e.stack);
         }
 
-        // declare the unique identifier in the link proxy
-        item.linkProxy.uid = uid;
+        // remove the partially added link, if any
+        removeComponent(uid);
 
-        if (x >= 0 && y >= 0)
-            item.m_LabelPos = Qt.vector2d(x, y);
-
-        if (width >= 0 && height >= 0)
-            item.m_LabelSize = Qt.vector2d(width, height);
-
-        // emit signal and log only if destination connector is defined
-        if (to)
-        {
-            // emit signal that link was added
-            linkAdded(item);
-
-            console.log("Add link - succeeded - new item - " + item.objectName);
-        }
-
-        return item;
+        return undefined;
     }
 
     /**
@@ -923,24 +1052,54 @@ T.Control
 
         console.log("Remove component - uid - " + uid);
 
-        // iterate through page view stack until find the view to delete, and deletes it
-        for (var i = rcPageContent.children.length - 1; i >= 0; --i)
+        let componentName;
+        let index = -1;
+
+        // iterate through page content
+        for (var i = 0; i < rpPageContent.count; ++i)
+        {
+            // get child
+            let child = rpPageContent.itemAt(i);
+
+            if (!child)
+            {
+                console.warn("Remove component - invalid child - index - " + i + " - count - " + rpPageContent.count);
+                continue;
+            }
+
+            // get child item
+            let childItem = child.item;
+
+            if (!childItem)
+                continue;
+
             // found the component to delete?
-            if ((rcPageContent.children[i] instanceof TSP_Box    &&
-                !rcPageContent.children[i].m_Deleted             &&
-                 rcPageContent.children[i].boxProxy.uid === uid) ||
-                (rcPageContent.children[i] instanceof TSP_Link   &&
-                !rcPageContent.children[i].m_Deleted             &&
-                 rcPageContent.children[i].linkProxy.uid === uid))
-                {
-                    // NOTE setting the deleted property just before destroying the component may seem incoherent,
-                    // however the destroyed item is kept in memory until the garbage collector deletes it, and may
-                    // be thus still found when the children are iterated. This may cause a deleting item to be
-                    // processed as a normal item in other situations where it shouldn't
-                    rcPageContent.children[i].m_Deleted = true;
-                    rcPageContent.children[i].destroy();
-                    break;
-                }
+            if ((childItem instanceof TSP_Box  && childItem.boxProxy.uid  === uid) ||
+                (childItem instanceof TSP_Link && childItem.linkProxy.uid === uid))
+            {
+                // keep the component name for logging
+                componentName = childItem.objectName;
+
+                // get the component index to delete
+                index = i;
+
+                break;
+            }
+        }
+
+        // found the component to delete?
+        if (index < 0)
+        {
+            console.log("Remove component - FAILED - item not found");
+            return;
+        }
+
+        // delete component
+        lmPageContent.remove(index);
+
+        // log deleted component
+        if (componentName && componentName.length)
+            console.log("Remove component - item was removed - item name - " + componentName);
 
         console.log("Remove component - succeeded");
     }

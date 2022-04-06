@@ -24,7 +24,7 @@ Item
     // advanced properties
     property var    m_From:        undefined // box start connector at which link is attached
     property var    m_To:          undefined // box end connector at which link is attached, if undefined link is dragging
-    property var    m_PageContent: parent
+    property var    m_PageContent: undefined
     property var    m_StartPoint:  getStartPoint()
     property var    m_CenterPoint: getCenterPoint()
     property var    m_EndPoint:    getEndPoint()
@@ -37,7 +37,6 @@ Item
     property string m_TextColor:   Styles.m_DarkTextColor
     property real   m_ScaleFactor: 1
     property int    m_TextMargin:  2
-    property bool   m_Deleted:     false
 
     // common properties
     id: itLink
@@ -179,6 +178,7 @@ Item
         signal move(int deltaX, int deltaY)
         signal moveEnd()
         signal resize(int direction, int deltaX, int deltaY)
+        signal dblClick()
 
         /**
         * Handle control
@@ -403,6 +403,10 @@ Item
                         break;
                 }
         }
+
+        /// Called when link label is double clicked
+        onDblClick: function()
+        {}
     }
 
     /**

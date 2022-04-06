@@ -27,7 +27,7 @@ T.Control
     property alias bottomConnector: coBottom
 
     // advanced properties
-    property var    m_PageContent:       parent
+    property var    m_PageContent:       undefined
     property string m_Color:             "#202020"
     property string m_BgColor:           "white"
     property string m_TextColor:         Styles.m_DarkTextColor
@@ -39,7 +39,6 @@ T.Control
     property int    m_BorderWidth:       1
     property int    m_Radius:            3
     property int    m_TextMargin:        2
-    property bool   m_Deleted:           false
 
     // common properties
     id: ctBox

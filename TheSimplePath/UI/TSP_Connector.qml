@@ -164,8 +164,8 @@ T.Control
             // do remove the link?
             if (doRemoveMsg)
             {
-                m_AddingLinkItem.unbindMsgFromBox(m_Box)
-                m_AddingLinkItem.destroy();
+                m_AddingLinkItem.unbindMsgFromBox(m_Box);
+                m_Page.deleteLink(m_AddingLinkItem);
 
                 // emit signal that link adding was canceled
                 m_Page.linkCanceled();
