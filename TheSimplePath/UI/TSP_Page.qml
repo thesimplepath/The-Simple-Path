@@ -263,7 +263,7 @@ T.Control
             objectName: "maPage"
             anchors.fill: parent
             hoverEnabled: true
-            cursorShape: rcPageContent.m_DraggingMsg ? Qt.CrossCursor : (m_Panning ? Qt.ClosedHandCursor : Qt.OpenHandCursor);
+            cursorShape: rcPageContent.m_DraggingLink ? Qt.CrossCursor : (m_Panning ? Qt.ClosedHandCursor : Qt.OpenHandCursor);
 
             /// Called when mouse is pressed above page
             onPressed: function(mouseEvent)
@@ -357,7 +357,7 @@ T.Control
             Rectangle
             {
                 // advanced properties
-                property bool m_DraggingMsg: false
+                property bool m_DraggingLink: false
 
                 // signals
                 signal doDisableMoveSize(var box)
@@ -985,8 +985,8 @@ T.Control
 
     /**
     * Deletes a box
-    *@param box - box to delete
-    *@param doDelAttachedLinks - if true, attached links will also be deleted
+    *@param {TSP_Box} box - box to delete
+    *@param {bool} doDelAttachedLinks - if true, attached links will also be deleted
     */
     function deleteBox(box, doDelAttachedLinks)
     {
@@ -1019,7 +1019,7 @@ T.Control
 
     /**
     * Deletes a link
-    *@param link - link to delete
+    *@param {TSP_Link} link - link to delete
     */
     function deleteLink(link)
     {
@@ -1028,11 +1028,11 @@ T.Control
 
         // unbind link from start box
         if (link.m_From)
-            link.unbindMsgFromBox(link.m_From.m_Box);
+            link.unbindLinkFromBox(link.m_From.m_Box);
 
         // unbind link from end box
         if (link.m_To)
-            link.unbindMsgFromBox(link.m_To.m_Box);
+            link.unbindLinkFromBox(link.m_To.m_Box);
 
         ppPageProxy.onDeleteLink(link.linkProxy.uid);
     }

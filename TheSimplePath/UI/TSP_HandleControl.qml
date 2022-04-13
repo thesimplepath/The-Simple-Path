@@ -14,11 +14,11 @@ T.Control
     // advanced properties
     property var    m_Target:            undefined
     property string m_Color:             "transparent"
-    property string m_BorderColor:       "#202020"
-    property string m_HandleColor:       "#c0c0c0"
-    property string m_HandleBorderColor: "black"
-    property int    m_BorderWidth:       1
-    property int    m_Radius:            3
+    property string m_BorderColor:       Styles.m_HandleControlBorderColor
+    property string m_HandleColor:       Styles.m_HandleBgColor
+    property string m_HandleBorderColor: Styles.m_HandleBorderColor
+    property int    m_BorderWidth:       Styles.m_HandleBorderWidth
+    property int    m_Radius:            Styles.m_HandleRadius
     property bool   m_HandleVisible:     true
 
     // common properties

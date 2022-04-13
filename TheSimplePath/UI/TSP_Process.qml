@@ -12,7 +12,7 @@ TSP_Box
     m_BgColor:     Styles.m_ProcessFillColor
     m_TextColor:   Styles.m_LightTextColor
     m_Radius:      Styles.m_ProcessRadius
-    m_BorderWidth: Styles.m_ProcessOutlineWidth
+    m_BorderWidth: Styles.m_ProcessBorderWidth
 
     // child components
     titleText.anchors.bottom:      rectContents.bottom

@@ -8,17 +8,17 @@ import QtQuick.Controls 2.15
 TSP_Box
 {
     // advanced properties
-    property string m_NormalURL:  "qrc:/Resources/Images/PageBreak_Logo_Normal.svg"
-    property string m_ProcessURL: "qrc:/Resources/Images/PageBreak_Logo_Process.svg"
+    property string m_NormalURL:  Styles.m_PageBreakGlyph
+    property string m_ProcessURL: Styles.m_ProcessPageBreakGlyph
     property bool   m_IsProcess:  false
     property bool   m_IsExit:     false
 
     // common properties
-    m_Color:       "#202020"
-    m_BgColor:     m_IsProcess ? "#009ed6"               : "white"
-    m_TextColor:   m_IsProcess ? Styles.m_LightTextColor : Styles.m_DarkTextColor
-    m_Radius:      0
-    m_BorderWidth: 2
+    m_Color:       Styles.m_PageBreakBorderColor
+    m_BgColor:     m_IsProcess ? Styles.m_ProcessPageBreakBgColor : Styles.m_PageBreakBgColor
+    m_TextColor:   m_IsProcess ? Styles.m_LightTextColor          : Styles.m_DarkTextColor
+    m_Radius:      Styles.m_PageBreakRadius
+    m_BorderWidth: Styles.m_PageBreakBorderWidth
 
     // child components
     titleText.anchors.bottom:      rectContents.bottom
@@ -66,8 +66,8 @@ TSP_Box
     /// called when page break should be resized
     onResize: function(direction, deltaX, deltaY)
     {
-        const connectorWidth  = 14;
-        const connectorHeight = 14;
+        const connectorWidth  = Styles.m_ConnectorWidth;
+        const connectorHeight = Styles.m_ConnectorHeight;
 
         // update connectors positions
         leftConnector.x   =  -((connectorWidth  / 2) + 2);

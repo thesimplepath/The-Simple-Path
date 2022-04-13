@@ -8,14 +8,14 @@ import QtQuick.Controls 2.15
 TSP_Box
 {
     // common properties
-    m_Radius:      5
-    m_BorderWidth: 2
+    m_Radius:      Styles.m_ActivityRadius
+    m_BorderWidth: Styles.m_ActivityBorderWidth
 
     /// called when activity should be resized
     onResize: function(direction, deltaX, deltaY)
     {
-        const connectorWidth  = 14;
-        const connectorHeight = 14;
+        const connectorWidth  = Styles.m_ConnectorWidth;
+        const connectorHeight = Styles.m_ConnectorHeight;
 
         // update connectors positions
         leftConnector.x   =  -((connectorWidth  / 2) + 2);

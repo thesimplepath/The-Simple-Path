@@ -8,5 +8,6 @@ import QtQuick.Controls 2.15
 TSP_Link
 {
     // overridden properties
-    m_Color: "#cc0099"
+    m_BgColor: Styles.m_MessageBgColor
+    m_Color:   Styles.m_MessageBorderColor
 }

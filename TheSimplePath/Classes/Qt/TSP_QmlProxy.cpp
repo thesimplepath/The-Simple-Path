@@ -1,8 +1,8 @@
 /****************************************************************************
  * ==> TSP_QmlProxy --------------------------------------------------------*
  ****************************************************************************
- * Description:  Proxy between an UI component and its c++ representation   *
- * Contained in: Component                                                  *
+ * Description:  Proxy between qml view and application engine              *
+ * Contained in: Qt                                                         *
  * Developer:    Jean-Milost Reymond                                        *
  ****************************************************************************
  * MIT License - The Simple Path                                            *

@@ -41,7 +41,7 @@ T.Control
         id: rcDocumentView
         objectName: "rcDocumentView"
         anchors.fill: parent
-        color: Styles.m_DocumentBackground
+        color: Styles.m_DocumentBgColor
 
         /**
         * Atlas stack model

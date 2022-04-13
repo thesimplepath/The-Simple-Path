@@ -7,16 +7,16 @@ import QtQuick.Controls 2.15
 */
 TSP_Box
 {
-    m_Color:       "#00b050"
-    m_BgColor:     "white"
-    m_Radius:      0
-    m_BorderWidth: 2
+    m_Color:       Styles.m_StartBorderColor
+    m_BgColor:     Styles.m_StartBgColor
+    m_Radius:      Styles.m_StartRadius
+    m_BorderWidth: Styles.m_StartBorderWidth
 
     /// called when start symbol should be resized
     onResize: function(direction, deltaX, deltaY)
     {
-        const connectorWidth  = 14;
-        const connectorHeight = 14;
+        const connectorWidth  = Styles.m_ConnectorWidth;
+        const connectorHeight = Styles.m_ConnectorHeight;
 
         // update connectors positions
         leftConnector.x   =  -((connectorWidth  / 2) + 2);

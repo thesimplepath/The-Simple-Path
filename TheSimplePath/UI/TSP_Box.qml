@@ -28,17 +28,19 @@ T.Control
 
     // advanced properties
     property var    m_PageContent:       undefined
-    property string m_Color:             "#202020"
-    property string m_BgColor:           "white"
+    property string m_Color:             Styles.m_BoxBorderColor
+    property string m_BgColor:           Styles.m_BoxBgColor
     property string m_TextColor:         Styles.m_DarkTextColor
-    property string m_HandleColor:       "#c0c0c0"
-    property string m_HandleBorderColor: "black"
+    property string m_HandleColor:       Styles.m_BoxHandleBgColor
+    property string m_HandleBorderColor: Styles.m_BoxHandleBorderColor
+    property string m_FontFamily:        Styles.m_ComponentFont.m_Family
     property real   m_ScaleFactor:       1
     property int    m_MouseStartX:       0
     property int    m_MouseStartY:       0
-    property int    m_BorderWidth:       1
-    property int    m_Radius:            3
-    property int    m_TextMargin:        2
+    property int    m_FontSize:          Styles.m_ComponentFont.m_Size
+    property int    m_BorderWidth:       Styles.m_BoxBorderWidth
+    property int    m_Radius:            Styles.m_BoxRadius
+    property int    m_TextMargin:        Styles.m_BoxTextMargin
 
     // common properties
     id: ctBox
@@ -202,19 +204,19 @@ T.Control
         Text
         {
             // common properties
-            id: txTitle
-            objectName: "txTitle"
-            text: bpBoxProxy.title
-            anchors.left: parent.left
-            anchors.leftMargin: m_TextMargin
-            anchors.top: parent.top
-            anchors.right: parent.right
+            id:                  txTitle
+            objectName:          "txTitle"
+            text:                bpBoxProxy.title
+            anchors.left:        parent.left
+            anchors.leftMargin:  m_TextMargin
+            anchors.top:         parent.top
+            anchors.right:       parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: Styles.m_FontFamily
-            font.pointSize: 9
-            wrapMode: Text.WordWrap
-            color: m_TextColor
-            clip: true
+            font.family:         m_FontFamily
+            font.pointSize:      m_FontSize
+            wrapMode:            Text.WordWrap
+            color:               m_TextColor
+            clip:                true
         }
 
         /**
@@ -223,19 +225,19 @@ T.Control
         Text
         {
             // common properties
-            id: txDescription
-            objectName: "txDescription"
-            text: bpBoxProxy.description
-            anchors.left: parent.left
-            anchors.leftMargin: m_TextMargin
-            anchors.top: txTitle.bottom
-            anchors.right: parent.right
+            id:                  txDescription
+            objectName:          "txDescription"
+            text:                bpBoxProxy.description
+            anchors.left:        parent.left
+            anchors.leftMargin:  m_TextMargin
+            anchors.top:         txTitle.bottom
+            anchors.right:       parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: Styles.m_FontFamily
-            font.pointSize: 9
-            wrapMode: Text.WordWrap
-            color: m_TextColor
-            clip: true
+            font.family:         m_FontFamily
+            font.pointSize:      m_FontSize
+            wrapMode:            Text.WordWrap
+            color:               m_TextColor
+            clip:                true
         }
 
         /**
@@ -244,19 +246,19 @@ T.Control
         Text
         {
             // common properties
-            id: txComments
-            objectName: "txComments"
-            text: bpBoxProxy.comments
-            anchors.left: parent.left
-            anchors.leftMargin: m_TextMargin
-            anchors.top: txDescription.bottom
-            anchors.right: parent.right
+            id:                  txComments
+            objectName:          "txComments"
+            text:                bpBoxProxy.comments
+            anchors.left:        parent.left
+            anchors.leftMargin:  m_TextMargin
+            anchors.top:         txDescription.bottom
+            anchors.right:       parent.right
             anchors.rightMargin: m_TextMargin
-            font.family: Styles.m_FontFamily
-            font.pointSize: 9
-            wrapMode: Text.WordWrap
-            color: m_TextColor
-            clip: true
+            font.family:         m_FontFamily
+            font.pointSize:      m_FontSize
+            wrapMode:            Text.WordWrap
+            color:               m_TextColor
+            clip:                true
         }
 
         /**

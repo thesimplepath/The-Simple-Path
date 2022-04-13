@@ -437,33 +437,4 @@ TSP_Page
         return addMessage(from, undefined);
     }
     */
-
-    /*REM
-    /// called when page is loaded
-    Component.onCompleted:
-    {
-    / *REM
-        let start = addStartDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200,  50);
-        let activity = addActivityDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 250);
-        let end = addEndDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "ID : 19353", "<i>Gestionnaires de fortune accrédités</i>", 200, 450);
-        let process = addProcessDefSize("<b>Rechercher les antécédents de Décès attendus</b>", "", "", 400, 200);
-        let pageBreak = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 400, false, false);
-        let pageBreak2 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 400, false, true);
-        let pageBreak3 = addPageBreakDefSize("Page des cas spéciaux", "", "", 400, 500, true, false);
-        let pageBreak4 = addPageBreakDefSize("Page des cas spéciaux", "", "", 550, 500, true, true);
-        addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", start.bottomConnector, activity.topConnector);
-        addMessage("Demande de tarification exceptionnelle à suivre rapidement", "ID : 5940", "<i>45%</i>", activity.bottomConnector, end.topConnector);
-        * /
-        let start = addStartDefSize(200,  50);
-        let activity = addActivityDefSize(200, 250);
-        let end = addEndDefSize(200, 450);
-        let process = addProcessDefSize(400, 200);
-        let pageBreak = addPageBreakDefSize(400, 400, false, false);
-        let pageBreak2 = addPageBreakDefSize(550, 400, false, true);
-        let pageBreak3 = addPageBreakDefSize(400, 500, true, false);
-        let pageBreak4 = addPageBreakDefSize(550, 500, true, true);
-        addMessage(start.bottomConnector, activity.topConnector);
-        addMessage(activity.bottomConnector, end.topConnector);
-    }
-    */
 }

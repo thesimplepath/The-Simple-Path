@@ -29,15 +29,15 @@ T.Control
 
     // advanced properties
     property var    m_Target:      undefined
-    property string m_Color:       "#c0c0c0"
-    property string m_BorderColor: "black"
+    property string m_Color:       Styles.m_HandleBgColor
+    property string m_BorderColor: Styles.m_HandleBorderColor
     property int    m_Direction:   IEDirection.IE_D_None
 
     // common properties
     id: ctHandle
     objectName: "ctHandle"
-    width: 7
-    height: 7
+    width: Styles.m_HandleWidth
+    height: Styles.m_HandleHeight
 
     /**
     * Handle rectangle
@@ -50,8 +50,8 @@ T.Control
         anchors.fill: parent
         color: m_Color
         border.color: m_BorderColor
-        border.width: 1
-        radius: 3
+        border.width: Styles.m_HandleBorderWidth
+        radius: Styles.m_HandleRadius
     }
 
     /**

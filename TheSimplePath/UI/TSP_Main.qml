@@ -24,8 +24,8 @@ ApplicationWindow
     id: wiMainWnd
     objectName: "wiMainWnd"
     visible: true
-    width: 800
-    height: 600
+    width: Styles.m_WindowWidth
+    height: Styles.m_WindowHeight
     title: qsTrId("app-name")
 
     /**
@@ -57,7 +57,7 @@ ApplicationWindow
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
-        height: 40
+        height: 40 // FIXME if required, define this value in the Styles properties
 
         /**
         * Create document button
@@ -175,7 +175,7 @@ ApplicationWindow
             // common properties
             id: plPageListView
             objectName: "plPageListView"
-            implicitWidth: 150
+            implicitWidth: Styles.m_PageListWidth
             Layout.fillWidth: false
             Layout.fillHeight: true
 
@@ -213,7 +213,7 @@ ApplicationWindow
                 // common properties
                 id: rcDocument
                 objectName: "rcDocument"
-                color: "#808080"
+                color: Styles.m_WindowBgColor
                 anchors.fill: parent
 
                 /**

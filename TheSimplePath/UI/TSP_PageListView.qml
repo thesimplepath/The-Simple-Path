@@ -9,7 +9,7 @@ import QtQuick.Templates 2.15 as T
 T.Frame
 {
     // declared properties
-    property string m_PageURL:               "qrc:/Resources/Images/Page.svg"
+    property string m_PageItemGlyph:         Styles.m_PageItemGlyph
     property int    m_DefTransitionDuration: 0
     property int    m_TransitionDuration:    0
 
@@ -38,8 +38,8 @@ T.Frame
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.right: parent.right
-            height: 26
-            color: "#f0f0f0"
+            height: Styles.m_PageListHeaderHeight
+            color: Styles.m_PageListHeaderBgColor
 
             /**
             * Add page button
@@ -52,9 +52,9 @@ T.Frame
                 anchors.right: btDeletePage.left
                 anchors.rightMargin: 3
                 anchors.verticalCenter: parent.verticalCenter
-                width: 20
-                height: 20
-                radius: 3
+                width: parent.height - 6
+                height: parent.height - 6
+                radius: Styles.m_PageListHeaderButtonRadius
                 text: "+"
                 enabled: false
 
@@ -79,9 +79,9 @@ T.Frame
                 anchors.right: parent.right
                 anchors.rightMargin: 3
                 anchors.verticalCenter: parent.verticalCenter
-                width: 20
-                height: 20
-                radius: 3
+                width: parent.height - 6
+                height: parent.height - 6
+                radius: Styles.m_PageListHeaderButtonRadius
                 text: "-"
                 enabled: false
 
@@ -138,8 +138,8 @@ T.Frame
                         anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.margins: 5
-                        source: m_PageURL
+                        anchors.margins: Styles.m_PageItemTextMargin
+                        source: m_PageItemGlyph
                         sourceSize: Qt.size(lvPageListView.m_ItemHeight, lvPageListView.m_ItemHeight)
                         fillMode: Image.PreserveAspectFit
                         smooth: true
@@ -158,9 +158,9 @@ T.Frame
                         anchors.top: parent.top
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
-                        anchors.margins: 5
-                        font.family: Styles.m_FontFamily
-                        font.pointSize: 9
+                        anchors.margins: Styles.m_PageItemTextMargin
+                        font.family: Styles.m_PageItemFont.m_Family
+                        font.pointSize: Styles.m_PageItemFont.m_Size
                         verticalAlignment: Text.AlignVCenter
                         color: Styles.m_DarkTextColor
                         clip: true
@@ -264,7 +264,7 @@ T.Frame
         ListView
         {
             // declared properties
-            property int m_ItemHeight:     25
+            property int m_ItemHeight:     Styles.m_PageItemHeight
             property int m_LastKnownCount: 0
 
             // common properties

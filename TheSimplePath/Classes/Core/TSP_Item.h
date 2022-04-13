@@ -43,8 +43,8 @@ class TSP_Item
         virtual ~TSP_Item();
 
         /**
-        * Gets the element unique identifier
-        *@return the element unique identifier
+        * Gets the item unique identifier
+        *@return the item unique identifier
         */
         virtual std::string GetUID() const;
 

@@ -50,10 +50,10 @@ T.Control
         id: rcConnector
         objectName: "rcConnector"
         anchors.fill: parent
-        color: "white"
-        border.color: "#c0c0c0"
-        border.width: 3
-        radius: 7
+        color: Styles.m_ConnectorBgColor
+        border.color: Styles.m_ConnectorBorderColor
+        border.width: Styles.m_ConnectorBorderWidth
+        radius: Styles.m_ConnectorRadius
     }
 
     /**
@@ -87,7 +87,7 @@ T.Control
 
                 // notify the page that a link is currently dragging
                 if (m_AddingLinkItem && m_PageContent)
-                    m_PageContent.m_DraggingMsg = true;
+                    m_PageContent.m_DraggingLink = true;
             }
         }
 
@@ -100,14 +100,14 @@ T.Control
 
             // notify the page that the link is no longer dragging
             if (m_PageContent)
-                m_PageContent.m_DraggingMsg = false;
+                m_PageContent.m_DraggingLink = false;
 
             // no document?
             if (!m_Document)
                 return;
 
-            let doRemoveMsg = false;
-            let targetConn  = undefined;
+            let doRemoveLink = false;
+            let targetConn   = undefined;
 
             try
             {
@@ -141,7 +141,7 @@ T.Control
                     console.log("Connector - link adding - CANCELED");
 
                     // no, remove the currently adding link
-                    doRemoveMsg = true;
+                    doRemoveLink = true;
                 }
             }
             catch (exception)
@@ -158,13 +158,13 @@ T.Control
                               " - error - "                                       + exception);
 
                 // remove the incompletely added link
-                doRemoveMsg = true;
+                doRemoveLink = true;
             }
 
             // do remove the link?
-            if (doRemoveMsg)
+            if (doRemoveLink)
             {
-                m_AddingLinkItem.unbindMsgFromBox(m_Box);
+                m_AddingLinkItem.unbindLinkFromBox(m_Box);
                 m_Page.deleteLink(m_AddingLinkItem);
 
                 // emit signal that link adding was canceled
